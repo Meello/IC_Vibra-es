@@ -1,5 +1,8 @@
-﻿using System;
-using static IC_Vibracao.DadosIniciais.Constantes;
+﻿using IC_Vibracao.InputData.Barra;
+using IC_Vibracao.InputData.Barra.Propriedades;
+using IC_Vibracao.InputData.Barra.PropriedadesGeometricas;
+using System;
+using static IC_Vibracao.InputData.Constantes;
 
 namespace IC_Vibracao
 {
@@ -14,6 +17,9 @@ namespace IC_Vibracao
                 Diametro = 0.0254,
                 Espessura = 0.0021
             };
+
+            
+
             barra.Apoio0 = new Engaste();
             barra.ApoioN = new Engaste();
             barra.QuantElementos = 5;

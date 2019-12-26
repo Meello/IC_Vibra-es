@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IC_Vibracao
+namespace IC_Vibracao.InputData.Barra.Propriedades
 {
     public abstract class Material
     {
