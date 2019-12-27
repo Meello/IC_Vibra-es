@@ -11,13 +11,11 @@ namespace IC_Vibracao.InputData.Barra
 
         public Perfil Perfil { get; set; }
 
-        public Fixacao Apoio0 { get; set; }
+        public Fixacao Apoio1 { get; set; }
 
         public Fixacao ApoioN { get; set; }
 
         //prefixo u --> somente positivos
-        public uint QuantElementos { get; set; }
-
         public uint Comprimento { get; set; }
     }
 }

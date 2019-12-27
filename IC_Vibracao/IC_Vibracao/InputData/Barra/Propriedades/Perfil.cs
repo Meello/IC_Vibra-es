@@ -8,9 +8,9 @@ namespace IC_Vibracao.InputData.Barra.Propriedades
     {
         public double Espessura { get; set; }
 
-        public double[] Area { get; set; }
+        public double Area { get; set; }
 
-        public double[] MomentoInercia { get; set; }
+        public double MomentoInercia { get; set; }
     }
 
     public class PerfilRetangular : Perfil

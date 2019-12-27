@@ -18,11 +18,8 @@ namespace IC_Vibracao
                 Espessura = 0.0021
             };
 
-            
-
-            barra.Apoio0 = new Engaste();
+            barra.Apoio1 = new Engaste();
             barra.ApoioN = new Engaste();
-            barra.QuantElementos = 5;
 
             //Compilador ignora o _ em números, ajuda a separar os milhares, milhoes, etc
             int[] forcaExterna = ForcaExterna(3,10_000,3);
