@@ -1,6 +1,7 @@
 ﻿using IC_Vibracao.InputData.Barra;
 using IC_Vibracao.InputData.Barra.Propriedades;
 using IC_Vibracao.InputData.Barra.PropriedadesGeometricas;
+using IC_Vibracao.Metodos.MetodosAuxiliares;
 using System;
 using static IC_Vibracao.InputData.Constantes;
 

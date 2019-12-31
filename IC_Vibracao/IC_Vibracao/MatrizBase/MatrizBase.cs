@@ -6,8 +6,8 @@ using static IC_Vibracao.InputData.Constantes;
 
 namespace IC_Vibracao.MatrizBase
 {
-    public class MatrizBase
-    {
+    public class MatrizBase : IMatrizBase
+	{
 		private readonly IMatrizes _matrizes;
 
 		public MatrizBase(IMatrizes matrizes)
@@ -15,7 +15,7 @@ namespace IC_Vibracao.MatrizBase
 			this._matrizes = matrizes;
 		}
 
-        public double[,] Matriz(Barra barra)
+        public double[,] Massa(Barra barra)
         {
 			double[,] massaElemento = new double[Variaveis.GrausLiberdadeElemenento,Variaveis.GrausLiberdadeElemenento];
 			double[,] massa = new double[Variaveis.GrausLiberdadeMaximo,Variaveis.GrausLiberdadeMaximo];
