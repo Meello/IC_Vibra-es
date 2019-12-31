@@ -90,7 +90,7 @@ namespace IC_Vibracao.InputData.Barra.PropriedadesGeometricas
                     condicoesContorno[i] = fixacao1.Deslocamento;
                     condicoesContorno[i + 1] = fixacao1.Angulo;
                 }
-                else if (i == Variaveis.GrausLiberdadeMaximo)
+                else if (i == Variaveis.GrausLiberdadeMaximo - 1)
                 {
                     condicoesContorno[i - 1] = fixacaoN.Deslocamento;
                     condicoesContorno[i] = fixacaoN.Angulo;
