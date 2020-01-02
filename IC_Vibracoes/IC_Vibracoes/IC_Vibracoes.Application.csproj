@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IC_Vibracoes.Core\IC_Vibracoes.Core.csproj" />
+    <ProjectReference Include="..\IC_Vibracoes.DataContract\IC_Vibracoes.DataContract.csproj" />
+  </ItemGroup>
+
+
+
+</Project>
