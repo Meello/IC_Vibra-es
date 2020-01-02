@@ -9,9 +9,9 @@ namespace IC_Vibracao
     {
         int[,] CoordenadaElementos();
 
-        double[] Area(double area);
+        double[] Area(double area, int n);
 
-        double[] MomentoInercia(double momentoInercia);
+        double[] MomentoInercia(double momentoInercia, int n);
 
         double[] ModuloElasticade(double moduloElasticidade);
 

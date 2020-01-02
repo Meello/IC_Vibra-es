@@ -24,11 +24,11 @@ namespace IC_Vibracao.InputData.Barra.PropriedadesGeometricas
             return coordenadaElementos;
         }
 
-        public double[] Area(double area)
+        public double[] Area(double area, int n)
         {
-            double[] matrizArea = new double[Variaveis.NumeroElementos];
+            double[] matrizArea = new double[n];
 
-            for(int i = 0; i < Variaveis.NumeroElementos;i++)
+            for(int i = 0; i < n;i++)
             {
                 matrizArea[i] = area; 
             }
@@ -36,11 +36,11 @@ namespace IC_Vibracao.InputData.Barra.PropriedadesGeometricas
             return matrizArea;
         }
 
-        public double[] MomentoInercia(double momentoInercia)
+        public double[] MomentoInercia(double momentoInercia, int n)
         {
-            double[] matrizMomentoInercia = new double[Variaveis.NumeroElementos];
+            double[] matrizMomentoInercia = new double[n];
 
-            for (int i = 0; i < Variaveis.NumeroElementos; i++)
+            for (int i = 0; i < Variaveis.n; i++)
             {
                 matrizMomentoInercia[i] = momentoInercia;
             }
