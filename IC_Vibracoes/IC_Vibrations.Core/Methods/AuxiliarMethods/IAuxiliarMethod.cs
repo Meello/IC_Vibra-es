@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IC_Vibration.Calculus.Methods.AuxiliarMethods
+namespace IC_Vibration.Methods.AuxiliarMethods
 {
     public interface IAuxiliarMethod
     {

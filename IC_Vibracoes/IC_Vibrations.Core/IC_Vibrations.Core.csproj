@@ -8,4 +8,8 @@
     <ProjectReference Include="..\IC_Vibrations.DataContract\IC_Vibrations.DataContract.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Methods\NewmarkMethods\Matrixes\" />
+  </ItemGroup>
+
 </Project>
