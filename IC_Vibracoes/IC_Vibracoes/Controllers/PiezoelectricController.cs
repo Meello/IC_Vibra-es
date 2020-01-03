@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using IC_Vibrations.Core.Operations.Piezoelectric.Calculate;
 using IC_Vibrations.DataContract.Beam;
 using IC_Vibrations.DataContract.Beam.CalculatePiezoelectric;
+using IC_Vibrations.DataContract.Piezoelectric;
+using IC_Vibrations.DataContract.Piezoelectric.Calculate;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -14,18 +16,18 @@ namespace WebApplication1.Controllers
     [Route("api/piezoelectric")]
     public class PiezoelectricController : ControllerBase
     {
-        private readonly ICalculatePiezoelectric _calculatePiezoelectric;
+        private readonly ICalculatePiezoelectricVibration _calculatePiezoelectric;
 
-        public PiezoelectricController(ICalculatePiezoelectric calculatePiezoelectric)
+        public PiezoelectricController(ICalculatePiezoelectricVibration calculatePiezoelectric)
         {
             this._calculatePiezoelectric = calculatePiezoelectric;
         }
 
-        public ActionResult<CalculateBeamResponse> Calculate(PiezoelectricRequestData requestData)
+        public ActionResult<CalculatePiezoelectricResponse> Calculate(PiezoelectricRequestData requestData)
         {
-            CalculateBeamRequest request = new CalculateBeamRequest(requestData);
+            CalculatePiezoelectricRequest request = new CalculatePiezoelectricRequest(requestData);
             //mudar para receber um arquivo
-            CalculateBeamResponse response = this._calculatePiezoelectric.Process(request);
+            CalculatePiezoelectricResponse response = this._calculatePiezoelectric.Process(request);
 
             if(!response.Success)
             {

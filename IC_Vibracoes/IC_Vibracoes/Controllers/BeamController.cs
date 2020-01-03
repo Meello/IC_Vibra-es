@@ -23,6 +23,7 @@ namespace WebApplication1.Controllers
             this._calculateBeamVibration = calculateBeamVibration;
         }
 
+        [HttpPost]
         public ActionResult<CalculateBeamResponse> Calculate(BeamRequestData requestData)
         {
             CalculateBeamRequest request = new CalculateBeamRequest(requestData);

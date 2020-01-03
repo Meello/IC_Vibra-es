@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="xunit" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IC_Vibracoes.Core\IC_Vibrations.Core.csproj" />
     <ProjectReference Include="..\IC_Vibracoes.DataContract\IC_Vibrations.DataContract.csproj" />
     <ProjectReference Include="..\IC_Vibracoes.Repository\IC_Vibrations.Repository.csproj" />

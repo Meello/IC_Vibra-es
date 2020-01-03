@@ -14,6 +14,6 @@ namespace IC_Vibration.Calculus.GeometricProperties
 
         double MomentInertia(double height, double width, double thickness);
 
-        double StaticalMomentArea(double diameter, double thickness);
+        //double StaticalMomentArea(double diameter, double thickness);
     }
 }
