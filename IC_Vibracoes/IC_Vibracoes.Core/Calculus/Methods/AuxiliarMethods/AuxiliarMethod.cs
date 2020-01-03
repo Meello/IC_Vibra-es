@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IC_Vibracao.Metodos.MetodosAuxiliares
+namespace IC_Vibration.Calculus.Methods.AuxiliarMethods
 {
-    public class MetodoAuxiliar : IMetodoAuxiliar
+    public class AuxiliarMethods : IAuxiliarMethods
     {
-		public double[,] MatrizInversa(double[,] matriz, int n) 
+		public double[,] InverseMatrix(double[,] matriz, int n) 
         {
             double[,] matrizInv = new double[n, n];
             double pivot, p;
@@ -68,7 +68,7 @@ namespace IC_Vibracao.Metodos.MetodosAuxiliares
             return matrizInv;
 		}
 
-        public double[,] AplicarCondicoesContorno(double[,] matriz, bool[] condicoesContorno, int n, int condicoesContornoTrue)
+        public double[,] AplyBondaryConditions(double[,] matriz, bool[] condicoesContorno, int n, int condicoesContornoTrue)
         {
             int i, j, k, count1, count2;
 
@@ -115,7 +115,7 @@ namespace IC_Vibracao.Metodos.MetodosAuxiliares
             return matrizCC;
         }
 
-        public double[] AplicarCondicoesContorno(double[] matriz, bool[] condicoesContorno, int n, int condicoesContornoTrue)
+        public double[] AplyBondaryConditions(double[] matriz, bool[] condicoesContorno, int n, int condicoesContornoTrue)
         {
             int i, cont1 = 0;
 

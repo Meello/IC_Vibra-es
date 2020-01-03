@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC_Vibracoes.Application", "IC_Vibracoes\IC_Vibracoes.Application.csproj", "{E52ECA02-6AD9-4D25-86E3-C08568841112}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IC_Vibracoes.Core", "IC_Vibracoes.Core\IC_Vibracoes.Core.csproj", "{ABC161A6-F1B2-475D-A9C3-C35CE3212D3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC_Vibracoes.Core", "IC_Vibracoes.Core\IC_Vibracoes.Core.csproj", "{ABC161A6-F1B2-475D-A9C3-C35CE3212D3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IC_Vibracoes.DataContract", "IC_Vibracoes.DataContract\IC_Vibracoes.DataContract.csproj", "{125460D4-3C5F-4CF9-AFE5-CB2B57E01902}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC_Vibracoes.DataContract", "IC_Vibracoes.DataContract\IC_Vibracoes.DataContract.csproj", "{125460D4-3C5F-4CF9-AFE5-CB2B57E01902}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IC_Vibracoes.Repository", "IC_Vibracoes.Repository\IC_Vibracoes.Repository.csproj", "{6BEEAB9A-99FC-4A1A-AA49-3478344E23B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{125460D4-3C5F-4CF9-AFE5-CB2B57E01902}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{125460D4-3C5F-4CF9-AFE5-CB2B57E01902}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{125460D4-3C5F-4CF9-AFE5-CB2B57E01902}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BEEAB9A-99FC-4A1A-AA49-3478344E23B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BEEAB9A-99FC-4A1A-AA49-3478344E23B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BEEAB9A-99FC-4A1A-AA49-3478344E23B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BEEAB9A-99FC-4A1A-AA49-3478344E23B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

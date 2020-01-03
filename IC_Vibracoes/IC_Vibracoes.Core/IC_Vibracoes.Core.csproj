@@ -9,4 +9,8 @@
     <ProjectReference Include="..\IC_Vibracoes.DataContract\IC_Vibracoes.DataContract.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Operations\Piezoelectric\Calculate\" />
+  </ItemGroup>
+
 </Project>

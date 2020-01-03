@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace IC_Vibracoes
+namespace IC_Vibrations
 {
     public class Program
     {

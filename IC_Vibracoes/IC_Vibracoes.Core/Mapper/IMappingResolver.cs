@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IC_Vibracao.MetodoNewmark
+namespace IC_Vibracoes.Core.Mapper
 {
-    public interface IMetodoNewmark
+    public interface IMappingResolver
     {
 
     }

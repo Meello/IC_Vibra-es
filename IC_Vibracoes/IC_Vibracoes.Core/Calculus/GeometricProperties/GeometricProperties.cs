@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IC_Vibracao.InputData.Beam.GeometricProperties
+namespace IC_Vibration.Calculus.GeometricProperties
 {
     public class GeometricProperties : IGeometricProperties
     {

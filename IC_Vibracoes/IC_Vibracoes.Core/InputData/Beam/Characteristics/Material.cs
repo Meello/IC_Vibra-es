@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IC_Vibracao.InputData.Beam.Properties
+namespace IC_Vibration.InputData.Beam.Characteristics
 {
     public abstract class Material
     {
-        // Unidade: Pa
+        // Unity: Pa
         public abstract double YoungModulus { get; }
 
-        // Unidade: Pa
+        // Unity: Pa
         public abstract double YieldStrenght { get; }
 
-        // Unidade: kg/m³
+        // Unity: kg/m³
         public abstract double SpecificMass { get; }
     }
 
