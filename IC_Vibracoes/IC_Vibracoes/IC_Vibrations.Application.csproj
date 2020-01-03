@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IC_Vibracoes.Core\IC_Vibracoes.Core.csproj" />
-    <ProjectReference Include="..\IC_Vibracoes.DataContract\IC_Vibracoes.DataContract.csproj" />
-    <ProjectReference Include="..\IC_Vibracoes.Repository\IC_Vibracoes.Repository.csproj" />
+    <ProjectReference Include="..\IC_Vibracoes.Core\IC_Vibrations.Core.csproj" />
+    <ProjectReference Include="..\IC_Vibracoes.DataContract\IC_Vibrations.DataContract.csproj" />
+    <ProjectReference Include="..\IC_Vibracoes.Repository\IC_Vibrations.Repository.csproj" />
   </ItemGroup>
 
 

@@ -12,6 +12,6 @@ namespace IC_Vibrations.DataContract.Beam.CalculatePiezoelectric
             Data = requestData;
         }
 
-        public BeamRequestData Data { get; set; }
+        public BeamRequestData Data { get; }
     }
 }

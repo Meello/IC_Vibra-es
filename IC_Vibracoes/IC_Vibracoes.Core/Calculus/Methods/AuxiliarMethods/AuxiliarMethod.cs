@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IC_Vibration.Calculus.Methods.AuxiliarMethods
 {
-    public class AuxiliarMethods : IAuxiliarMethods
+    public class AuxiliarMethod : IAuxiliarMethod
     {
 		public double[,] InverseMatrix(double[,] matriz, int n) 
         {

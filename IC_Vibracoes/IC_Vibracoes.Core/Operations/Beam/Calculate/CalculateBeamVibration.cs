@@ -1,5 +1,4 @@
 ﻿using IC_Vibrations.Core.Operations;
-using IC_Vibrations.Core.Operations.Piezoelectric.Calculate;
 using IC_Vibrations.DataContract.Beam.CalculatePiezoelectric;
 using System;
 using System.Collections.Generic;

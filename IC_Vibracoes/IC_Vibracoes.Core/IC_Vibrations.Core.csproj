@@ -6,11 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IC_Vibracoes.DataContract\IC_Vibracoes.DataContract.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Operations\Piezoelectric\Calculate\" />
+    <ProjectReference Include="..\IC_Vibracoes.DataContract\IC_Vibrations.DataContract.csproj" />
   </ItemGroup>
 
 </Project>
