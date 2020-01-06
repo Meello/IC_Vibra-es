@@ -24,6 +24,8 @@ namespace IC_Vibrations.DataContract
 
         public double Width { get; set; }
 
+        public double Thickness { get; set; }
+
         public string Fastening1 { get; set; }
 
         public string FasteningN { get; set; }

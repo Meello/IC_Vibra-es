@@ -8,9 +8,9 @@ namespace IC_Vibration.InputData.Beam.Characteristics
     {
         public double Thickness { get; set; }
 
-        public double Area { get; set; }
+        public double[] Area { get; set; }
 
-        public double MomentoInercia { get; set; }
+        public double[] MomentInertia { get; set; }
     }
 
     public class RectangleProfile : Profile

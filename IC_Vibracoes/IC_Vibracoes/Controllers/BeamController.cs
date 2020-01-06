@@ -26,6 +26,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public ActionResult<CalculateBeamResponse> Calculate(BeamRequestData requestData)
         {
+            /*
             CalculateBeamRequest request = new CalculateBeamRequest(requestData);
             //mudar para receber um arquivo
             CalculateBeamResponse response = this._calculateBeamVibration.Process(request);
@@ -36,6 +37,8 @@ namespace WebApplication1.Controllers
             }
 
             return Ok(response);
+            */
+            return null;
         }
     }
 }

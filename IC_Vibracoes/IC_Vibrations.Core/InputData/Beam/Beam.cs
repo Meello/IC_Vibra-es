@@ -17,5 +17,11 @@ namespace IC_Vibration.InputData.Beam
 
         //prefixo u --> somente positivos
         public uint Length { get; set; }
+
+        public double[,] Mass { get; set; }
+
+        public double[,] Hardness { get; set; }
+
+        public double[,] Damping { get; set; }
     }
 }

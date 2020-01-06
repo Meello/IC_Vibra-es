@@ -1,6 +1,7 @@
 ﻿using IC_Vibracoes.Core.Calculus.Variables;
 using IC_Vibration.Calculus.GeometricProperties;
 using IC_Vibration.Calculus.PrincipalMatrixes;
+using IC_Vibration.InputData.Beam;
 using IC_Vibrations.DataContract;
 using System;
 using System.Collections.Generic;
@@ -24,17 +25,25 @@ namespace IC_Vibrations.Core.Calculus
             this._geometricProperties = geometricProperties;
         }
 
-        public void Execute(BeamRequestData requestData)
+        public Beam Execute(BeamRequestData requestData)
         {
+            Beam beam = new Beam();
             int dfMax = this._variable.DegreesFreedomMaximum(requestData.Nodes, requestData.DegreesFreedom);
             int dfEl = this._variable.DegreesFreedomPerElemenent(requestData.DegreesFreedom, requestData.NodesPerElement);
             int el = this._variable.Elements(requestData.Nodes);
-            double[] area;
+            double area;
+            double[] areaMatrix;
 
             if(requestData.Profile == "Rectangle")
             {
-                area = 
+                area = this._geometricProperties.Area(requestData.Diameter, requestData.Thickness);
             }
+            else if (requestData.Profile == "Circular")
+            {
+                area = this._geometricProperties.Area(requestData.Height,requestData.Width, requestData.Thickness);
+            }
+
+            return beam;
         }
     }
 
