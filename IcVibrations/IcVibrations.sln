@@ -3,7 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcVibrations", "IcVibrations\IcVibrations.csproj", "{6B41CC8F-4CA5-4031-B905-768254B70CD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcVibrations.Application", "IcVibrations\IcVibrations.Application.csproj", "{6B41CC8F-4CA5-4031-B905-768254B70CD7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D5717D01-5421-460A-AEC6-16B201467754}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{55CEDD72-C6A5-4279-8676-D103E813438A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{C3BD5CF4-D8C1-4E61-A2F5-D9C78C849242}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcVibrationsTest", "IcVibrationsTest\IcVibrationsTest.csproj", "{C9FF326E-401E-4104-8102-E27E4F75BC41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcVibrations.Core", "IcVibrations.Core\IcVibrations.Core.csproj", "{998BEBC4-76F2-492C-9D16-5206867286B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcVibrations.DataContracts", "IcVibrations.DataContract\IcVibrations.DataContracts.csproj", "{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcVibrations.Repositories", "IcVibrations.Repository\IcVibrations.Repositories.csproj", "{B20F1FD6-8485-4176-AFF0-BE22BD9CC73C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +32,32 @@ Global
 		{6B41CC8F-4CA5-4031-B905-768254B70CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B41CC8F-4CA5-4031-B905-768254B70CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B41CC8F-4CA5-4031-B905-768254B70CD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9FF326E-401E-4104-8102-E27E4F75BC41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9FF326E-401E-4104-8102-E27E4F75BC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9FF326E-401E-4104-8102-E27E4F75BC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9FF326E-401E-4104-8102-E27E4F75BC41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{998BEBC4-76F2-492C-9D16-5206867286B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{998BEBC4-76F2-492C-9D16-5206867286B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{998BEBC4-76F2-492C-9D16-5206867286B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{998BEBC4-76F2-492C-9D16-5206867286B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B20F1FD6-8485-4176-AFF0-BE22BD9CC73C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B20F1FD6-8485-4176-AFF0-BE22BD9CC73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B20F1FD6-8485-4176-AFF0-BE22BD9CC73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B20F1FD6-8485-4176-AFF0-BE22BD9CC73C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6B41CC8F-4CA5-4031-B905-768254B70CD7} = {D5717D01-5421-460A-AEC6-16B201467754}
+		{C9FF326E-401E-4104-8102-E27E4F75BC41} = {55CEDD72-C6A5-4279-8676-D103E813438A}
+		{998BEBC4-76F2-492C-9D16-5206867286B7} = {D5717D01-5421-460A-AEC6-16B201467754}
+		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32} = {D5717D01-5421-460A-AEC6-16B201467754}
+		{B20F1FD6-8485-4176-AFF0-BE22BD9CC73C} = {D5717D01-5421-460A-AEC6-16B201467754}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E443C2FD-9CF5-49EE-9F79-AEAD24219189}
