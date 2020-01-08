@@ -6,7 +6,7 @@ using IcVibrations.DataContracts.Beam;
 
 namespace IcVibrations.Core.Calculator
 {
-    public interface ICalculator
+    public interface ICalculate
     {
         Beam Execute(BeamRequestData requestData);
     }

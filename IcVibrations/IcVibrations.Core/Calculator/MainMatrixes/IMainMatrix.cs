@@ -8,11 +8,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public interface IMainMatrix
     {
-        double[,] Mass(int degreesFreedomPerElemenent, int degreesFreedomMaximum, int elements, double[] area, int[,] elementsCoordinate, double density, double length);
+        double[,] Mass (int degreesFreedomPerElemenent, int degreesFreedomMaximum, int elements, double[] area, int[,] elementsCoordinate, double density, double length);
 
         double[,] Hardness(int degreesFreedomPerElemenent, int degreesFreedomMaximum, int elements, int[,] elementsCoordinate, double[] momentInertia, double[] youngModulus, double length);
 
-        double[,] Damping(double[,] mass, double[,] hardness, double mi, int degreesFreedomMaximum); int[,] ElementsCoordinate(int elements, int dimensions);
+        double[,] Damping(double[,] mass, double[,] hardness, double mi, int degreesFreedomMaximum);
+        
+        int[,] ElementsCoordinate(int elements, int dimensions);
 
         double[] Area(double area, int elements);
 
@@ -20,7 +22,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[] YoungModulus(double youngModulus, int elements);
 
-        double[] Force(double forca, int posicaoForca, int degreesFreedomMaximum);
+        double[] Force(double[] forceValues, int[] forcePositions, int degreesFreedomMaximum);
 
         bool[] BondaryCondition(Fastening fixacao1, Fastening fixacaoN, int degreesFreedomMaximum);
     }

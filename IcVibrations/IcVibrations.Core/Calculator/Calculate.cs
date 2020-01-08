@@ -9,13 +9,13 @@ using IcVibrations.DataContracts.Beam;
 
 namespace IcVibrations.Core.Calculator
 {
-    public class Calculator : ICalculator
+    public class Calculate : ICalculate
     {
         private readonly IVariable _variable;
         private readonly IMainMatrix _principalMatrix;
         private readonly IGeometricProperties _geometricProperties;
 
-        public Calculator(
+        public Calculate(
             IVariable variable,
             IMainMatrix principalMatrix,
             IGeometricProperties geometricProperties)

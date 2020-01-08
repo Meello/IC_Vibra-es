@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace IcVibrations.Calculator.MainMatrixes
@@ -182,23 +183,16 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return moduloEl;
 		}
 
-		public double[] Force(double forca, int posicaoForca, int degreesFreedomMaximum)
+		public double[] Force(double[] forceValues, int[] forcePosition, int degreesFreedomMaximum)
 		{
-			double[] forcamento = new double[degreesFreedomMaximum];
-
-			for (int i = 0; i < degreesFreedomMaximum; i++)
+			double[] force = new double[degreesFreedomMaximum];
+			
+			for (int i = 0; i < force.Count(); i++)
 			{
-				if (i == posicaoForca)
-				{
-					forcamento[i] = forca;
-				}
-				else
-				{
-					forcamento[i] = 0;
-				}
+				force[forcePosition[i]] = forceValues[i];
 			}
 
-			return forcamento;
+			return force;
 		}
 
 		public bool[] BondaryCondition(Fastening fixacao1, Fastening fixacaoN, int degreesFreedomMaximum)

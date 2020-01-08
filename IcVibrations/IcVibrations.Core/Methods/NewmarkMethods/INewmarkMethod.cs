@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IcVibrations.Methods.NewmarkMethod
 {
-    public interface INewmarkMethods
+    public interface INewmarkMethod
     {
 
     }
