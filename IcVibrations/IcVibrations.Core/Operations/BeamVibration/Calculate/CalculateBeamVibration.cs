@@ -11,7 +11,8 @@ namespace IcVibrations.Core.Operations.Beam.Calculate
     {
         private readonly IValidateBeam _beamValidator;
 
-        public CalculateBeamVibration(IValidateBeam beamValidator)
+        public CalculateBeamVibration(
+            IValidateBeam beamValidator)
         {
             this._beamValidator = beamValidator;
         }
@@ -20,7 +21,7 @@ namespace IcVibrations.Core.Operations.Beam.Calculate
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
-
+            // Operation
 
             return response;
         }
@@ -29,7 +30,7 @@ namespace IcVibrations.Core.Operations.Beam.Calculate
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
-            this._beamValidator.Execute();
+            this._beamValidator.Execute(request.Data);
 
             return response;
         }

@@ -8,8 +8,6 @@ namespace IcVibrations.DataContracts.Beam
     {
         public int Nodes { get; set; }
 
-        public int Dimensions { get; set; }
-
         public int DegreesFreedom { get; set; }
 
         public string Material { get; set; }

@@ -27,29 +27,7 @@ namespace IcVibrations.Core.Calculator
 
         public Beam Execute(BeamRequestData requestData)
         {
-            Beam beam = new Beam();
-            int dfMax = this._variable.DegreesFreedomMaximum(requestData.Nodes, requestData.DegreesFreedom);
-            int dfEl = this._variable.DegreesFreedomPerElemenent(requestData.DegreesFreedom, requestData.NodesPerElement);
-            int el = this._variable.Elements(requestData.Nodes);
-            double area;
-            double[] areaMatrix;
-            
-            if(requestData.Profile == "Rectangle")
-            {
-                area = this._geometricProperties.Area(requestData.Diameter, requestData.Thickness);
-            }
-            else if (requestData.Profile == "Circular")
-            {
-                area = this._geometricProperties.Area(requestData.Height,requestData.Width, requestData.Thickness);
-            }
-
-            return beam;
+            return null;
         }
-    }
-
-    public enum algo
-    {
-        Retangular = 1,
-        Circular = 2
     }
 }
