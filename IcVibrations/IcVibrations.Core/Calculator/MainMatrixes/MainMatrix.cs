@@ -1,4 +1,5 @@
-﻿using IcVibrations.Models.Beam.Characteristics;
+﻿using IcVibrations.Core.Models;
+using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,57 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public class MainMatrix : IMainMatrix
 	{
-        public double[,] Mass(int degreesFreedomPerElemenent, int degreesFreedomMaximum, int elements, double[] area, int[,] elementsCoordinate, double density, double length)
+		public double[,] MassElement(double area, double density, double length)
+		{
+			double[,] massElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
+
+			massElement[0, 0] = 156 * ((area * density * length) / 420);
+			massElement[0, 1] = 22 * length * ((area * density * length) / 420);
+			massElement[0, 2] = 54 * ((area * density * length) / 420);
+			massElement[0, 3] = -13 * length * ((area * density * length) / 420);
+			massElement[1, 0] = 22 * length * ((area * density * length) / 420);
+			massElement[1, 1] = 4 * length * length * ((area * density * length) / 420);
+			massElement[1, 2] = 13 * length * ((area * density * length) / 420);
+			massElement[1, 3] = -3 * length * length * ((area * density * length) / 420);
+			massElement[2, 0] = 54 * ((area * density * length) / 420);
+			massElement[2, 1] = 13 * length * ((area * density * length) / 420);
+			massElement[2, 2] = 156 * ((area * density * length) / 420);
+			massElement[2, 3] = -22 * length * ((area * density * length) / 420);
+			massElement[3, 0] = -13 * length * ((area * density * length) / 420);
+			massElement[3, 1] = -3 * length * length * ((area * density * length) / 420);
+			massElement[3, 2] = -22 * length * ((area * density * length) / 420);
+			massElement[3, 3] = 4 * length * length * ((area * density * length) / 420);
+
+			return massElement;
+		}
+
+		public double[,] HardnessElement(double momentInertia, double youngModulus, double length)
+		{
+			double[,] hardnessElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
+
+			hardnessElement[0, 0] = 12 * momentInertia * youngModulus / Math.Pow(length, 3);
+			hardnessElement[0, 1] = 6 * momentInertia  * youngModulus  / Math.Pow(length, 2);
+			hardnessElement[0, 2] = -12 * momentInertia * youngModulus / Math.Pow(length, 3);
+			hardnessElement[0, 3] = 6 * momentInertia * youngModulus / Math.Pow(length, 2);
+			hardnessElement[1, 0] = 6 * momentInertia * youngModulus / Math.Pow(length, 2);
+			hardnessElement[1, 1] = 4 * momentInertia * youngModulus / length;
+			hardnessElement[1, 2] = -(6 * momentInertia * youngModulus / Math.Pow(length, 2));
+			hardnessElement[1, 3] = (4 * momentInertia * youngModulus / length) / 2;
+			hardnessElement[2, 0] = -(12 * momentInertia * youngModulus / Math.Pow(length, 3));
+			hardnessElement[2, 1] = -(6 * momentInertia * youngModulus / Math.Pow(length, 2));
+			hardnessElement[2, 2] = 12 * momentInertia * youngModulus / Math.Pow(length, 3);
+			hardnessElement[2, 3] = -(6 * momentInertia * youngModulus / Math.Pow(length, 2));
+			hardnessElement[3, 0] = 6 * momentInertia * youngModulus / Math.Pow(length, 2);
+			hardnessElement[3, 1] = 4 * momentInertia * youngModulus / length / 2;
+			hardnessElement[3, 2] = -(6 * momentInertia * youngModulus / Math.Pow(length, 2));
+			hardnessElement[3, 3] = 4 * momentInertia * youngModulus / length;
+
+			return hardnessElement;
+		}
+
+		public double[,] Mass(int degreesFreedomMaximum, int elements, double[,] massElement)
         {
-			double[,] elementMass = new double[degreesFreedomPerElemenent, degreesFreedomPerElemenent];
+			int[,] elementsCoordinate = this.ElementsCoordinate(elements);
 			double[,] mass = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 			int p, q, r, s;
 
@@ -24,95 +73,61 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			for (int n = 0; n < elements; n++)
 			{
-				elementMass[0, 0] = 156 * ((area[n] * density * length) / 420);
-				elementMass[0, 1] = 22 * length * ((area[n] * density * length) / 420);
-				elementMass[0, 2] = 54 * ((area[n] * density * length) / 420);
-				elementMass[0, 3] = -13 * length * ((area[n] * density * length) / 420);
-				elementMass[1, 0] = 22 * length * ((area[n] * density * length) / 420);
-				elementMass[1, 1] = 4 * length * length * ((area[n] * density * length) / 420);
-				elementMass[1, 2] = 13 * length * ((area[n] * density * length) / 420);
-				elementMass[1, 3] = -3 * length * length * ((area[n] * density * length) / 420);
-				elementMass[2, 0] = 54 * ((area[n] * density * length) / 420);
-				elementMass[2, 1] = 13 * length * ((area[n] * density * length) / 420);
-				elementMass[2, 2] = 156 * ((area[n] * density * length) / 420);
-				elementMass[2, 3] = -22 * length * ((area[n] * density * length) / 420);
-				elementMass[3, 0] = -13 * length * ((area[n] * density * length) / 420);
-				elementMass[3, 1] = -3 * length * length * ((area[n] * density * length) / 420);
-				elementMass[3, 2] = -22 * length * ((area[n] * density * length) / 420);
-				elementMass[3, 3] = 4 * length * length * ((area[n] * density * length) / 420);
-
 				p = elementsCoordinate[n,0];
 				q = elementsCoordinate[n,1];
 				r = elementsCoordinate[n,2];
 				s = elementsCoordinate[n,3];
 
-				mass[p,p] = elementMass[0, 0] + mass[p,p];
-				mass[p,q] = elementMass[0, 1] + mass[p,q];
-				mass[p,r] = elementMass[0, 2] + mass[p,r];
-				mass[p,s] = elementMass[0, 3] + mass[p,s];
-				mass[q,p] = elementMass[1, 0] + mass[q,p];
-				mass[q,q] = elementMass[1, 1] + mass[q,q];
-				mass[q,r] = elementMass[1, 2] + mass[q,r];
-				mass[q,s] = elementMass[1, 3] + mass[q,s];
-				mass[r,p] = elementMass[2, 0] + mass[r,p];
-				mass[r,q] = elementMass[2, 1] + mass[r,q];
-				mass[r,r] = elementMass[2, 2] + mass[r,r];
-				mass[r,s] = elementMass[2, 3] + mass[r,s];
-				mass[s,p] = elementMass[3, 0] + mass[s,p];
-				mass[s,q] = elementMass[3, 1] + mass[s,q];
-				mass[s,r] = elementMass[3, 2] + mass[s,r];
-				mass[s,s] = elementMass[3, 3] + mass[s,s];
+				mass[p, p] += massElement[0, 0];
+				mass[p, q] += massElement[0, 1];
+				mass[p, r] += massElement[0, 2];
+				mass[p, s] += massElement[0, 3];
+				mass[q, p] += massElement[1, 0];
+				mass[q, q] += massElement[1, 1];
+				mass[q, r] += massElement[1, 2];
+				mass[q, s] += massElement[1, 3];
+				mass[r, p] += massElement[2, 0];
+				mass[r, q] += massElement[2, 1];
+				mass[r, r] += massElement[2, 2];
+				mass[r, s] += massElement[2, 3];
+				mass[s, p] += massElement[3, 0];
+				mass[s, q] += massElement[3, 1];
+				mass[s, r] += massElement[3, 2];
+				mass[s, s] += massElement[3, 3];
 			}
 
 			return mass;
 		}
 
-		public double[,] Hardness(int degreesFreedomPerElemenent, int degreesFreedomMaximum, int elements, int[,] elementsCoordinate, double[] momentInertia, double[] youngModulus, double length)
+		public double[,] Hardness(int degreesFreedomMaximum, int elements, double[,] hardnessElement)
 		{
-			double[,] elementHardness = new double[degreesFreedomPerElemenent, degreesFreedomPerElemenent];
 			double[,] hardness = new double[degreesFreedomMaximum, degreesFreedomMaximum];
+			int[,] elementsCoordinate = this.ElementsCoordinate(elements);
 			int p, q, r, s;
 
 			for (int n = 0; n < elements; n++)
 			{
-				elementHardness[0, 0] = (12 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 3));
-				elementHardness[0, 1] = (6 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 2));
-				elementHardness[0, 2] = -(12 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 3));
-				elementHardness[0, 3] = (6 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 2));
-				elementHardness[1, 0] = (6 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 2));
-				elementHardness[1, 1] = (4 * momentInertia[n] * youngModulus[n] / length);
-				elementHardness[1, 2] = -(6 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 2));
-				elementHardness[1, 3] = (4 * momentInertia[n] * youngModulus[n] / length) / 2;
-				elementHardness[2, 0] = -(12 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 3));
-				elementHardness[2, 1] = -(6 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 2));
-				elementHardness[2, 2] = (12 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 3));
-				elementHardness[2, 3] = -(6 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 2));
-				elementHardness[3, 0] = (6 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 2));
-				elementHardness[3, 1] = (4 * momentInertia[n] * youngModulus[n] / length) / 2;
-				elementHardness[3, 2] = -(6 * momentInertia[n] * youngModulus[n] / Math.Pow(length, 2));
-				elementHardness[3, 3] = (4 * momentInertia[n] * youngModulus[n] / length);
-
 				p = elementsCoordinate[n, 0];
 				q = elementsCoordinate[n, 1];
 				r = elementsCoordinate[n, 2];
 				s = elementsCoordinate[n, 3];
 
-				hardness[p, p] = elementHardness[0, 0] + hardness[p, p];
-				hardness[p, q] = elementHardness[0, 1] + hardness[p, q];
-				hardness[p, r] = elementHardness[0, 2] + hardness[p, r];
-				hardness[p, s] = elementHardness[0, 3] + hardness[p, s];
-				hardness[q, p] = elementHardness[1, 0] + hardness[q, p];
-				hardness[q, q] = elementHardness[1, 1] + hardness[q, q];
-				hardness[q, r] = elementHardness[1, 2] + hardness[q, r];
-				hardness[q, s] = elementHardness[1, 3] + hardness[q, s];
-				hardness[r, p] = elementHardness[2, 0] + hardness[r, p];
-				hardness[r, q] = elementHardness[2, 1] + hardness[r, q];
-				hardness[r, r] = elementHardness[2, 2] + hardness[r, r];
-				hardness[r, s] = elementHardness[2, 3] + hardness[r, s];
-				hardness[s, p] = elementHardness[3, 0] + hardness[s, p];
-				hardness[s, q] = elementHardness[3, 1] + hardness[s, q];
-				hardness[s, r] = elementHardness[3, 2] + hardness[s, r];
-				hardness[s, s] = elementHardness[3, 3] + hardness[s, s];
+				hardness[p, p] += hardnessElement[0, 0];
+				hardness[p, q] += hardnessElement[0, 1];
+				hardness[p, r] += hardnessElement[0, 2];
+				hardness[p, s] += hardnessElement[0, 3];
+				hardness[q, p] += hardnessElement[1, 0];
+				hardness[q, q] += hardnessElement[1, 1];
+				hardness[q, r] += hardnessElement[1, 2];
+				hardness[q, s] += hardnessElement[1, 3];
+				hardness[r, p] += hardnessElement[2, 0];
+				hardness[r, q] += hardnessElement[2, 1];
+				hardness[r, r] += hardnessElement[2, 2];
+				hardness[r, s] += hardnessElement[2, 3];
+				hardness[s, p] += hardnessElement[3, 0];
+				hardness[s, q] += hardnessElement[3, 1];
+				hardness[s, r] += hardnessElement[3, 2];
+				hardness[s, s] += hardnessElement[3, 3];
 			}
 
 			return hardness;
@@ -120,25 +135,25 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 		public double[,] Damping(double[,] mass, double[,] hardness, double mi, int degreesFreedomMaximum)
 		{
-			double[,] amortecimento = new double[degreesFreedomMaximum, degreesFreedomMaximum];
+			double[,] damping = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 
 			for (int i = 0; i < degreesFreedomMaximum; i++)
 			{
 				for (int j = 0; j < degreesFreedomMaximum; j++)
 				{
-					amortecimento[i, j] = mi * (mass[i, j] + hardness[i, j]);
+					damping[i, j] = mi * (mass[i, j] + hardness[i, j]);
 				}
 			}
 
-			return amortecimento;
+			return damping;
 		}
-		public int[,] ElementsCoordinate(int elements, int dimensions)
+		public int[,] ElementsCoordinate(int elements)
 		{
-			int[,] coordenadaElementos = new int[elements, dimensions];
+			int[,] coordenadaElementos = new int[elements, Constants.Dimensions];
 
 			for (int i = 0; i < elements; i++)
 			{
-				for (int j = 0; j < dimensions; j++)
+				for (int j = 0; j < Constants.Dimensions; j++)
 				{
 					coordenadaElementos[i, j] = i + j + 1;
 				}

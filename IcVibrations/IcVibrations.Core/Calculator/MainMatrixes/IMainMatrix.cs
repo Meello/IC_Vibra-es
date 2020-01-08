@@ -8,13 +8,17 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public interface IMainMatrix
     {
-        double[,] Mass (int degreesFreedomPerElemenent, int degreesFreedomMaximum, int elements, double[] area, int[,] elementsCoordinate, double density, double length);
+        double[,] Mass(int degreesFreedomMaximum, int elements, double[,] massElement);
 
-        double[,] Hardness(int degreesFreedomPerElemenent, int degreesFreedomMaximum, int elements, int[,] elementsCoordinate, double[] momentInertia, double[] youngModulus, double length);
+        double[,] Hardness(int degreesFreedomMaximum, int elements, double[,] hardnessElement);
 
         double[,] Damping(double[,] mass, double[,] hardness, double mi, int degreesFreedomMaximum);
-        
-        int[,] ElementsCoordinate(int elements, int dimensions);
+
+        double[,] MassElement(double area, double density, double length);
+
+        double[,] HardnessElement(double momentInertia, double youngModulus, double length);
+
+        int[,] ElementsCoordinate(int elements);
 
         double[] Area(double area, int elements);
 

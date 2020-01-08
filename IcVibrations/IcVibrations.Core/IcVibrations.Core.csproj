@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Mapper\" />
     <Folder Include="Repositories\" />
     <Folder Include="Operations\" />

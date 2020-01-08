@@ -33,7 +33,7 @@ namespace IcVibrations.Core.Calculator
             int el = this._variable.Elements(requestData.Nodes);
             double area;
             double[] areaMatrix;
-
+            
             if(requestData.Profile == "Rectangle")
             {
                 area = this._geometricProperties.Area(requestData.Diameter, requestData.Thickness);

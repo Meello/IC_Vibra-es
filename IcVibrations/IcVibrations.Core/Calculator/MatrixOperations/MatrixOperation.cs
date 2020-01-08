@@ -76,11 +76,6 @@ namespace IcVibrations.Core.Calculator.MatrixOperations
             int lines2 = matrix2.GetLength(0);
             int columns2 = matrix2.GetLength(1);
 
-            if(columns1 != lines2)
-            {
-                return null;
-            }
-
             double[,] matrixMultiplication = new double[lines1, columns2];
 
             for (int i = 0; i < lines1; i++)
@@ -108,11 +103,6 @@ namespace IcVibrations.Core.Calculator.MatrixOperations
             int lines2 = matrix2.GetLength(0);
             int columns2 = matrix2.GetLength(1);
 
-            if(lines1 != lines2 || columns1 != columns2)
-            {
-                return null;
-            }
-
             double[,] matrixSubtraction = new double[lines1, columns1];
 
             for (int i = 0; i < lines1; i++)
@@ -132,11 +122,6 @@ namespace IcVibrations.Core.Calculator.MatrixOperations
             int columns1 = matrix1.GetLength(1);
             int lines2 = matrix2.GetLength(0);
             int columns2 = matrix2.GetLength(1);
-
-            if (lines1 != lines2 || columns1 != columns2)
-            {
-                return null;
-            }
 
             double[,] matrixSubtraction = new double[lines1, columns1];
 
