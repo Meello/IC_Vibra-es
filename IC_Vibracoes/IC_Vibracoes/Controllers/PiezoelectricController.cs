@@ -11,18 +11,19 @@ using IC_Vibrations.DataContract.Piezoelectric.Calculate;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace WebApplication1.Controllers
+namespace IC_Vibrations.Controllers
 {
-    [Route("api/piezoelectric")]
+    [Route("api/v1/piezoelectric")]
     public class PiezoelectricController : ControllerBase
     {
         private readonly ICalculatePiezoelectricVibration _calculatePiezoelectric;
 
-        public PiezoelectricController(ICalculatePiezoelectricVibration calculatePiezoelectric)
-        {
-            this._calculatePiezoelectric = calculatePiezoelectric;
-        }
+        //public PiezoelectricController(ICalculatePiezoelectricVibration calculatePiezoelectric)
+        //{
+        //    this._calculatePiezoelectric = calculatePiezoelectric;
+        //}
 
+        [HttpGet]
         public ActionResult<CalculatePiezoelectricResponse> Calculate(PiezoelectricRequestData requestData)
         {
             CalculatePiezoelectricRequest request = new CalculatePiezoelectricRequest(requestData);

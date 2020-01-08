@@ -11,17 +11,17 @@ using IC_Vibrations.DataContract.Beam.CalculatePiezoelectric;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace WebApplication1.Controllers
+namespace IC_Vibrations.Controllers
 {
-    [Route("api/piezoelectric")]
+    [Route("api/v1/beam")]
     public class BeamController : ControllerBase
     {
         private readonly ICalculateBeamVibration _calculateBeamVibration;
 
-        public BeamController(ICalculateBeamVibration calculateBeamVibration)
-        {
-            this._calculateBeamVibration = calculateBeamVibration;
-        }
+        //public BeamController(ICalculateBeamVibration calculateBeamVibration)
+        //{
+        //    this._calculateBeamVibration = calculateBeamVibration;
+        //}
 
         [HttpPost]
         public ActionResult<CalculateBeamResponse> Calculate(BeamRequestData requestData)
