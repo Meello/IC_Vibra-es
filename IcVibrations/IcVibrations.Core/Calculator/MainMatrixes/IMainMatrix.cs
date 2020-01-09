@@ -18,8 +18,6 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[,] HardnessElement(double momentInertia, double youngModulus, double length);
 
-        int[,] ElementsCoordinate(int elements);
-
         double[] Area(double area, int elements);
 
         double[] MomentInertia(double momentInertia, int elements);

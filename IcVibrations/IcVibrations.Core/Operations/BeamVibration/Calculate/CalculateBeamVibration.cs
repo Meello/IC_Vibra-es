@@ -1,5 +1,5 @@
 ﻿using IcVibrations.Core.Operations;
-using IcVibrations.Core.Validators.Beans;
+using IcVibrations.Core.Validators.BeamRequest;
 using IcVibrations.DataContracts.Beam.Calculate;
 using System;
 using System.Collections.Generic;
@@ -9,12 +9,12 @@ namespace IcVibrations.Core.Operations.Beam.Calculate
 {
     public class CalculateBeamVibration : OperationBase<CalculateBeamRequest, CalculateBeamResponse>, ICalculateBeamVibration
     {
-        private readonly IValidateBeam _beamValidator;
+        private readonly IBeamRequestValidator _validateBeamRequest;
 
         public CalculateBeamVibration(
-            IValidateBeam beamValidator)
+            IBeamRequestValidator validateBeamRequest)
         {
-            this._beamValidator = beamValidator;
+            this._validateBeamRequest = validateBeamRequest;
         }
 
         protected override CalculateBeamResponse ProcessOperation(CalculateBeamRequest request)
@@ -30,7 +30,10 @@ namespace IcVibrations.Core.Operations.Beam.Calculate
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
-            this._beamValidator.Execute(request.Data);
+            if(!this._validateBeamRequest.Execute(request.Data, response))
+            {
+                return response;
+            }
 
             return response;
         }

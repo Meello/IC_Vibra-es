@@ -1,0 +1,14 @@
+﻿code = 001
+message = Nodes should be greatter than or equal 2
+
+code = 002
+message = Invalid material: {MATERIAL}. Valid materials: {VALID_MATERIALS}
+
+code = 003
+message = Height: {HEIGTH} must be bigger than zero to profile: Rectangle.
+
+code = 004
+message = Width: {WIDTH} must be bigger than zero to profile: Rectangle.
+
+code = 005
+message = Diameter: {DIAMETER} must be null to profile: Rectangle.

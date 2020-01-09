@@ -147,21 +147,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			return damping;
 		}
-		public int[,] ElementsCoordinate(int elements)
-		{
-			int[,] coordenadaElementos = new int[elements, Constants.Dimensions];
-
-			for (int i = 0; i < elements; i++)
-			{
-				for (int j = 0; j < Constants.Dimensions; j++)
-				{
-					coordenadaElementos[i, j] = i + j + 1;
-				}
-			}
-
-			return coordenadaElementos;
-		}
-
+		
 		public double[] Area(double area, int elements)
 		{
 			double[] matrizArea = new double[elements];
@@ -233,6 +219,21 @@ namespace IcVibrations.Calculator.MainMatrixes
 			}
 
 			return condicoesContorno;
+		}
+
+		private int[,] ElementsCoordinate(int elements)
+		{
+			int[,] coordenadaElementos = new int[elements, Constants.Dimensions];
+
+			for (int i = 0; i < elements; i++)
+			{
+				for (int j = 0; j < Constants.Dimensions; j++)
+				{
+					coordenadaElementos[i, j] = i + j + 1;
+				}
+			}
+
+			return coordenadaElementos;
 		}
 	}
 }

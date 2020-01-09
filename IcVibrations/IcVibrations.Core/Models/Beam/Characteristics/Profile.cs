@@ -24,4 +24,11 @@ namespace IcVibrations.Models.Beam.Characteristics
     {
         public double Diameter { get; set; }
     }
+
+    [Flags]
+    public enum Profiles
+    {
+        Circular,
+        Rectangle
+    }
 }

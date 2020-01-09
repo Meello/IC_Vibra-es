@@ -8,8 +8,6 @@ namespace IcVibrations.Core.Calculator.Variables
     {
         int Elements(int nodes);
 
-        int DegreesFreedomMaximum(int nodes, int degreesFreedom);
-
-        int DegreesFreedomPerElemenent(int degreesFreedom, int nodesPerElement);
+        int DegreesFreedomMaximum(int nodes);
     }
 }

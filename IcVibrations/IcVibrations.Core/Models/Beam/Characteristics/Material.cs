@@ -34,12 +34,19 @@ namespace IcVibrations.Models.Beam.Characteristics
         public override double SpecificMass => 7850;
     }
 
-    public class Aluminium : Material
+    //public class Aluminium : Material
+    //{
+    //    public override double YoungModulus => 70e9;
+
+    //    public override double YieldStrenght => 300e6;
+
+    //    public override double SpecificMass => 2700;
+    //}
+
+    [Flags]
+    public enum Materials
     {
-        public override double YoungModulus => 70e9;
-
-        public override double YieldStrenght => 300e6;
-
-        public override double SpecificMass => 2700;
+        Steal1020 = 1020,
+        Steal4130 = 4130
     }
 }

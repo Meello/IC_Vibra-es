@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IcVibrations.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,16 +13,10 @@ namespace IcVibrations.Core.Calculator.Variables
             return elements;
         }
 
-        public int DegreesFreedomMaximum(int nodes, int degreesFreedom)
+        public int DegreesFreedomMaximum(int nodes)
         {
-            int degreesFreedomMaximum = nodes * degreesFreedom;
+            int degreesFreedomMaximum = nodes * Constants.DegreesFreedom;
             return degreesFreedomMaximum;
-        }
-
-        public int DegreesFreedomPerElemenent(int degreesFreedom, int nodesPerElement)
-        {
-            int degreesFreedomPerElemenent = degreesFreedom * nodesPerElement;
-            return degreesFreedomPerElemenent;
         }
     }
 }
