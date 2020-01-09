@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Core.Operations;
 using IcVibrations.Core.Validators.BeamRequest;
+using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
 using System;
 using System.Collections.Generic;
@@ -7,11 +8,15 @@ using System.Text;
 
 namespace IcVibrations.Core.Operations.Beam.Calculate
 {
-    public class CalculateBeamVibration : OperationBase<CalculateBeamRequest, CalculateBeamResponse>, ICalculateBeamVibration
+    public abstract class AbstractCalculateBeamVibration : OperationBase<CalculateBeamRequest, CalculateBeamResponse>, ICalculateBeamVibration
     {
+        protected abstract double CalculateArea(BeamRequestData requestData);
+
+        protected abstract double CalculateInertia(BeamRequestData requestData);
+
         private readonly IBeamRequestValidator _validateBeamRequest;
 
-        public CalculateBeamVibration(
+        public AbstractCalculateBeamVibration(
             IBeamRequestValidator validateBeamRequest)
         {
             this._validateBeamRequest = validateBeamRequest;

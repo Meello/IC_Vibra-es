@@ -4,26 +4,30 @@ using System.Text;
 
 namespace IcVibrations.DataContracts.Beam
 {
-    public class BeamRequestData
+    public abstract class BeamRequestData
     {
-        public uint Nodes { get; set; }
+        public uint NodeCount { get; set; }
 
         public string Material { get; set; }
 
-        public string Profile { get; set; }
-        
-        public double? Diameter { get; set; }
+        public double Thickness { get; set; }
 
+        public string FirstFastening { get; set; }
+
+        public string LastFastening { get; set; }
+
+        public double Length { get; set; }
+    }
+
+    public class CircularRequestData : BeamRequestData
+    {
+        public double? Diameter { get; set; }
+    }
+
+    public class RectangularRequestData : BeamRequestData
+    {
         public double? Height { get; set; }
 
         public double? Width { get; set; }
-
-        public double Thickness { get; set; }
-
-        public string Fastening1 { get; set; }
-
-        public string FasteningN { get; set; }
-
-        public double Length { get; set; }
     }
 }

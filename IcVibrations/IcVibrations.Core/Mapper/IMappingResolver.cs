@@ -1,4 +1,5 @@
-﻿using IcVibrations.DataContracts.Beam;
+﻿using IcVibrations.Core.DTO;
+using IcVibrations.DataContracts.Beam;
 using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,6 @@ namespace IcVibrations.Core.Mapper
 {
     public interface IMappingResolver
     {
-        Beam BuildFrom(BeamRequestData requestData);
+        ProfileDimension BuildFrom(BeamRequestData requestData);
     }
 }

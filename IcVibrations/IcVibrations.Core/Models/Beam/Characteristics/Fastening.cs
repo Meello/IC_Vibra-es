@@ -12,7 +12,7 @@ namespace IcVibrations.Models.Beam.Characteristics
 
     }
 
-    public class Collet : Fastening
+    public class Fixed : Fastening
     {
         public override bool Displacement => false;
 
@@ -20,7 +20,7 @@ namespace IcVibrations.Models.Beam.Characteristics
 
     }
 
-    public class Support : Fastening
+    public class Simple : Fastening
     {
         public override bool Displacement => true;
 
@@ -28,11 +28,18 @@ namespace IcVibrations.Models.Beam.Characteristics
 
     }
 
-    public class Bolt : Fastening
+    public class Pinned : Fastening
     {
         public override bool Displacement => false;
 
         public override bool Angle => true;
 
+    }
+
+    public enum Fastenings
+    {
+        Simple,
+        Pinned,
+        Fixed
     }
 }

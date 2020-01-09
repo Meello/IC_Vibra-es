@@ -29,6 +29,6 @@ namespace IcVibrations.Models.Beam.Characteristics
     public enum Profiles
     {
         Circular,
-        Rectangle
+        Rectangular
     }
 }

@@ -51,11 +51,11 @@ namespace IcVibrations
             services.AddScoped<IAuxiliarMethod, AuxiliarMethod>();
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
             // Beam Operations
-            services.AddScoped<ICalculateBeamVibration, CalculateBeamVibration>();
+            services.AddScoped<ICalculateBeamVibration, AbstractCalculateBeamVibration>();
             // Piezoelectric Operations
             services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
             // Beam Operations Base
-            services.AddScoped<IOperationBase<CalculateBeamRequest, CalculateBeamResponse>, CalculateBeamVibration>();
+            services.AddScoped<IOperationBase<CalculateBeamRequest, CalculateBeamResponse>, AbstractCalculateBeamVibration>();
             // Piezoelectric Operations Base
             services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, CalculatePiezoelectricVibration>();
 

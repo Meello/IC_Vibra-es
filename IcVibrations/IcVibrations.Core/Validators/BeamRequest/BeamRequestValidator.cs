@@ -1,6 +1,7 @@
-﻿using IcVibrations.Core.Models;
+﻿using IcVibrations.Core.Mapper;
+using IcVibrations.Core.Models;
 using IcVibrations.Core.Validators.BeamRequestParameters;
-using IcVibrations.Core.Validators.BiggerThanZero;
+using IcVibrations.Core.Validators.GreaterThanZero;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.Models.Beam;
@@ -13,48 +14,32 @@ namespace IcVibrations.Core.Validators.BeamRequest
 {
     public class BeamRequestValidator : IBeamRequestValidator
     {
-        private readonly IBiggerThanZeroValidator _biggerThanZeroValidator;
+        private readonly IGreaterThanZeroValidator _biggerThanZeroValidator;
         private readonly IBeamRequestParameterValidator _parameterValidator;
+        private readonly IMappingResolver _mappingresolver;
 
         public BeamRequestValidator(
-            IBiggerThanZeroValidator biggerThanZeroValidator,
-            IBeamRequestParameterValidator parameterValidator)
+            IGreaterThanZeroValidator biggerThanZeroValidator,
+            IBeamRequestParameterValidator parameterValidator,
+            IMappingResolver mappingresolver)
         {
             this._biggerThanZeroValidator = biggerThanZeroValidator;
             this._parameterValidator = parameterValidator;
+            this._mappingresolver = mappingresolver;
         }
 
         public bool Execute(BeamRequestData requestData, OperationResponseBase response)
         {
-            this._parameterValidator.ValidateNodes(requestData.Nodes, response);
+            // Validate nodes
+            this._parameterValidator.ValidateNodes(requestData.NodeCount, response);
 
-            if (!Enum.TryParse(requestData.Material.Trim(), true, out Materials materials))
-            {
-                response.AddError("002",$"Invalid material: {requestData.Material}. Valid materials: {Enum.GetValues(typeof(Materials))}.");
-            }
-            
-            if(requestData.Profile == "Rectangle")
-            {
-                if(!this._biggerThanZeroValidator.Execute(requestData.Height))
-                {
-                    response.AddError("003",$"Height: {requestData.Height} must be bigger than zero to profile: {requestData.Profile}.");
-                }
+            // Validate material
+            this._parameterValidator.ValidateMaterial(requestData.Material, response);
 
-                if (!this._biggerThanZeroValidator.Execute(requestData.Width))
-                {
-                    response.AddError("004", $"Width: {requestData.Width} must be bigger than zero to profile: {requestData.Profile}.");
-                }
+            // Validate profile
+            this._parameterValidator.ValidateProfile(requestData.Profile, this._mappingresolver.BuildFrom(requestData), response);
 
-                if (requestData.Diameter != null)
-                {
-                    response.AddError("005", $"Diameter: {requestData.Diameter} must be null to profile: {requestData.Profile}.");
-                }
-            }
 
-            if(!this._biggerThanZeroValidator.Execute(requestData.Diameter))
-            {
-
-            }
 
             return true;
         }

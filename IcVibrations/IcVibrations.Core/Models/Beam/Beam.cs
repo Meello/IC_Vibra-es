@@ -11,9 +11,9 @@ namespace IcVibrations.Models.Beam
 
         public Profile Profile { get; set; }
 
-        public Fastening Fastening1 { get; set; }
+        public Fastening FirstFastening { get; set; }
 
-        public Fastening FasteningN { get; set; }
+        public Fastening LastFastening { get; set; }
 
         //prefixo u --> somente positivos
         public uint Length { get; set; }
