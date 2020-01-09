@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using IcVibrations.DataContracts.Beam;
+using IcVibrations.Core.DTO;
 
 namespace IcVibrations.Core.Calculator
 {
@@ -25,7 +26,7 @@ namespace IcVibrations.Core.Calculator
             this._geometricProperties = geometricProperties;
         }
 
-        public Beam Execute(BeamRequestData requestData)
+        public MassHardnessDamping Execute(BeamRequestData requestData)
         {
             return null;
         }

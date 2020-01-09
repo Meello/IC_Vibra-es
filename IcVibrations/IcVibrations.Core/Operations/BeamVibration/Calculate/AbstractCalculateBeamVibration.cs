@@ -8,38 +8,36 @@ using System.Text;
 
 namespace IcVibrations.Core.Operations.Beam.Calculate
 {
-    public abstract class AbstractCalculateBeamVibration : OperationBase<CalculateBeamRequest, CalculateBeamResponse>, ICalculateBeamVibration
+    public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> where T : BeamRequestData
     {
-        protected abstract double CalculateArea(BeamRequestData requestData);
+        protected abstract double CalculateArea(CalculateBeamRequest<T> request);
 
-        protected abstract double CalculateInertia(BeamRequestData requestData);
+        protected abstract double CalculateInertia(CalculateBeamRequest<T> request);
 
-        private readonly IBeamRequestValidator _validateBeamRequest;
+        private readonly IBeamRequestValidator<T> _validator;
 
-        public AbstractCalculateBeamVibration(
-            IBeamRequestValidator validateBeamRequest)
+        public AbstractCalculateBeamVibration(IBeamRequestValidator<T> validator)
         {
-            this._validateBeamRequest = validateBeamRequest;
+            this._validator = validator;
         }
 
-        protected override CalculateBeamResponse ProcessOperation(CalculateBeamRequest request)
+        protected override CalculateBeamResponse ProcessOperation(CalculateBeamRequest<T> request)
         {
-            CalculateBeamResponse response = new CalculateBeamResponse();
+            var a = this.CalculateArea(request);
+            var b = this.CalculateInertia(request);
 
-            // Operation
-
-            return response;
+            return new CalculateBeamResponse();
         }
 
-        protected override CalculateBeamResponse ValidateOperation(CalculateBeamRequest request)
+        protected override CalculateBeamResponse ValidateOperation(CalculateBeamRequest<T> request)
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
-
-            if(!this._validateBeamRequest.Execute(request.Data, response))
+            
+            if (!this._validator.Execute(request.Data, response))
             {
                 return response;
             }
-
+            
             return response;
         }
     }

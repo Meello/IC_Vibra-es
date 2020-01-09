@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using IcVibrations.Core.Operations;
 using IcVibrations.Core.Operations.Beam.Calculate;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
@@ -14,18 +15,36 @@ namespace IC_Vibrations.Controllers
     [Route("api/v1/beam")]
     public class BeamController : ControllerBase
     {
-        private readonly ICalculateBeamVibration _calculateBeamVibration;
+        private readonly IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse> _rectangularCalculateBeamVibration;
 
-        public BeamController(ICalculateBeamVibration calculateBeamVibration)
+        private readonly IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse> _circularCalculateBeamVibration;
+
+        public BeamController(IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse> rectangularCalculateBeamVibration,
+            IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse> circularCalculateBeamVibration)
         {
-            this._calculateBeamVibration = calculateBeamVibration;
+            this._rectangularCalculateBeamVibration = rectangularCalculateBeamVibration;
+            this._circularCalculateBeamVibration = circularCalculateBeamVibration;
         }
 
-        [HttpPost]
-        public ActionResult<CalculateBeamResponse> Calculate(BeamRequestData requestData)
+        [HttpPost("rectangular")]
+        public ActionResult<CalculateBeamResponse> CalculateRectangular(RectangularBeamRequestData requestData)
         {
-            CalculateBeamRequest request = new CalculateBeamRequest(requestData);
-            CalculateBeamResponse response = this._calculateBeamVibration.Process(request);
+            var request = new CalculateBeamRequest<RectangularBeamRequestData>(requestData);
+            CalculateBeamResponse response = this._rectangularCalculateBeamVibration.Process(request);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost("circular")]
+        public ActionResult<CalculateBeamResponse> CalculateCircular(CircularBeamRequestData requestData)
+        {
+            var request = new CalculateBeamRequest<CircularBeamRequestData>(requestData);
+            CalculateBeamResponse response = this._circularCalculateBeamVibration.Process(request);
 
             if (!response.Success)
             {

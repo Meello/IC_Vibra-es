@@ -19,15 +19,15 @@ namespace IcVibrations.DataContracts.Beam
         public double Length { get; set; }
     }
 
-    public class CircularRequestData : BeamRequestData
+    public class CircularBeamRequestData : BeamRequestData
     {
-        public double? Diameter { get; set; }
+        public double Diameter { get; set; }
     }
 
-    public class RectangularRequestData : BeamRequestData
+    public class RectangularBeamRequestData : BeamRequestData
     {
-        public double? Height { get; set; }
+        public double Height { get; set; }
 
-        public double? Width { get; set; }
+        public double Width { get; set; }
     }
 }

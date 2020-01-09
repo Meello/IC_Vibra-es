@@ -7,8 +7,8 @@ using IcVibrations.Models.Beam;
 
 namespace IcVibrations.Core.Validators.BeamRequest
 {
-    public interface IBeamRequestValidator
+    public interface IBeamRequestValidator<T> where T : BeamRequestData
     {
-        bool Execute(BeamRequestData requestDat, OperationResponseBase response);
+        bool Execute(T requestData, OperationResponseBase response);
     }
 }

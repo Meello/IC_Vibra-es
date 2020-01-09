@@ -7,10 +7,12 @@ using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.Calculator;
 using IcVibrations.Core.Calculator.MatrixOperations;
 using IcVibrations.Core.Calculator.Variables;
-using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Operations;
 using IcVibrations.Core.Operations.Beam.Calculate;
+using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Operations.Piezoelectric.Calculate;
+using IcVibrations.Core.Validators.BeamRequest;
+using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.DataContracts.Piezoelectric.Calculate;
 using IcVibrations.Methods.AuxiliarMethods;
@@ -45,17 +47,21 @@ namespace IcVibrations
             services.AddScoped<IVariable, Variable>();
             services.AddScoped<ICalculate, Calculate>();
             services.AddScoped<ICalculate, Calculate>();
-            // Mapper
-            services.AddScoped<IMappingResolver, MappingResolver>();
+            
             // Methods
             services.AddScoped<IAuxiliarMethod, AuxiliarMethod>();
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
+            
             // Beam Operations
-            services.AddScoped<ICalculateBeamVibration, AbstractCalculateBeamVibration>();
+            services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
+            services.AddScoped<IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse>, CalculateCircularBeamVibration>();
+            services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
+            services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
+
             // Piezoelectric Operations
             services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
             // Beam Operations Base
-            services.AddScoped<IOperationBase<CalculateBeamRequest, CalculateBeamResponse>, AbstractCalculateBeamVibration>();
+            services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
             // Piezoelectric Operations Base
             services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, CalculatePiezoelectricVibration>();
 
