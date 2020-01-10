@@ -19,7 +19,8 @@ namespace IC_Vibrations.Controllers
 
         private readonly IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse> _circularCalculateBeamVibration;
 
-        public BeamController(IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse> rectangularCalculateBeamVibration,
+        public BeamController(
+            IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse> rectangularCalculateBeamVibration,
             IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse> circularCalculateBeamVibration)
         {
             this._rectangularCalculateBeamVibration = rectangularCalculateBeamVibration;

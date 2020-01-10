@@ -8,10 +8,13 @@ using System.Text;
 
 namespace IcVibrations.Core.Operations.Beam.Calculate
 {
-    public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> where T : BeamRequestData
+    public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> 
+        where T : BeamRequestData
     {
+        //Não é esse método --> apenas exemplo
         protected abstract double CalculateArea(CalculateBeamRequest<T> request);
-
+        
+        //Não é esse método --> apenas exemplo
         protected abstract double CalculateInertia(CalculateBeamRequest<T> request);
 
         private readonly IBeamRequestValidator<T> _validator;

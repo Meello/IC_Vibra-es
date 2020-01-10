@@ -1,11 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace IcVibrations.Core.Calculator.MatrixOperations
+namespace IcVibrations.Core.Calculator.ArrayOperations
 {
-    public class MatrixOperation : IMatrixOperation
+    public class ArrayOperation : IArrayOperation
     {
+        public double[] AddValue(double[] array, int[] position, double[] value)
+        {
+            for (int i = 0; i < position.Length; i++)
+            {
+                array[position[i]] = value[i];
+            }
+
+            return array;
+        }
+
+        public double[] Create(double value, int size)
+        {
+            double[] newArray = new double[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                newArray[i] = value;
+            }
+
+            return newArray;
+        }
+
+        public double[,] Inversearray(double[,] array)
+        {
+            throw new NotImplementedException();
+        }
+
         public double[,] InverseMatrix(double[,] matrix)
         {
             int n = matrix.GetLength(0);
@@ -69,14 +97,14 @@ namespace IcVibrations.Core.Calculator.MatrixOperations
             return matrizInv;
         }
 
-        public double[,] Multiply(double[,] matrix1, double[,] matrix2)
+        public double[,] Multiply(double[,] array1, double[,] array2)
         {
-            int lines1 = matrix1.GetLength(0);
-            int columns1 = matrix1.GetLength(1);
-            int lines2 = matrix2.GetLength(0);
-            int columns2 = matrix2.GetLength(1);
+            int lines1 = array1.GetLength(0);
+            int columns1 = array1.GetLength(1);
+            int lines2 = array2.GetLength(0);
+            int columns2 = array2.GetLength(1);
 
-            double[,] matrixMultiplication = new double[lines1, columns2];
+            double[,] arrayMultiplication = new double[lines1, columns2];
 
             for (int i = 0; i < lines1; i++)
             {
@@ -86,54 +114,54 @@ namespace IcVibrations.Core.Calculator.MatrixOperations
 
                     for (int k = 0; k < columns1; k++)
                     {
-                        sum += matrix1[i, k] * matrix2[k, j];
+                        sum += array1[i, k] * array2[k, j];
                     }
 
-                    matrixMultiplication[i, j] = sum;
+                    arrayMultiplication[i, j] = sum;
                 }
             }
 
-            return matrixMultiplication;
+            return arrayMultiplication;
         }
 
-        public double[,] Subtract(double[,] matrix1, double[,] matrix2)
+        public double[,] Subtract(double[,] array1, double[,] array2)
         {
-            int lines1 = matrix1.GetLength(0);
-            int columns1 = matrix1.GetLength(1);
-            int lines2 = matrix2.GetLength(0);
-            int columns2 = matrix2.GetLength(1);
+            int lines1 = array1.GetLength(0);
+            int columns1 = array1.GetLength(1);
+            int lines2 = array2.GetLength(0);
+            int columns2 = array2.GetLength(1);
 
-            double[,] matrixSubtraction = new double[lines1, columns1];
+            double[,] arraySubtraction = new double[lines1, columns1];
 
             for (int i = 0; i < lines1; i++)
             {
                 for (int j = 0; j < columns1; j++)
                 {
-                    matrixSubtraction[i, j] = matrix1[i, j] - matrix1[i, j];
+                    arraySubtraction[i, j] = array1[i, j] - array1[i, j];
                 }
             }
 
-            return matrixSubtraction;
+            return arraySubtraction;
         }
 
-        public double[,] Sum(double[,] matrix1, double[,] matrix2)
+        public double[,] Sum(double[,] array1, double[,] array2)
         {
-            int lines1 = matrix1.GetLength(0);
-            int columns1 = matrix1.GetLength(1);
-            int lines2 = matrix2.GetLength(0);
-            int columns2 = matrix2.GetLength(1);
+            int lines1 = array1.GetLength(0);
+            int columns1 = array1.GetLength(1);
+            int lines2 = array2.GetLength(0);
+            int columns2 = array2.GetLength(1);
 
-            double[,] matrixSubtraction = new double[lines1, columns1];
+            double[,] arraySubtraction = new double[lines1, columns1];
 
             for (int i = 0; i < lines1; i++)
             {
                 for (int j = 0; j < columns1; j++)
                 {
-                    matrixSubtraction[i, j] = matrix1[i, j] + matrix1[i, j];
+                    arraySubtraction[i, j] = array1[i, j] + array1[i, j];
                 }
             }
 
-            return matrixSubtraction;
+            return arraySubtraction;
         }
     }
 }

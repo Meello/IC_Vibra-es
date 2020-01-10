@@ -4,7 +4,8 @@ using System.Text;
 
 namespace IcVibrations.DataContracts.Beam.Calculate
 {
-    public class CalculateBeamRequest<T> : OperationRequestBase where T : BeamRequestData
+    public class CalculateBeamRequest<T> : OperationRequestBase 
+        where T : BeamRequestData
     {
         public CalculateBeamRequest(T requestData)
         {

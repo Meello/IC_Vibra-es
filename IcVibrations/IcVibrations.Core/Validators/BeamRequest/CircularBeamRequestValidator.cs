@@ -12,9 +12,8 @@ namespace IcVibrations.Core.Validators.BeamRequest
         {
             if(requestData.Diameter <= 0)
             {
+                response.AddError("006", $"Diameter : {requestData.Diameter } must be greater than zero.");
             }
-
-            return;
         }
     }
 }

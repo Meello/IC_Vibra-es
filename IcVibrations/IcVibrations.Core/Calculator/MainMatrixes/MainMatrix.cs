@@ -172,13 +172,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return matrizMomentoInercia;
 		}
 
-		public double[] YoungModulus(double moduloElasticidade, int elements)
+		public double[] YoungModulus(double youngModulus, int elements)
 		{
 			double[] moduloEl = new double[elements];
 
 			for (int i = 0; i < elements; i++)
 			{
-				moduloEl[i] = moduloElasticidade;
+				moduloEl[i] = youngModulus;
 			}
 
 			return moduloEl;

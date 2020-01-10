@@ -5,17 +5,19 @@ code = 002
 message = Invalid material: {materials}. Valid materials: {valid_materials}
 
 code = 003
-message = Height: {height} must be greater than zero to rectangle profile.
+message = Thickness: {thickness} must be greater than zero.
 
 code = 004
-message = Width: {width} must be greater than zero to rectangle profile.
+message = Invalid fastening: {fastening}. Valid fastenings: {valid_fastenings}.
 
 code = 005
-message = Diameter: {diameter} must be greater than zero to circular profile.
+message = Length: {length} must be greater than zero.
 
 code = 006
-message = Invalid profile: {profile}. Valid profiles: {valid_profiles}.
+message = Diameter: {diameter} must be greater than zero.
 
 code = 007
-message = Thickness: {thickness}  must be greater than zero.
+message = Width: {width} must be bigger than zero.
 
+code = 008
+message = Height: {height} must be bigger than zero.

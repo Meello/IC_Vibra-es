@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using IcVibrations.Calculator.GeometricProperties;
 using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.Calculator;
-using IcVibrations.Core.Calculator.MatrixOperations;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.Variables;
 using IcVibrations.Core.Operations;
 using IcVibrations.Core.Operations.Beam.Calculate;
@@ -43,7 +43,7 @@ namespace IcVibrations
             // Calculator
             services.AddScoped<IGeometricProperties, GeometricProperties>();
             services.AddScoped<IMainMatrix, MainMatrix>();
-            services.AddScoped<IMatrixOperation, MatrixOperation>();
+            services.AddScoped<IArrayOperation, ArrayOperation>();
             services.AddScoped<IVariable, Variable>();
             services.AddScoped<ICalculate, Calculate>();
             services.AddScoped<ICalculate, Calculate>();

@@ -35,11 +35,4 @@ namespace IcVibrations.Models.Beam.Characteristics
         public override bool Angle => true;
 
     }
-
-    public enum Fastenings
-    {
-        Simple,
-        Pinned,
-        Fixed
-    }
 }

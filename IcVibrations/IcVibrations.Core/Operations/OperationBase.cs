@@ -24,6 +24,7 @@ namespace IcVibrations.Core.Operations
                     return response;
                 }
 
+                //operar
                 response = ProcessOperation(request);
             }
             catch (Exception ex)

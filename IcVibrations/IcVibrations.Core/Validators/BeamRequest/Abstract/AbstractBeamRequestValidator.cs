@@ -1,5 +1,4 @@
 ﻿using IcVibrations.Core.Models;
-using IcVibrations.Core.Validators.GreaterThanZero;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.Models.Beam;
@@ -7,6 +6,7 @@ using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static IcVibrations.Common.Enum;
 
 namespace IcVibrations.Core.Validators.BeamRequest
 {
@@ -14,13 +14,18 @@ namespace IcVibrations.Core.Validators.BeamRequest
     {
         public bool Execute(T requestData, OperationResponseBase response)
         {
-            // Validate nodes
-            this.ValidateNodes(requestData.NodeCount, response);
+            this.ValidateNodeCount(requestData.NodeCount, response);
 
-            // Validate material
             this.ValidateMaterial(requestData.Material, response);
 
-            // Validate profile
+            this.ValidateThickness(requestData.Thickness, response);
+
+            this.ValidateFastening(requestData.FirstFastening, response);
+
+            this.ValidateFastening(requestData.LastFastening, response);
+
+            this.ValidateLength(requestData.Length, response);
+
             this.ValidateShapeInput(requestData, response);
 
             return true;
@@ -28,7 +33,7 @@ namespace IcVibrations.Core.Validators.BeamRequest
 
         protected abstract void ValidateShapeInput(T requestData, OperationResponseBase response);
 
-        private void ValidateNodes(uint nodes, OperationResponseBase response)
+        private void ValidateNodeCount(uint nodes, OperationResponseBase response)
         {
             if (nodes <= 2)
             {
@@ -48,18 +53,24 @@ namespace IcVibrations.Core.Validators.BeamRequest
         {
             if (thickness <= 0)
             {
-                response.AddError("007", $"Thickness: {thickness} must be greater than zero.");
+                response.AddError("003", $"Thickness: {thickness} must be greater than zero.");
             }
         }
 
         private void ValidateFastening(string fastening, OperationResponseBase response)
         {
-            throw new NotImplementedException();
+            if (!Enum.TryParse(fastening, true, out Fastenings fastenings))
+            {
+                response.AddError("004", $"Invalid fastening: {fastening}. Valid fastenings: {Enum.GetValues(typeof(Fastenings))}.");
+            }
         }
 
         private void ValidateLength(double length, OperationResponseBase response)
         {
-            throw new NotImplementedException();
+            if (length <= 0)
+            {
+                response.AddError("005", $"Length: {length} must be greater than zero.");
+            }
         }
     }
 }

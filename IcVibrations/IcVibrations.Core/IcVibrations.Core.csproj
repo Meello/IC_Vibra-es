@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IcVibrations.Common\IcVibrations.Common.csproj" />
     <ProjectReference Include="..\IcVibrations.DataContract\IcVibrations.DataContracts.csproj" />
   </ItemGroup>
 

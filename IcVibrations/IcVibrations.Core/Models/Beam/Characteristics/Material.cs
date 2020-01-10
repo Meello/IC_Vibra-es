@@ -42,11 +42,4 @@ namespace IcVibrations.Models.Beam.Characteristics
 
     //    public override double SpecificMass => 2700;
     //}
-
-    [Flags]
-    public enum Materials
-    {
-        Steal1020 = 1020,
-        Steal4130 = 4130
-    }
 }

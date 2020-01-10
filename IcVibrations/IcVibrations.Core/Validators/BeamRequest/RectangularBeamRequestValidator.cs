@@ -12,9 +12,13 @@ namespace IcVibrations.Core.Validators.BeamRequest
         {
             if(requestData.Width <= 0)
             {
+                response.AddError("007",$"Width: {requestData.Width} must be bigger than zero.");
             }
-
-            return;
+            
+            if (requestData.Height <= 0)
+            {
+                response.AddError("008", $"Height: {requestData.Height} must be bigger than zero.");
+            }
         }
     }
 }
