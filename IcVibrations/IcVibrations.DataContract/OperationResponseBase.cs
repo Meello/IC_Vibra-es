@@ -16,7 +16,7 @@ namespace IcVibrations.DataContracts
 
         public List<OperationError> Errors { get; }
 
-        public object Data { get; set; }
+        public OperationResponseData Data { get; set; }
 
         public void AddError(OperationError operationError)
         {

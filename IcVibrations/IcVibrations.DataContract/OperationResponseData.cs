@@ -11,13 +11,5 @@ namespace IcVibrations.DataContracts
         public double[,] Result { get; set; }
 
         public double[] Time { get; set; }
-
-        public double[,] Mass { get; set; }
-        
-        public double[,] Hardness { get; set; }
-
-        public double[,] Damping { get; set; }
-
-        public uint NodeCount { get; set; }
     }
 }

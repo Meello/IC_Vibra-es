@@ -1,4 +1,5 @@
 ﻿using IcVibrations.Core.DTO;
+using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.Models.Beam;
 using System;
@@ -13,6 +14,8 @@ namespace IcVibrations.Core.Mapper
 
         Beam AddValues(RectangularBeamRequestData rectangularBeamRequestData);
 
-        void AddValues(BeamMatrix beamMatrix, Beam beam);
+        void AddValues(BeamMatrix values, Beam local);
+
+        OperationResponseData BuildFrom(NewmarkMethodOutput output, string analysisExplanation);
     }
 }

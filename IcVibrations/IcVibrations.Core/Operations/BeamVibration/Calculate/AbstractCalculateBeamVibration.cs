@@ -20,18 +20,20 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
         protected abstract BeamMatrix CalculateParameters(Beam beam);
 
+        protected abstract string AnalysisExplanation();
+
         private readonly IBeamRequestValidator<T> _validator;
-        private readonly IMappingResolver _mappingResolver;
         private readonly INewmarkMethod _newmarkMethod;
+        private readonly IMappingResolver _mappingResolver;
 
         public AbstractCalculateBeamVibration(
             IBeamRequestValidator<T> validator,
-            IMappingResolver mappingResolver,
-            INewmarkMethod newmarkMethod)
+            INewmarkMethod newmarkMethod,
+            IMappingResolver mappingResolver)
         {
             this._validator = validator;
-            this._mappingResolver = mappingResolver;
             this._newmarkMethod = newmarkMethod;
+            this._mappingResolver = mappingResolver;
         }
 
         protected override CalculateBeamResponse ProcessOperation(CalculateBeamRequest<T> request)
@@ -42,8 +44,14 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
             BeamMatrix beamMatrix = this.CalculateParameters(beam);
 
-            response.Data = this._newmarkMethod.Execute(beamMatrix.Mass, beamMatrix.Hardness, beamMatrix.Damping);
+            this._mappingResolver.AddValues(values: beamMatrix, local: beam);
 
+            string analysisExplanation = this.AnalysisExplanation();
+
+            NewmarkMethodOutput newmarkMethodOutput = this._newmarkMethod.Execute(beam.Mass, beam.Hardness, beam.Damping);
+
+            response.Data = this._mappingResolver.BuildFrom(newmarkMethodOutput, analysisExplanation);
+            
             return response;
         }
 

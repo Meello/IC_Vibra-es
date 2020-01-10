@@ -7,6 +7,8 @@ namespace IcVibrations.Models.Beam
 {
     public class Beam
     {
+        public uint Nodes { get; set; }
+
         public Material Material { get; set; }
 
         public Profile Profile { get; set; }

@@ -19,7 +19,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         public CalculateRectangularBeamVibration(
             IBeamRequestValidator<RectangularBeamRequestData> validator, 
             IMappingResolver mappingResolver,
-            INewmarkMethod newmarkMethod) : base(validator, mappingResolver, newmarkMethod)
+            INewmarkMethod newmarkMethod) : base(validator, newmarkMethod)
         {
             this._mappingResolver = mappingResolver;
         }
@@ -31,9 +31,17 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             return beam;
         }
 
+        protected override string AnalysisExplanation(Beam beam)
+        {
+            // Ajustar a explicação
+            string analysisExplanation = "The program analyse dymanic effects in a beam.";
+
+            return analysisExplanation;
+        }
+
         protected override BeamMatrix CalculateParameters(Beam beam)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

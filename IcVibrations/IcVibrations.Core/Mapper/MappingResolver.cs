@@ -1,4 +1,5 @@
 ﻿using IcVibrations.Core.DTO;
+using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
@@ -83,18 +84,33 @@ namespace IcVibrations.Core.Mapper
             };
         }
 
-        public void AddValues(BeamMatrix beamMatrix, Beam beam)
+        public void AddValues(BeamMatrix values, Beam local)
         {
-            if(beamMatrix == null)
+            if(values == null)
             {
                 return;
             }
 
-            beam.Damping = beamMatrix.Damping;
-            beam.Hardness = beamMatrix.Hardness;
-            beam.Mass = beamMatrix.Mass;
-            beam.Profile.Area = beamMatrix.Area;
-            beam.Profile.MomentInertia = beamMatrix.MomentInertia;
+            local.Damping = values.Damping;
+            local.Hardness = values.Hardness;
+            local.Mass = values.Mass;
+            local.Profile.Area = values.Area;
+            local.Profile.MomentInertia = values.MomentInertia;
+        }
+
+        public OperationResponseData BuildFrom(NewmarkMethodOutput output, string analysisExplanation)
+        {
+            if(output == null || string.IsNullOrWhiteSpace(analysisExplanation))
+            {
+                return null;
+            }
+
+            return new OperationResponseData
+            {
+                AnalysisExplanation = analysisExplanation,
+                Result = output.AnalysisResult,
+                Time = output.Time
+            };
         }
     }
 }
