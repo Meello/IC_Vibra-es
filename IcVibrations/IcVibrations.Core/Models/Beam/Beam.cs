@@ -15,8 +15,7 @@ namespace IcVibrations.Models.Beam
 
         public Fastening LastFastening { get; set; }
 
-        //prefixo u --> somente positivos
-        public uint Length { get; set; }
+        public double Length { get; set; }
 
         public double[,] Mass { get; set; }
 

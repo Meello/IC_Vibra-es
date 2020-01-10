@@ -43,7 +43,8 @@ namespace IcVibrations.Core.Validators.BeamRequest
 
         private void ValidateMaterial(string material, OperationResponseBase response)
         {
-            if (!Enum.TryParse(material.Trim(), true, out Materials materials))
+            //_ => descarte, não importa a variável
+            if (!Enum.TryParse(material.Trim(), ignoreCase: true, out Materials _))
             {
                 response.AddError("002", $"Invalid material: {material}. Valid materials: {Enum.GetValues(typeof(Materials))}.");
             }

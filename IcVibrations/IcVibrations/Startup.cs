@@ -7,8 +7,9 @@ using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.Calculator;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.Variables;
+using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Operations;
-using IcVibrations.Core.Operations.Beam.Calculate;
+using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Operations.Piezoelectric.Calculate;
 using IcVibrations.Core.Validators.BeamRequest;
@@ -52,16 +53,19 @@ namespace IcVibrations
             services.AddScoped<IAuxiliarMethod, AuxiliarMethod>();
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
             
+            // Mapper
+            services.AddScoped<IMappingResolver, MappingResolver>();
+            
             // Beam Operations
             services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
             services.AddScoped<IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse>, CalculateCircularBeamVibration>();
             services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
             services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
+            // Beam Operations Base
+            services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
 
             // Piezoelectric Operations
             services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
-            // Beam Operations Base
-            services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
             // Piezoelectric Operations Base
             services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, CalculatePiezoelectricVibration>();
 

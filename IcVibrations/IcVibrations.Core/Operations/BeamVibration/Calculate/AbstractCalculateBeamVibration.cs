@@ -1,35 +1,50 @@
-﻿using IcVibrations.Core.Operations;
+﻿using IcVibrations.Core.Calculator;
+using IcVibrations.Core.DTO;
+using IcVibrations.Core.Mapper;
+using IcVibrations.Core.Operations;
 using IcVibrations.Core.Validators.BeamRequest;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
+using IcVibrations.Methods.NewmarkMethod;
+using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IcVibrations.Core.Operations.Beam.Calculate
+namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 {
     public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> 
         where T : BeamRequestData
     {
-        //Não é esse método --> apenas exemplo
-        protected abstract double CalculateArea(CalculateBeamRequest<T> request);
-        
-        //Não é esse método --> apenas exemplo
-        protected abstract double CalculateInertia(CalculateBeamRequest<T> request);
+        protected abstract Beam AddValues(CalculateBeamRequest<T> request);
+
+        protected abstract BeamMatrix CalculateParameters(Beam beam);
 
         private readonly IBeamRequestValidator<T> _validator;
+        private readonly IMappingResolver _mappingResolver;
+        private readonly INewmarkMethod _newmarkMethod;
 
-        public AbstractCalculateBeamVibration(IBeamRequestValidator<T> validator)
+        public AbstractCalculateBeamVibration(
+            IBeamRequestValidator<T> validator,
+            IMappingResolver mappingResolver,
+            INewmarkMethod newmarkMethod)
         {
             this._validator = validator;
+            this._mappingResolver = mappingResolver;
+            this._newmarkMethod = newmarkMethod;
         }
 
         protected override CalculateBeamResponse ProcessOperation(CalculateBeamRequest<T> request)
         {
-            var a = this.CalculateArea(request);
-            var b = this.CalculateInertia(request);
+            CalculateBeamResponse response = new CalculateBeamResponse();
 
-            return new CalculateBeamResponse();
+            Beam beam = this.AddValues(request);
+
+            BeamMatrix beamMatrix = this.CalculateParameters(beam);
+
+            response.Data = this._newmarkMethod.Execute(beamMatrix.Mass, beamMatrix.Hardness, beamMatrix.Damping);
+
+            return response;
         }
 
         protected override CalculateBeamResponse ValidateOperation(CalculateBeamRequest<T> request)

@@ -7,7 +7,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 {
     public class ArrayOperation : IArrayOperation
     {
-        public double[] AddValue(double[] array, int[] position, double[] value)
+        public double[] AddValues(double[] array, int[] position, double[] value)
         {
             for (int i = 0; i < position.Length; i++)
             {
@@ -29,13 +29,13 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return newArray;
         }
 
-        public double[,] Inversearray(double[,] array)
-        {
-            throw new NotImplementedException();
-        }
-
         public double[,] InverseMatrix(double[,] matrix)
         {
+            if(matrix.GetLength(0) != matrix.GetLength(1))
+            {
+                throw new Exception("It is just possible to inverse a qudratic matrix.");
+            }
+
             int n = matrix.GetLength(0);
             double[,] matrizInv = new double[n, n];
             double pivot, p;
@@ -99,14 +99,19 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
         public double[,] Multiply(double[,] array1, double[,] array2)
         {
-            int lines1 = array1.GetLength(0);
+            int rows1 = array1.GetLength(0);
             int columns1 = array1.GetLength(1);
-            int lines2 = array2.GetLength(0);
+            int rows2 = array2.GetLength(0);
             int columns2 = array2.GetLength(1);
 
-            double[,] arrayMultiplication = new double[lines1, columns2];
+            if(columns1 != rows2)
+            {
+                throw new Exception("Error in multiplication operation.");
+            }
 
-            for (int i = 0; i < lines1; i++)
+            double[,] arrayMultiplication = new double[rows1, columns2];
+
+            for (int i = 0; i < rows1; i++)
             {
                 for (int j = 0; j < columns1; j++)
                 {
@@ -126,14 +131,19 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
         public double[,] Subtract(double[,] array1, double[,] array2)
         {
-            int lines1 = array1.GetLength(0);
+            int rows1 = array1.GetLength(0);
             int columns1 = array1.GetLength(1);
-            int lines2 = array2.GetLength(0);
+            int rows2 = array2.GetLength(0);
             int columns2 = array2.GetLength(1);
 
-            double[,] arraySubtraction = new double[lines1, columns1];
+            if(rows1 != rows2 || columns1 != columns2)
+            {
+                throw new Exception("Can't subtract matrixes with differents sizes.");
+            }
 
-            for (int i = 0; i < lines1; i++)
+            double[,] arraySubtraction = new double[rows1, columns1];
+
+            for (int i = 0; i < rows1; i++)
             {
                 for (int j = 0; j < columns1; j++)
                 {
@@ -146,22 +156,27 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
         public double[,] Sum(double[,] array1, double[,] array2)
         {
-            int lines1 = array1.GetLength(0);
+            int rows1 = array1.GetLength(0);
             int columns1 = array1.GetLength(1);
-            int lines2 = array2.GetLength(0);
+            int rows2 = array2.GetLength(0);
             int columns2 = array2.GetLength(1);
 
-            double[,] arraySubtraction = new double[lines1, columns1];
+            if (rows1 != rows2 || columns1 != columns2)
+            {
+                throw new Exception("Can't sum matrixes with differents sizes.");
+            }
 
-            for (int i = 0; i < lines1; i++)
+            double[,] arraySum = new double[rows1, columns1];
+
+            for (int i = 0; i < rows1; i++)
             {
                 for (int j = 0; j < columns1; j++)
                 {
-                    arraySubtraction[i, j] = array1[i, j] + array1[i, j];
+                    arraySum[i, j] = array1[i, j] + array1[i, j];
                 }
             }
 
-            return arraySubtraction;
+            return arraySum;
         }
     }
 }

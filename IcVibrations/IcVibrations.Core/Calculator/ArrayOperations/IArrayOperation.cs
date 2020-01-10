@@ -6,7 +6,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 {
     public interface IArrayOperation
     {
-        double[,] Inversearray(double[,] array);
+        double[,] InverseMatrix(double[,] matrix);
 
         double[,] Multiply(double[,] array1, double[,] array2);
 
@@ -16,6 +16,6 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
         double[] Create(double value, int size);
 
-        double[] AddValue(double[] array, int[] positions, double[] values);
+        double[] AddValues(double[] array, int[] positions, double[] values);
     }
 }

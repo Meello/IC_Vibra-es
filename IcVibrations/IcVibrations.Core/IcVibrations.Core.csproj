@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Mapper\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 

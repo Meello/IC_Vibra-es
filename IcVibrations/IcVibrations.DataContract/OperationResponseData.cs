@@ -6,8 +6,18 @@ namespace IcVibrations.DataContracts
 {
     public class OperationResponseData
     {
+        public string AnalysisExplanation { get; set; }
+
         public double[,] Result { get; set; }
 
         public double[] Time { get; set; }
+
+        public double[,] Mass { get; set; }
+        
+        public double[,] Hardness { get; set; }
+
+        public double[,] Damping { get; set; }
+
+        public uint NodeCount { get; set; }
     }
 }

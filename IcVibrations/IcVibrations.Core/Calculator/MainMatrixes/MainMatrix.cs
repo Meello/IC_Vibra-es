@@ -1,4 +1,5 @@
 ﻿using IcVibrations.Core.Models;
+using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
@@ -9,26 +10,26 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public class MainMatrix : IMainMatrix
 	{
-		public double[,] MassElement(double area, double density, double length)
+		public double[,] MassElement(double area, double specificMass, double length)
 		{
 			double[,] massElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
-			massElement[0, 0] = 156 * ((area * density * length) / 420);
-			massElement[0, 1] = 22 * length * ((area * density * length) / 420);
-			massElement[0, 2] = 54 * ((area * density * length) / 420);
-			massElement[0, 3] = -13 * length * ((area * density * length) / 420);
-			massElement[1, 0] = 22 * length * ((area * density * length) / 420);
-			massElement[1, 1] = 4 * length * length * ((area * density * length) / 420);
-			massElement[1, 2] = 13 * length * ((area * density * length) / 420);
-			massElement[1, 3] = -3 * length * length * ((area * density * length) / 420);
-			massElement[2, 0] = 54 * ((area * density * length) / 420);
-			massElement[2, 1] = 13 * length * ((area * density * length) / 420);
-			massElement[2, 2] = 156 * ((area * density * length) / 420);
-			massElement[2, 3] = -22 * length * ((area * density * length) / 420);
-			massElement[3, 0] = -13 * length * ((area * density * length) / 420);
-			massElement[3, 1] = -3 * length * length * ((area * density * length) / 420);
-			massElement[3, 2] = -22 * length * ((area * density * length) / 420);
-			massElement[3, 3] = 4 * length * length * ((area * density * length) / 420);
+			massElement[0, 0] = 156 * ((area * specificMass * length) / 420);
+			massElement[0, 1] = 22 * length * ((area * specificMass * length) / 420);
+			massElement[0, 2] = 54 * ((area * specificMass * length) / 420);
+			massElement[0, 3] = -13 * length * ((area * specificMass * length) / 420);
+			massElement[1, 0] = 22 * length * ((area * specificMass * length) / 420);
+			massElement[1, 1] = 4 * length * length * ((area * specificMass * length) / 420);
+			massElement[1, 2] = 13 * length * ((area * specificMass * length) / 420);
+			massElement[1, 3] = -3 * length * length * ((area * specificMass * length) / 420);
+			massElement[2, 0] = 54 * ((area * specificMass * length) / 420);
+			massElement[2, 1] = 13 * length * ((area * specificMass * length) / 420);
+			massElement[2, 2] = 156 * ((area * specificMass * length) / 420);
+			massElement[2, 3] = -22 * length * ((area * specificMass * length) / 420);
+			massElement[3, 0] = -13 * length * ((area * specificMass * length) / 420);
+			massElement[3, 1] = -3 * length * length * ((area * specificMass * length) / 420);
+			massElement[3, 2] = -22 * length * ((area * specificMass * length) / 420);
+			massElement[3, 3] = 4 * length * length * ((area * specificMass * length) / 420);
 
 			return massElement;
 		}
@@ -57,22 +58,20 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardnessElement;
 		}
 
-		public double[,] Mass(int degreesFreedomMaximum, int elements, double[,] massElement)
+		public double[,] Mass(Beam beam, int degreesFreedomMaximum, int elements)
         {
 			int[,] elementsCoordinate = this.ElementsCoordinate(elements);
-			double[,] mass = new double[degreesFreedomMaximum, degreesFreedomMaximum];
+			
 			int p, q, r, s;
-
-			for (int i = 0; i < degreesFreedomMaximum; i++)
-			{
-				for (int j = 0; j < degreesFreedomMaximum; j++)
-				{
-					mass[i, j] = 0;
-				}
-			}
+			
+			double[,] mass = new double[degreesFreedomMaximum, degreesFreedomMaximum];
+			
+			double length = beam.Length / elements;
 
 			for (int n = 0; n < elements; n++)
 			{
+				double[,] massElement = this.MassElement(beam.Profile.Area[n], beam.Material.SpecificMass, length);
+
 				p = elementsCoordinate[n,0];
 				q = elementsCoordinate[n,1];
 				r = elementsCoordinate[n,2];
@@ -99,14 +98,20 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return mass;
 		}
 
-		public double[,] Hardness(int degreesFreedomMaximum, int elements, double[,] hardnessElement)
+		public double[,] Hardness(Beam beam, int degreesFreedomMaximum, int elements)
 		{
-			double[,] hardness = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 			int[,] elementsCoordinate = this.ElementsCoordinate(elements);
+			
 			int p, q, r, s;
+
+			double[,] hardness = new double[degreesFreedomMaximum, degreesFreedomMaximum];
+
+			double length = beam.Length / elements;
 
 			for (int n = 0; n < elements; n++)
 			{
+				double[,] hardnessElement = this.HardnessElement(beam.Profile.MomentInertia[n], beam.Material.YoungModulus, length);
+
 				p = elementsCoordinate[n, 0];
 				q = elementsCoordinate[n, 1];
 				r = elementsCoordinate[n, 2];
@@ -147,7 +152,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			return damping;
 		}
-		
+
 		public double[] Area(double area, int elements)
 		{
 			double[] matrizArea = new double[elements];

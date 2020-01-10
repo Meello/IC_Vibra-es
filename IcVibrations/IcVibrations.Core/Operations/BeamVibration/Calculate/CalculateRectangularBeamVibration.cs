@@ -1,7 +1,11 @@
-﻿using IcVibrations.Core.Operations.Beam.Calculate;
+﻿using IcVibrations.Core.DTO;
+using IcVibrations.Core.Mapper;
+using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Validators.BeamRequest;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
+using IcVibrations.Methods.NewmarkMethod;
+using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,18 +14,26 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 {
     public class CalculateRectangularBeamVibration : AbstractCalculateBeamVibration<RectangularBeamRequestData>
     {
-        public CalculateRectangularBeamVibration(IBeamRequestValidator<RectangularBeamRequestData> validator) : base(validator)
+        private readonly IMappingResolver _mappingResolver;
+
+        public CalculateRectangularBeamVibration(
+            IBeamRequestValidator<RectangularBeamRequestData> validator, 
+            IMappingResolver mappingResolver,
+            INewmarkMethod newmarkMethod) : base(validator, mappingResolver, newmarkMethod)
         {
+            this._mappingResolver = mappingResolver;
         }
 
-        protected override double CalculateArea(CalculateBeamRequest<RectangularBeamRequestData> request)
+        protected override Beam AddValues(CalculateBeamRequest<RectangularBeamRequestData> request)
         {
-            return request.Data.Width * request.Data.Height;
+            Beam beam = this._mappingResolver.AddValues(request.Data);
+
+            return beam;
         }
 
-        protected override double CalculateInertia(CalculateBeamRequest<RectangularBeamRequestData> request)
+        protected override BeamMatrix CalculateParameters(Beam beam)
         {
-            return request.Data.Width * 1.23;
+            throw new NotImplementedException();
         }
     }
 }
