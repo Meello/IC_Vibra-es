@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IcVibrations.Calculator.GeometricProperties;
+﻿using IcVibrations.Calculator.GeometricProperties;
 using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Core.Calculator;
 using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.Calculator.Variables;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Operations;
-using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Operations.Piezoelectric.Calculate;
 using IcVibrations.Core.Validators.BeamRequest;
@@ -23,8 +16,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace IcVibrations
@@ -42,25 +33,20 @@ namespace IcVibrations
         public void ConfigureServices(IServiceCollection services)
         {
             // Calculator
+            services.AddScoped<IArrayOperation, ArrayOperation>();
             services.AddScoped<IGeometricProperty, GeometricProperty>();
             services.AddScoped<IMainMatrix, MainMatrix>();
-            services.AddScoped<IArrayOperation, ArrayOperation>();
-            services.AddScoped<IVariable, Variable>();
-            services.AddScoped<ICalculate, Calculate>();
-            services.AddScoped<ICalculate, Calculate>();
+            
+            // Mapper
+            services.AddScoped<IMappingResolver, MappingResolver>();
             
             // Methods
             services.AddScoped<IAuxiliarMethod, AuxiliarMethod>();
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
             
-            // Mapper
-            services.AddScoped<IMappingResolver, MappingResolver>();
-            
             // Beam Operations
             services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
             services.AddScoped<IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse>, CalculateCircularBeamVibration>();
-            services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
-            services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
             // Beam Operations Base
             services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
 
@@ -68,6 +54,10 @@ namespace IcVibrations
             services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
             // Piezoelectric Operations Base
             services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, CalculatePiezoelectricVibration>();
+            
+            // Validator
+            services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
+            services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

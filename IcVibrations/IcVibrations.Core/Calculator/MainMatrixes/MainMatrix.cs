@@ -138,7 +138,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardness;
 		}
 
-		public double[,] CreateDamping(double[,] mass, double[,] hardness, double mi, int degreesFreedomMaximum)
+		public double[,] CreateDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum)
 		{
 			double[,] damping = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 
@@ -146,7 +146,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			{
 				for (int j = 0; j < degreesFreedomMaximum; j++)
 				{
-					damping[i, j] = mi * (mass[i, j] + hardness[i, j]);
+					damping[i, j] = Constants.Mi * (mass[i, j] + hardness[i, j]);
 				}
 			}
 

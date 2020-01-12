@@ -12,7 +12,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[,] CreateHardness(Beam beam, int degreesFreedomMaximum, int elements);
 
-        double[,] CreateDamping(double[,] mass, double[,] hardness, double mi, int degreesFreedomMaximum);
+        double[,] CreateDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum);
 
         double[,] CreateMassElement(double area, double density, double lengthElement);
 

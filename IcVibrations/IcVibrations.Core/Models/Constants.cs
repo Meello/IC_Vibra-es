@@ -17,5 +17,7 @@ namespace IcVibrations.Core.Models
         public const double Beta = 1 / 4;
 
         public const double Gama = 1 / 2;
+
+        public const double Mi = 0.005;
     }
 }

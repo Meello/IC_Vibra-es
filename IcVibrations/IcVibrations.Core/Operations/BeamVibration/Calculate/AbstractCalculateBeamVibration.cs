@@ -44,7 +44,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
             NewmarkMethodInput input = this.CalculateParameters(request, degreesFredomMaximum, response);
 
-            NewmarkMethodOutput output = this._newmarkMethod.Execute(input, response);
+            NewmarkMethodOutput output = this._newmarkMethod.CreateOutput(input, response);
 
             response.Data = this._mappingResolver.BuildFrom(output);
             

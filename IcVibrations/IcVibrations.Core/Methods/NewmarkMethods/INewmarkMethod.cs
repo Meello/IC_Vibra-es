@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Core.DTO;
 using IcVibrations.DataContracts;
+using IcVibrations.DataContracts.Beam;
 using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ namespace IcVibrations.Methods.NewmarkMethod
 {
     public interface INewmarkMethod
     {
-        NewmarkMethodOutput Execute(NewmarkMethodInput input, OperationResponseBase response);
+        NewmarkMethodInput CreateInput(BeamRequestData requestData, Beam beam, int degreesFreedomMaximum);
+
+        NewmarkMethodOutput CreateOutput(NewmarkMethodInput input, OperationResponseBase response);
     }
 }
