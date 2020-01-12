@@ -10,12 +10,10 @@ namespace IcVibrations.Core.Mapper
 {
     public interface IMappingResolver
     {
-        Beam AddValues(CircularBeamRequestData circularBeamRequestData);
-
-        Beam AddValues(RectangularBeamRequestData rectangularBeamRequestData);
+        Beam AddValues(BeamRequestData circularBeamRequestData);
 
         void AddValues(BeamMatrix values, Beam local);
 
-        OperationResponseData BuildFrom(NewmarkMethodOutput output, string analysisExplanation);
+        OperationResponseData BuildFrom(NewmarkMethodOutput output);
     }
 }

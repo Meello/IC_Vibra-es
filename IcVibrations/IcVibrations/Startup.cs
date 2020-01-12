@@ -42,7 +42,7 @@ namespace IcVibrations
         public void ConfigureServices(IServiceCollection services)
         {
             // Calculator
-            services.AddScoped<IGeometricProperties, GeometricProperties>();
+            services.AddScoped<IGeometricProperty, GeometricProperty>();
             services.AddScoped<IMainMatrix, MainMatrix>();
             services.AddScoped<IArrayOperation, ArrayOperation>();
             services.AddScoped<IVariable, Variable>();

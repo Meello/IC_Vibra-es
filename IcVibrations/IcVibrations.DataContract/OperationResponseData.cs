@@ -6,7 +6,7 @@ namespace IcVibrations.DataContracts
 {
     public class OperationResponseData
     {
-        public string AnalysisExplanation { get; set; }
+        //public string AnalysisExplanation { get; set; }
 
         public double[,] Result { get; set; }
 

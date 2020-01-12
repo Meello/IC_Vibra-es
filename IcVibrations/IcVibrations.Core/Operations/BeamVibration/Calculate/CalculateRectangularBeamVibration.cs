@@ -1,4 +1,6 @@
-﻿using IcVibrations.Core.DTO;
+﻿using IcVibrations.Calculator.GeometricProperties;
+using IcVibrations.Core.Calculator.ArrayOperations;
+using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Validators.BeamRequest;
@@ -6,6 +8,7 @@ using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.Methods.NewmarkMethod;
 using IcVibrations.Models.Beam;
+using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,34 +17,43 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 {
     public class CalculateRectangularBeamVibration : AbstractCalculateBeamVibration<RectangularBeamRequestData>
     {
+        private readonly IArrayOperation _arrayOperation;
+        private readonly IGeometricProperty _geometricProperty;
         private readonly IMappingResolver _mappingResolver;
 
         public CalculateRectangularBeamVibration(
+            IArrayOperation arrayOperation,
+            IGeometricProperty geometricProperty,
             IBeamRequestValidator<RectangularBeamRequestData> validator, 
             IMappingResolver mappingResolver,
-            INewmarkMethod newmarkMethod) : base(validator, newmarkMethod)
+            INewmarkMethod newmarkMethod) : base(validator, newmarkMethod, mappingResolver)
         {
+            this._arrayOperation = arrayOperation;
+            this._geometricProperty = geometricProperty;
             this._mappingResolver = mappingResolver;
         }
 
-        protected override Beam AddValues(CalculateBeamRequest<RectangularBeamRequestData> request)
+        protected override void CalculateParameters(CalculateBeamRequest<RectangularBeamRequestData> request, Beam beam, int elementCount, int degressFreedomMaximum)
         {
-            Beam beam = this._mappingResolver.AddValues(request.Data);
+            beam.Profile = new RectangularProfile
+            {
+                Height = request.Data.Height,
+                Width = request.Data.Width,
+                Thickness = request.Data.Thickness
+            };
 
-            return beam;
-        }
+            double area = this._geometricProperty.Area(request.Data.Height, request.Data.Width, request.Data.Thickness);
 
-        protected override string AnalysisExplanation(Beam beam)
-        {
-            // Ajustar a explicação
-            string analysisExplanation = "The program analyse dymanic effects in a beam.";
+            double momentInertia = this._geometricProperty.MomentInertia(request.Data.Height, request.Data.Width, request.Data.Thickness);
 
-            return analysisExplanation;
-        }
+            double[,] mass;
 
-        protected override BeamMatrix CalculateParameters(Beam beam)
-        {
-            return null;
-        }
+            double[,] hardness;
+
+            double[,] damping;
+
+            beam.Profile.Area = this._arrayOperation.Create(area, elementCount);
+
+        }                                              
     }
 }

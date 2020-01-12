@@ -1,4 +1,6 @@
-﻿using IcVibrations.DataContracts;
+﻿using IcVibrations.Core.DTO;
+using IcVibrations.DataContracts;
+using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,12 +9,12 @@ namespace IcVibrations.Methods.NewmarkMethod
 {
     public class NewmarkMethod : INewmarkMethod
     {
-        public OperationResponseData Execute(double[,] mass, double[,] hardness, double[,] damping)
+        public NewmarkMethodOutput Execute(Beam beam, int elementCount, int degreesFeedromMaximum, OperationResponseBase response)
         {
-            OperationResponseData responseData = new OperationResponseData();
+            NewmarkMethodOutput newmarkMethodOutput = new NewmarkMethodOutput();
 
 
-            return responseData;
+            return newmarkMethodOutput;
         }
     }
 }

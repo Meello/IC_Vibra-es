@@ -41,46 +41,19 @@ namespace IcVibrations.Core.Mapper
 
     public class MappingResolver : IMappingResolver
     {
-        public Beam AddValues(CircularBeamRequestData circularBeamRequestData)
+        public Beam AddValues(BeamRequestData beamRequestData)
         {
-            if (circularBeamRequestData == null)
+            if (beamRequestData == null)
             {
                 return null;
             }
 
             return new Beam
             {
-                FirstFastening = FasteningFactory.Create(circularBeamRequestData.FirstFastening),
-                LastFastening = FasteningFactory.Create(circularBeamRequestData.LastFastening),
-                Length = circularBeamRequestData.Length,
-                Material = MaterialFactory.Create(circularBeamRequestData.Material),
-                Profile = new CircularProfile
-                {
-                    Thickness = circularBeamRequestData.Thickness,
-                    Diameter = circularBeamRequestData.Diameter
-                }
-            };
-        }
-
-        public Beam AddValues(RectangularBeamRequestData rectangularBeamRequestData)
-        {
-            if (rectangularBeamRequestData == null)
-            {
-                return null;
-            }
-
-            return new Beam
-            {
-                FirstFastening = FasteningFactory.Create(rectangularBeamRequestData.FirstFastening),
-                LastFastening = FasteningFactory.Create(rectangularBeamRequestData.LastFastening),
-                Length = rectangularBeamRequestData.Length,
-                Material = MaterialFactory.Create(rectangularBeamRequestData.Material),
-                Profile = new RectangleProfile
-                {
-                    Thickness = rectangularBeamRequestData.Thickness,
-                    Height = rectangularBeamRequestData.Height,
-                    Width = rectangularBeamRequestData.Width
-                }
+                FirstFastening = FasteningFactory.Create(beamRequestData.FirstFastening),
+                LastFastening = FasteningFactory.Create(beamRequestData.LastFastening),
+                Length = beamRequestData.Length,
+                Material = MaterialFactory.Create(beamRequestData.Material)
             };
         }
 
@@ -98,16 +71,15 @@ namespace IcVibrations.Core.Mapper
             local.Profile.MomentInertia = values.MomentInertia;
         }
 
-        public OperationResponseData BuildFrom(NewmarkMethodOutput output, string analysisExplanation)
+        public OperationResponseData BuildFrom(NewmarkMethodOutput output)
         {
-            if(output == null || string.IsNullOrWhiteSpace(analysisExplanation))
+            if(output == null)
             {
                 return null;
             }
 
             return new OperationResponseData
             {
-                AnalysisExplanation = analysisExplanation,
                 Result = output.AnalysisResult,
                 Time = output.Time
             };

@@ -152,43 +152,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			return damping;
 		}
-
-		public double[] Area(double area, int elements)
-		{
-			double[] matrizArea = new double[elements];
-
-			for (int i = 0; i < elements; i++)
-			{
-				matrizArea[i] = area;
-			}
-
-			return matrizArea;
-		}
-
-		public double[] MomentInertia(double momentoInercia, int elements)
-		{
-			double[] matrizMomentoInercia = new double[elements];
-
-			for (int i = 0; i < elements; i++)
-			{
-				matrizMomentoInercia[i] = momentoInercia;
-			}
-
-			return matrizMomentoInercia;
-		}
-
-		public double[] YoungModulus(double youngModulus, int elements)
-		{
-			double[] moduloEl = new double[elements];
-
-			for (int i = 0; i < elements; i++)
-			{
-				moduloEl[i] = youngModulus;
-			}
-
-			return moduloEl;
-		}
-
+		
 		public double[] Force(double[] forceValues, int[] forcePosition, int degreesFreedomMaximum)
 		{
 			double[] force = new double[degreesFreedomMaximum];

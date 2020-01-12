@@ -18,12 +18,6 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[,] HardnessElement(double momentInertia, double youngModulus, double lengthElement);
 
-        double[] Area(double area, int elements);
-
-        double[] MomentInertia(double momentInertia, int elements);
-
-        double[] YoungModulus(double youngModulus, int elements);
-
         double[] Force(double[] forceValues, int[] forcePositions, int degreesFreedomMaximum);
 
         bool[] BondaryCondition(Fastening fixacao1, Fastening fixacaoN, int degreesFreedomMaximum);

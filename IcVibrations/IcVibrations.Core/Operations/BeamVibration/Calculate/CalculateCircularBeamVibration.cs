@@ -20,20 +20,15 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         public CalculateCircularBeamVibration(
             IBeamRequestValidator<CircularBeamRequestData> validator,
             IMappingResolver mappingResolver,
-            INewmarkMethod newmarkMethod) : base(validator, mappingResolver, newmarkMethod)
+            INewmarkMethod newmarkMethod) : base(validator, newmarkMethod, mappingResolver)
         {
             this._mappingResolver = mappingResolver;
         }
 
-        protected override Beam AddValues(CalculateBeamRequest<CircularBeamRequestData> request)
+        protected override BeamMatrix CalculateParameters(CalculateBeamRequest<CircularBeamRequestData> request)
         {
             Beam beam = this._mappingResolver.AddValues(request.Data);
 
-            return beam;
-        }
-
-        protected override BeamMatrix CalculateParameters(Beam beam)
-        {
             return null;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Core.Calculator;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
+using IcVibrations.Core.Models;
 using IcVibrations.Core.Operations;
 using IcVibrations.Core.Validators.BeamRequest;
 using IcVibrations.DataContracts.Beam;
@@ -16,11 +17,9 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
     public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> 
         where T : BeamRequestData
     {
-        protected abstract Beam AddValues(CalculateBeamRequest<T> request);
+        protected abstract void CalculateParameters(CalculateBeamRequest<T> request, Beam beam, int elementCount, int degressFreedomMaximum);
 
-        protected abstract BeamMatrix CalculateParameters(Beam beam);
-
-        protected abstract string AnalysisExplanation();
+        //protected abstract string AnalysisExplanation();
 
         private readonly IBeamRequestValidator<T> _validator;
         private readonly INewmarkMethod _newmarkMethod;
@@ -40,17 +39,17 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
-            Beam beam = this.AddValues(request);
+            int elementCount = this.ElementCount(request.Data.NodeCount);
 
-            BeamMatrix beamMatrix = this.CalculateParameters(beam);
+            int degreesFredomMaximum = this.DegreesFreedomMaximum(request.Data.NodeCount);
 
-            this._mappingResolver.AddValues(values: beamMatrix, local: beam);
+            Beam beam = this._mappingResolver.AddValues(request.Data);
 
-            string analysisExplanation = this.AnalysisExplanation();
+            this.CalculateParameters(request, beam, elementCount, degreesFredomMaximum);
 
-            NewmarkMethodOutput newmarkMethodOutput = this._newmarkMethod.Execute(beam.Mass, beam.Hardness, beam.Damping);
+            NewmarkMethodOutput newmarkMethodOutput = this._newmarkMethod.Execute(beam, elementCount, degreesFredomMaximum, response);
 
-            response.Data = this._mappingResolver.BuildFrom(newmarkMethodOutput, analysisExplanation);
+            response.Data = this._mappingResolver.BuildFrom(newmarkMethodOutput);
             
             return response;
         }
@@ -65,6 +64,18 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             }
             
             return response;
+        }
+        
+        private int ElementCount(int nodes)
+        {
+            int elements = nodes - 1;
+            return elements;
+        }
+
+        private int DegreesFreedomMaximum(int nodes)
+        {
+            int degreesFreedomMaximum = nodes * Constants.DegreesFreedom;
+            return degreesFreedomMaximum;
         }
     }
 }

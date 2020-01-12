@@ -13,7 +13,7 @@ namespace IcVibrations.Models.Beam.Characteristics
         public double[] MomentInertia { get; set; }
     }
 
-    public class RectangleProfile : Profile
+    public class RectangularProfile : Profile
     {
         public double Height { get; set; }
 

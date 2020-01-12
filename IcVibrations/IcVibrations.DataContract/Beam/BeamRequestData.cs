@@ -6,7 +6,7 @@ namespace IcVibrations.DataContracts.Beam
 {
     public abstract class BeamRequestData
     {
-        public uint NodeCount { get; set; }
+        public int NodeCount { get; set; }
 
         public string Material { get; set; }
 
