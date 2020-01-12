@@ -9,12 +9,18 @@ namespace IcVibrations.Methods.NewmarkMethod
 {
     public class NewmarkMethod : INewmarkMethod
     {
-        public NewmarkMethodOutput Execute(Beam beam, int elementCount, int degreesFeedromMaximum, OperationResponseBase response)
+        public NewmarkMethodOutput Execute(NewmarkMethodInput input, OperationResponseBase response)
         {
-            NewmarkMethodOutput newmarkMethodOutput = new NewmarkMethodOutput();
+            double a0 = 1.0 / (beta * dt * dt);
+            double a1 = gama / (beta * dt);
+            double a2 = 1.0 / (beta * dt);
+            double a3 = gama / (beta);
+            double a4 = 1 / (2 * beta);
+            double a5 = dt * ((gama / (2 * beta)) - 1);
+            double a6 = dt * (1 - gama);
+            double a7 = gama * dt;
 
-
-            return newmarkMethodOutput;
+            throw new NotImplementedException();
         }
     }
 }

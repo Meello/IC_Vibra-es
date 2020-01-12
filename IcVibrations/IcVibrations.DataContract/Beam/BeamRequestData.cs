@@ -6,7 +6,7 @@ namespace IcVibrations.DataContracts.Beam
 {
     public abstract class BeamRequestData
     {
-        public int NodeCount { get; set; }
+        public int ElementCount { get; set; }
 
         public string Material { get; set; }
 
@@ -17,6 +17,10 @@ namespace IcVibrations.DataContracts.Beam
         public string LastFastening { get; set; }
 
         public double Length { get; set; }
+
+        public double[] Forces { get; set; }
+
+        public int[] ForceNodePositions { get; set; }
     }
 
     public class CircularBeamRequestData : BeamRequestData

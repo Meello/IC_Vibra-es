@@ -50,25 +50,12 @@ namespace IcVibrations.Core.Mapper
 
             return new Beam
             {
+                ElementCount = beamRequestData.ElementCount,
                 FirstFastening = FasteningFactory.Create(beamRequestData.FirstFastening),
                 LastFastening = FasteningFactory.Create(beamRequestData.LastFastening),
                 Length = beamRequestData.Length,
                 Material = MaterialFactory.Create(beamRequestData.Material)
             };
-        }
-
-        public void AddValues(BeamMatrix values, Beam local)
-        {
-            if(values == null)
-            {
-                return;
-            }
-
-            local.Damping = values.Damping;
-            local.Hardness = values.Hardness;
-            local.Mass = values.Mass;
-            local.Profile.Area = values.Area;
-            local.Profile.MomentInertia = values.MomentInertia;
         }
 
         public OperationResponseData BuildFrom(NewmarkMethodOutput output)

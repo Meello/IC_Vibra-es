@@ -7,7 +7,7 @@ namespace IcVibrations.Models.Beam
 {
     public class Beam
     {
-        public uint Nodes { get; set; }
+        public int ElementCount { get; set; }
 
         public Material Material { get; set; }
 
@@ -18,11 +18,5 @@ namespace IcVibrations.Models.Beam
         public Fastening LastFastening { get; set; }
 
         public double Length { get; set; }
-
-        public double[,] Mass { get; set; }
-
-        public double[,] Hardness { get; set; }
-
-        public double[,] Damping { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿code = 001
-message = Nodes should be greatter than or equal 2
+message = Elements should be greatter than zero.
 
 code = 002
 message = Invalid material: {materials}. Valid materials: {valid_materials}

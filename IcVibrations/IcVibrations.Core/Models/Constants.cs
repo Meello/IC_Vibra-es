@@ -13,5 +13,9 @@ namespace IcVibrations.Core.Models
         public const int Dimensions = 2;
 
         public const int DegreesFreedom = 2;
+
+        public const double Beta = 1 / 4;
+
+        public const double Gama = 1 / 2;
     }
 }

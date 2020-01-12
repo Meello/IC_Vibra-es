@@ -14,7 +14,7 @@ namespace IcVibrations.Core.Validators.BeamRequest
     {
         public bool Execute(T requestData, OperationResponseBase response)
         {
-            this.ValidateNodeCount(requestData.NodeCount, response);
+            this.ValidateElementCount(requestData.ElementCount, response);
 
             this.ValidateMaterial(requestData.Material, response);
 
@@ -33,11 +33,11 @@ namespace IcVibrations.Core.Validators.BeamRequest
 
         protected abstract void ValidateShapeInput(T requestData, OperationResponseBase response);
 
-        private void ValidateNodeCount(uint nodes, OperationResponseBase response)
+        private void ValidateElementCount(int elementCount, OperationResponseBase response)
         {
-            if (nodes <= 2)
+            if (elementCount <= 1)
             {
-                response.AddError("001", "Nodes should be greatter than or equal 2");
+                response.AddError("001", "Elements should be greatter than zero.");
             }
         }
 

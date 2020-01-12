@@ -12,8 +12,6 @@ namespace IcVibrations.Core.Mapper
     {
         Beam AddValues(BeamRequestData circularBeamRequestData);
 
-        void AddValues(BeamMatrix values, Beam local);
-
         OperationResponseData BuildFrom(NewmarkMethodOutput output);
     }
 }

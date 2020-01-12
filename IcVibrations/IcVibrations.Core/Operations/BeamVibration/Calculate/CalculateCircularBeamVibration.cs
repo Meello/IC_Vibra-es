@@ -3,6 +3,7 @@ using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Validators.BeamRequest;
+using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.Methods.NewmarkMethod;
@@ -25,11 +26,9 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             this._mappingResolver = mappingResolver;
         }
 
-        protected override BeamMatrix CalculateParameters(CalculateBeamRequest<CircularBeamRequestData> request)
+        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<CircularBeamRequestData> request, int degressFreedomMaximum, OperationResponseBase response)
         {
-            Beam beam = this._mappingResolver.AddValues(request.Data);
-
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

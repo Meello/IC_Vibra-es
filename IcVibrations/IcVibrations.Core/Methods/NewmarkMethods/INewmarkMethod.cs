@@ -9,6 +9,6 @@ namespace IcVibrations.Methods.NewmarkMethod
 {
     public interface INewmarkMethod
     {
-        NewmarkMethodOutput Execute(Beam beam, int elementCount, int degreesFeedromMaximum, OperationResponseBase response);
+        NewmarkMethodOutput Execute(NewmarkMethodInput input, OperationResponseBase response);
     }
 }
