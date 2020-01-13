@@ -83,7 +83,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             double[,] hardness = this._mainMatrix.BuildHardness(beam, degreesFreedomMaximum, requestData.ElementCount);
 
-            double[,] damping = this._mainMatrix.BuildDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
+            double[,] damping = this._mainMatrix.BuildDamping(mass, hardness, degreesFreedomMaximum);
 
             double[] force = this._mainMatrix.BuildForce(requestData.Forces, requestData.ForceNodePositions, degreesFreedomMaximum);
 

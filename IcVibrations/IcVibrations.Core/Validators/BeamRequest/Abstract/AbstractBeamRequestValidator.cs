@@ -39,6 +39,11 @@ namespace IcVibrations.Core.Validators.BeamRequest
 
             this.ValidateShapeInput(requestData, response);
 
+            if(!response.Success)
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -55,9 +60,9 @@ namespace IcVibrations.Core.Validators.BeamRequest
         private void ValidateMaterial(string material, OperationResponseBase response)
         {
             //_ => descarte, não importa a variável
-            if (!Enum.TryParse(material.Trim(), ignoreCase: true, out Materials _))
+            if (!Enum.TryParse(material, ignoreCase: false, out Materials _))
             {
-                response.AddError("002", $"Invalid material: {material}. Valid materials: {Enum.GetValues(typeof(Materials))}.");
+                response.AddError("002", $"Invalid material: {material}. Valid materials: {Enum.GetValues(typeof(Materials)).ToString()}.");
             }
         }
 

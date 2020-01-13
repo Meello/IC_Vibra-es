@@ -79,6 +79,8 @@ namespace IcVibrations
                 app.UseHsts();
             }
 
+            // POSTMAN NÃO ESTÁ FUNCIONANDO --> TENTAR CONSERTAR
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 

@@ -60,7 +60,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 		public double[,] BuildMass(Beam beam, int degreesFreedomMaximum, int elements)
         {
-			int[,] elementsCoordinate = this.ElementsCoordinate(elements);
+			int[,] nodeCoordinates = this.NodeCoordinates(elements);
 			
 			int p, q, r, s;
 			
@@ -72,10 +72,10 @@ namespace IcVibrations.Calculator.MainMatrixes
 			{
 				double[,] massElement = this.BuildMassElement(beam.Profile.Area[n], beam.Material.SpecificMass, length);
 
-				p = elementsCoordinate[n,0];
-				q = elementsCoordinate[n,1];
-				r = elementsCoordinate[n,2];
-				s = elementsCoordinate[n,3];
+				p = nodeCoordinates[n,0];
+				q = nodeCoordinates[n,1];
+				r = nodeCoordinates[n,2];
+				s = nodeCoordinates[n,3];
 
 				mass[p, p] += massElement[0, 0];
 				mass[p, q] += massElement[0, 1];
@@ -100,7 +100,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 		public double[,] BuildHardness(Beam beam, int degreesFreedomMaximum, int elements)
 		{
-			int[,] elementsCoordinate = this.ElementsCoordinate(elements);
+			int[,] nodeCoordinates = this.NodeCoordinates(elements);
 			
 			int p, q, r, s;
 
@@ -112,10 +112,10 @@ namespace IcVibrations.Calculator.MainMatrixes
 			{
 				double[,] hardnessElement = this.BuildHardnessElement(beam.Profile.MomentInertia[n], beam.Material.YoungModulus, length);
 
-				p = elementsCoordinate[n, 0];
-				q = elementsCoordinate[n, 1];
-				r = elementsCoordinate[n, 2];
-				s = elementsCoordinate[n, 3];
+				p = nodeCoordinates[n, 0];
+				q = nodeCoordinates[n, 1];
+				r = nodeCoordinates[n, 2];
+				s = nodeCoordinates[n, 3];
 
 				hardness[p, p] += hardnessElement[0, 0];
 				hardness[p, q] += hardnessElement[0, 1];
@@ -157,52 +157,39 @@ namespace IcVibrations.Calculator.MainMatrixes
 		{
 			double[] force = new double[degreesFreedomMaximum];
 			
-			for (int i = 0; i < force.Count(); i++)
+			for (int i = 0; i < forceValues.Count(); i++)
 			{
-				force[forcePosition[i]] = forceValues[i];
+				force[2*forcePosition[i]] = forceValues[i];
 			}
 
 			return force;
 		}
 
-		public bool[] BuildBondaryCondition(Fastening fixacao1, Fastening fixacaoN, int degreesFreedomMaximum)
+		public bool[] BuildBondaryCondition(Fastening firstFastening, Fastening lastFastening, int degreesFreedomMaximum)
 		{
-			bool[] condicoesContorno = new bool[degreesFreedomMaximum];
+			bool[] bondaryCondition = new bool[degreesFreedomMaximum];
 
-			for (int i = 0; i < degreesFreedomMaximum; i++)
-			{
-				if (i == 0)
-				{
-					condicoesContorno[i] = fixacao1.Displacement;
-					condicoesContorno[i + 1] = fixacao1.Angle;
-				}
-				else if (i == degreesFreedomMaximum - 1)
-				{
-					condicoesContorno[i - 1] = fixacaoN.Displacement;
-					condicoesContorno[i] = fixacaoN.Angle;
-				}
-				else
-				{
-					condicoesContorno[i] = true;
-				}
-			}
+			bondaryCondition[0] = firstFastening.Displacement;
+			bondaryCondition[1] = firstFastening.Angle;
+			bondaryCondition[degreesFreedomMaximum - 1] = lastFastening.Displacement;
+			bondaryCondition[degreesFreedomMaximum] = lastFastening.Angle;
 
-			return condicoesContorno;
+			return bondaryCondition;
 		}
 
-		private int[,] ElementsCoordinate(int elements)
+		private int[,] NodeCoordinates(int elements)
 		{
-			int[,] coordenadaElementos = new int[elements, Constants.Dimensions];
+			int[,] nodeCoordinates = new int[elements + 1, Constants.DegreesFreedomElement];
 
-			for (int i = 0; i < elements; i++)
+			for (int i = 0; i < elements + 1; i++)
 			{
-				for (int j = 0; j < Constants.Dimensions; j++)
+				for (int j = 0; j < Constants.DegreesFreedomElement; j++)
 				{
-					coordenadaElementos[i, j] = i + j + 1;
+					nodeCoordinates[i, j] = 2 * i + j;
 				}
 			}
 
-			return coordenadaElementos;
+			return nodeCoordinates;
 		}
 	}
 }
