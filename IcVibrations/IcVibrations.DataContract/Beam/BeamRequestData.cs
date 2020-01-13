@@ -21,6 +21,18 @@ namespace IcVibrations.DataContracts.Beam
         public double[] Forces { get; set; }
 
         public int[] ForceNodePositions { get; set; }
+
+        public double InitialTime { get; set; }
+
+        public double TimeDivion { get; set; }
+
+        public double FinalTime { get; set; }
+
+        public double InitialAngularFrequency { get; set; }
+
+        public double AngularFrequencyDivision { get; set; }
+
+        public double FinalAngularFrequency { get; set; }
     }
 
     public class CircularBeamRequestData : BeamRequestData
