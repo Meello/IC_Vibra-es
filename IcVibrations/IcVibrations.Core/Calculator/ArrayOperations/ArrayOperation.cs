@@ -129,6 +129,62 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return arrayMultiplication;
         }
 
+        public double[] Multiply(double[,] array1, double[] array2)
+        {
+            int rows1 = array1.GetLength(0);
+            int columns1 = array1.GetLength(1);
+            int size2 = array2.Length;
+
+            if (columns1 != size2)
+            {
+                throw new Exception("Error in multiplication operation.");
+            }
+
+            double[] arrayMultiplication = new double[rows1];
+
+            for (int i = 0; i < rows1; i++)
+            {
+                double sum = 0;
+
+                for (int j = 0; j < columns1; j++)
+                {
+                    sum += array1[i, j] * array2[j];
+                }
+
+                arrayMultiplication[i] = sum;
+            }
+
+            return arrayMultiplication;
+        }
+
+        public double[] Multiply(double[] array1, double[,] array2)
+        {
+            int size1 = array1.Length;
+            int rows2 = array2.GetLength(0);
+            int columns2 = array2.GetLength(1);
+
+            if (size1 != rows2)
+            {
+                throw new Exception("Error in multiplication operation.");
+            }
+
+            double[] arrayMultiplication = new double[rows2];
+
+            for (int i = 0; i < columns2; i++)
+            {
+                double sum = 0;
+
+                for (int j = 0; j < size1; j++)
+                {
+                    sum += array1[j] * array2[j,i];
+                }
+
+                arrayMultiplication[i] = sum;
+            }
+
+            return arrayMultiplication;
+        }
+
         public double[,] Subtract(double[,] array1, double[,] array2)
         {
             int rows1 = array1.GetLength(0);
@@ -147,8 +203,28 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             {
                 for (int j = 0; j < columns1; j++)
                 {
-                    arraySubtraction[i, j] = array1[i, j] - array1[i, j];
+                    arraySubtraction[i, j] = array1[i, j] - array2[i, j];
                 }
+            }
+
+            return arraySubtraction;
+        }
+
+        public double[] Subtract(double[] array1, double[] array2)
+        {
+            int size1 = array1.Length;
+            int size2 = array2.Length;
+
+            if (size1 != size2)
+            {
+                throw new Exception("Can't subtract matrixes with differents sizes.");
+            }
+
+            double[] arraySubtraction = new double[size1];
+
+            for (int i = 0; i < size1; i++)
+            {
+                arraySubtraction[i] = array1[i] - array2[i];
             }
 
             return arraySubtraction;
@@ -172,8 +248,28 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             {
                 for (int j = 0; j < columns1; j++)
                 {
-                    arraySum[i, j] = array1[i, j] + array1[i, j];
+                    arraySum[i, j] = array1[i, j] + array2[i, j];
                 }
+            }
+
+            return arraySum;
+        }
+
+        public double[] Sum(double[] array1, double[] array2)
+        {
+            int size1 = array1.Length;
+            int size2 = array2.Length;
+
+            if (size1 != size2)
+            {
+                throw new Exception("Can't sum matrixes with differents sizes.");
+            }
+
+            double[] arraySum = new double[size1];
+
+            for (int i = 0; i < size1; i++)
+            {
+                arraySum[i] = array1[i] + array2[i];
             }
 
             return arraySum;

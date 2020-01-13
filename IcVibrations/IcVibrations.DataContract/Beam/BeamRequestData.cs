@@ -24,9 +24,9 @@ namespace IcVibrations.DataContracts.Beam
 
         public double InitialTime { get; set; }
 
-        public double TimeDivion { get; set; }
+        public double PeriodDivion { get; set; }
 
-        public double FinalTime { get; set; }
+        public double PeriodCount { get; set; }
 
         public double InitialAngularFrequency { get; set; }
 

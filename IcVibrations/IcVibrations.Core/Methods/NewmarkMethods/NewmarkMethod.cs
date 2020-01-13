@@ -1,4 +1,5 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
 using IcVibrations.DataContracts;
@@ -7,53 +8,67 @@ using IcVibrations.Methods.AuxiliarMethods;
 using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace IcVibrations.Methods.NewmarkMethod
 {
     public class NewmarkMethod : INewmarkMethod
     {
+        // Parameters to Newmark Method
         private double a0, a1, a2, a3, a4, a5, a6, a7;
+        // Degrees freedom maximum
         private double glMax;
+        // Boundary condition true
         private int bcTrue;
+        // Angular frequency 
+        private double wf, wi, dw, w;
+        // Time
+        private double dt, t0, pD, pC;
 
         private readonly IMainMatrix _mainMatrix;
         private readonly IAuxiliarMethod _auxiliarMethod;
+        private readonly IArrayOperation _arrayOperation;
 
         public NewmarkMethod(
             IMainMatrix mainMatrix,
-            IAuxiliarMethod auxiliarMethod)
+            IAuxiliarMethod auxiliarMethod,
+            IArrayOperation arrayOperation)
         {
             this._mainMatrix = mainMatrix;
             this._auxiliarMethod = auxiliarMethod;
+            this._arrayOperation = arrayOperation;
         }
 
         public NewmarkMethodOutput CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
         {
             NewmarkMethodOutput output = new NewmarkMethodOutput();
 
-            double dt = 0;
+            int angularFrequencyLoopCount = (int)((wf - wi) / dw) + 1;
 
-            a0 = 1 / (Constants.Beta * Math.Pow(dt, 2));
-            a1 = Constants.Gama / (Constants.Beta * dt);
-            a2 = 1.0 / (Constants.Beta * dt);
-            a3 = Constants.Gama / (Constants.Beta);
-            a4 = 1 / (2 * Constants.Beta);
-            a5 = dt * ((Constants.Gama / (2 * Constants.Beta)) - 1);
-            a6 = dt * (1 - Constants.Gama);
-            a7 = Constants.Gama * dt;
-
-            int nbif = (int)((input.FinalAngularFrequency - input.InitialAngularFrequency) / input.TimeDivion) + 1;
-
-            for (int i = 0; i < nbif; i++)
+            for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
-                //W = Wi + (jb * dW);
-                //printf("W = %g\n", W);
-                //if (W != 0) dt = (long double) ((PI * 2./ W) / nm);
-                //else dt = (long double) ((PI * 2.) / nm);
+                w = wi + (i * dw);
 
-                //MatrizP1();
-                //solucao();
+                if (w != 0)
+                {
+                    dt = (Math.PI * 2 / w) / pD;
+                }
+                else
+                { 
+                    dt = (Math.PI * 2) / pD;
+                }
+
+                a0 = 1 / (Constants.Beta * Math.Pow(dt, 2));
+                a1 = Constants.Gama / (Constants.Beta * dt);
+                a2 = 1.0 / (Constants.Beta * dt);
+                a3 = Constants.Gama / (Constants.Beta);
+                a4 = 1 / (2 * Constants.Beta);
+                a5 = dt * ((Constants.Gama / (2 * Constants.Beta)) - 1);
+                a6 = dt * (1 - Constants.Gama);
+                a7 = Constants.Gama * dt;
+
+                output = this.Solution(input, response);
             }
 
             return output;
@@ -94,263 +109,226 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             input.Force = this._auxiliarMethod.AplyBondaryConditions(force, bondaryCondition);
 
-            input.InitialTime = requestData.InitialTime;
+            t0 = requestData.InitialTime;
 
-            input.TimeDivion = requestData.TimeDivion;
+            pD = requestData.PeriodDivion;
             
-            input.FinalTime = requestData.FinalTime;
+            pC = requestData.PeriodCount;
             
-            input.InitialAngularFrequency = requestData.InitialAngularFrequency;
+            wi = requestData.InitialAngularFrequency;
             
-            input.AngularFrequencyDivision = requestData.AngularFrequencyDivision;
+            dw = requestData.AngularFrequencyDivision;
             
-            input.FinalAngularFrequency = requestData.FinalAngularFrequency;
+            wf = requestData.FinalAngularFrequency;
 
             return input;
         }
 
-        private NewmarkMethodOutput Solution(NewmarkMethodInput input)
+        private NewmarkMethodOutput Solution(NewmarkMethodInput input, OperationResponseBase response)
         {
             NewmarkMethodOutput output = new NewmarkMethodOutput();
 
-            double z;
+            StreamWriter streamWriter = new StreamWriter(@"C:\Workspace\IC VIbrações\IcVibrations\Solutions\RectangularBeamSolution.csv");
+
             int i, jn, jp;
+            double time = 0;
 
-            //cont1 = 0;
-            //for (jp = 1; jp <= np - 1; jp++)
-            //{
-                //for (jn = 1; jn <= nm - 1; jn++)            /* time loop */
-                //{
-                    //f[0] = f1[0] * sin(W * t);
-                    //f[1] = f1[1] * sin(W * t);
-                    //f[2] = f1[2] * sin(W * t);
-                    //f[3] = f1[3] * sin(W * t);
-                    //f[4] = f1[4] * sin(W * t);
-                    //f[5] = f1[5] * sin(W * t);
-                    //CondicoesContorno1();
-                    //if (t == 0)
-                    //{
-                        //for (i = 0; i < 3 * (N - cont); i++)
-                        //{
-                            //y[i] = y_ant[i] = 0.0;              /* initial position */
-                        //}
+            double[] y = new double[bcTrue];
+            double[] y_ant = new double[bcTrue];
+            double[] delta_y = new double[bcTrue];
 
-                        //Matriz_K_Y();
-                        //Matriz_C_Y();
-                        //Matriz_K_C_Y();
-                        //Elim_Gauss1();
+            double[] vel = new double[bcTrue];
+            double[] vel_ant = new double[bcTrue];
+            double[] delta_vel = new double[bcTrue];
 
-                        //for (i = 0; i < (N - cont); i++)
-                        //{
-                            //y[i + 2 * (N - cont)] = acel[i];                /* initial position */
-                        //}
+            double[] acel = new double[bcTrue];
+            double[] acel_ant = new double[bcTrue];
+            double[] delta_acel = new double[bcTrue];
 
-                        //for (i = 2 * (N - cont); i < 3 * (N - cont); i++)
-                        //{
-                            //y_ant[i] = y[i];                /* initial position */
-                        //}
+            double[] force_ant = new double[bcTrue];
 
-                    //}
+            for (jp = 1; jp <= pC - 1; jp++)
+            {
+                for (jn = 1; jn <= pD - 1; jn++)            
+                {
+                    for (i = 0; i < bcTrue; i++)
+                    {
+                        input.Force[i] = input.Force[i] * Math.Sin(w * time);
+                    }
 
-                    //if (jp > 0)
-                    //{
-                        //if (sqrt((W - 0.5) * (W - 0.5)) < 0.0001)
-                        //{
-                            //fprintf(output, "%Lf\t %Lf\t %Lf\t %Lf\t %Lf\t %Lf\n", W, t, y[0], y[1], y[2], y[3]);
-                        //}
-                    //}
+                    if (time == 0)
+                    {
+                        double[,] massInverse = this._arrayOperation.InverseMatrix(input.Mass);
 
-                    //MatrizP1();
-                    //MatrizP2();
-                    //MatrizP3();
-                    //MatrizP4();
-                    //Elim_Gauss();
+                        double[] matrix_K_C_Y = this.CreateMatrix_K_C_Y(input, y, response);
 
-                    //for (i = 0; i < (N - cont); i++)
-                    //{
-                        //delta_y[i] = P7[i];
-                    //}
+                        acel = this._arrayOperation.Multiply(massInverse, matrix_K_C_Y);
 
+                        for (i = 0; i < bcTrue; i++)
+                        {
+                            acel_ant[i] = y[i];                
+                        }
+                    }
 
-                    //for (i = 0; i < (N - cont); i++)
-                    //{
-                        //delta_y[i + 2 * (N - cont)] = a1 * (P7[i]) - a3 * y_ant[i + (N - cont)] - a5 * y_ant[i + 2 * (N - cont)];
-                    //}
+                    if (jp > 0)
+                    {
+                        if (Math.Sqrt((w - 0.5) * (w - 0.5)) < 0.0001)
+                        {
+                            output.Result.Add(y);
+                            output.Time.Add(time);
 
-                    //for (i = 0; i < (N - cont); i++)
-                    //{
-                        //delta_y[i + (N - cont)] = a0 * (P7[i]) - a2 * y_ant[i + (N - cont)] - a4 * y_ant[i + 2 * (N - cont)];
-                    //}
+                            try
+                            {
+                                using (StreamWriter sw = streamWriter)
+                                {
+                                    sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
 
-                    //for (i = 0; i <= 3 * (N - cont); i++)
-                    //{
-                        //y[i] = y_ant[i] + delta_y[i];
-                    //}
+                                    sw.Close();
+                                }
+                            }
+                            catch
+                            {
+                                // Não quero que pare, só avise que deu erro.
+                                throw new Exception("Couldn't ope file.");
+                            }
+                        }
+                    }
 
-                    //t = t + dt;
+                    double[,] equivalentHardness = this.BuildEquivalentHardness(input.Mass, input.Damping, input.Hardness);
+                    double[] equivalentForce = this.BuildEquivalentForce(input, force_ant, vel, acel);
 
-                    //for (i = 0; i < 3 * (N - cont); i++)
-                    //{
-                        //y_ant[i] = y[i];         /* initial position */
-                    //}
+                    double[,] equivalentHardnessInverse = this._arrayOperation.InverseMatrix(equivalentHardness);
 
-                    //for (i = 0; i < (N - cont); i++)
-                    //{
-                        //fa_ant[i] = fa[i];       /* initial position */
-                    //}
+                    delta_y = this._arrayOperation.Multiply(equivalentForce,equivalentHardnessInverse);
 
-                //}
-            //}
+                    for (i = 0; i < bcTrue; i++)
+                    {
+                        delta_vel[i] = a1 * delta_y[i] - a3 * vel_ant[i] - a5 * acel_ant[i];
+                    }
+
+                    for (i = 0; i < bcTrue; i++)
+                    {
+                        delta_y[i + bcTrue] = a0 * delta_y[i] - a2 * vel_ant[i] - a4 * acel_ant[i];
+                    }
+
+                    for (i = 0; i < bcTrue; i++)
+                    {
+                        y[i] = y_ant[i] + delta_y[i];
+                        vel[i] = vel_ant[i] + delta_vel[i];
+                        acel[i] = acel_ant[i] + delta_acel[i];
+                    }
+
+                    time += dt;
+
+                    for (i = 0; i < 3 * bcTrue; i++)
+                    {
+                        y_ant[i] = y[i];
+                    }
+
+                    for (i = 0; i < bcTrue; i++)
+                    {
+                        force_ant[i] = input.Force[i];
+                    }
+                }
+            }
 
             return output;
         }
 
-        private double[,] MatrizP1(double[,] mass, double[,] damping, double[,] hardness)
+        private double[,] BuildEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness)
         {
-            double[,] P1 = new double[bcTrue, bcTrue];
+            double[,] equivalentHardness = new double[bcTrue, bcTrue];
 
             /* montagem da matriz massa*/
             for (int i = 0; i < bcTrue; i++)
             {
                 for (int j = 0; j < bcTrue; j++)
                 {
-                    P1[i,j] = a0 * mass[i,j] + a1 * damping[i,j] + hardness[i,j];
+                    equivalentHardness[i,j] = a0 * mass[i,j] + a1 * damping[i,j] + hardness[i,j];
                 }
             }
 
-            return P1;
+            return equivalentHardness;
         }
 
-        private double[,] MatrizP2a(void)
+
+        private double[,] BuildMatrixP1(double[,] mass, double[,] damping)
         {
-            int i, j;
-            double soma, soma1;
+            double[,] p1 = new double[bcTrue, bcTrue];
 
-            for (i = 0; i < N - cont; i++)
+            for (int i = 0; i < bcTrue; i++)
             {
-
-                for (j = 0; j < N - cont; j++)
+                for (int j = 0; j < bcTrue; j++)
                 {
-                    P2a[i,j] = a2 * M_cc[j,i] + a3 * C[i,j];
-
+                    p1[i,j] = a2 * mass[i,j] + a3 * damping[i,j];
                 }
             }
 
+            return p1;
         }
-        
-        void MatrizP2(void)
-        {
-            int i, j;
-            long double soma, soma1;
 
-            for (i = 0; i < N - cont; i++)
+        private double[,] BuildMatrixP2(double[,] mass, double[,] damping)
+        {
+            double[,] p2 = new double[bcTrue, bcTrue];
+
+            for (int i = 0; i < bcTrue; i++)
             {
-                soma = 0.;
-                for (j = 0; j < N - cont; j++)
+                for (int j = 0; j < bcTrue; j++)
                 {
-                    soma1 = P2a[i,j] * y_ant[j + N - cont];
+                    p2[i, j] = a4 * mass[j, i] + a5 * damping[i, j];
                 }
-                P2[j] = soma;
             }
 
+            return p2;
         }
 
-        /***********************************************************************/
-        /***************************************************/
-        void MatrizP3a(void)
+        private double[] BuildEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
         {
-            int i, j;
-            long double soma, soma1;
+            double[] deltaForce = this._arrayOperation.Subtract(input.Force, force_ant);
 
-            for (i = 0; i < N - cont; i++)
-            {
+            double[,] p1 = this.BuildMatrixP2(input.Mass, input.Damping);
 
-                for (j = 0; j < N - cont; j++)
-                {
-                    P3a[i,j] = a4 * M_cc[j,i] + a5 * C[i,j];
+            double[,] p2 = this.BuildMatrixP2(input.Mass, input.Damping);
 
-                }
+            double[] vel_p1 = this._arrayOperation.Multiply(p1, vel);
 
-            }
+            double[] acel_p2 = this._arrayOperation.Multiply(p2, acel);
 
+            double[] equivalentForce = _arrayOperation.Sum(deltaForce, _arrayOperation.Sum(vel_p1, acel_p2));
+
+            return equivalentForce;
         }
 
-        /***********************************************************************/
-        void MatrizP3(void)
+        private double[] CreateMatrix_K_C_Y(NewmarkMethodInput input, double[] displacement, OperationResponseBase response)
         {
-            int i, j;
-            long double soma;
+            double[] matrix_K_Y = this._arrayOperation.Multiply(input.Hardness, displacement);
 
-            for (j = 0; j < N - cont; j++)
+            if(matrix_K_Y.Length != bcTrue)
             {
-                soma = 0.;
-                for (i = 0; i < N - cont; i++)
-                {
-                    soma = soma + P3a[j,i] * y_ant[i + 2 * (N - cont)];
-                }
-                P3[j] = soma;
+                response.AddError("101", $"Size of matrix HardnessXDisplacement is incorrect: {matrix_K_Y.Length}. Correct size: {bcTrue}.");
+
+                return null;
             }
 
-        }
+            double[] matrix_C_Vel = this._arrayOperation.Multiply(input.Damping, displacement);
 
-
-        /***********************************************************************/
-        void MatrizP4(void)
-        {
-            /* montagem da matriz massa*/
-            for (i = 0; i < N - cont; i++)
+            if (matrix_C_Vel.Length != bcTrue)
             {
-                P6[i] = fa[i] - fa_ant[i];
-                P4[i] = P6[i] + P2[i] + P3[i];
+                response.AddError("102", $"Size of matrix DampingXVelocity is incorrect: {matrix_C_Vel.Length}. Correct size: {bcTrue}.");
 
-            }
-        }
-
-        /***********************************************************************/
-        void Matriz_K_Y(void)
-        {
-            int i, j;
-            long double soma;
-
-            for (j = 0; j < N - cont; j++)
-            {
-                soma = 0.;
-                for (i = 0; i < N - cont; i++)
-                {
-                    soma = soma + (K_cc[j,i] * y[i]);
-                }
-                K_Y[j] = soma;
+                return null;
             }
 
-        }
+            double[] result = this._arrayOperation.Subtract(input.Force, this._arrayOperation.Sum(matrix_K_Y, matrix_C_Vel));
 
-        /*****************************************************/
-        void Matriz_C_Y(void)
-        {
-            int i, j;
-            long double soma;
-
-            for (j = 0; j < N - cont; j++)
+            if (result.Length != bcTrue)
             {
-                soma = 0.;
-                for (i = 0; i < N - cont; i++)
-                {
-                    soma = soma + (C[j,i] * y[i + (N - cont)]);
-                }
-                C_Y[j] = soma;
+                response.AddError("103", $"Size of matrix K_C_Y is incorrect: {result.Length}. Correct size: {bcTrue}.");
+
+                return null;
             }
 
-        }
-        /***********************************************************************/
-        void Matriz_K_C_Y(void)
-        {
-            /* montagem da matriz massa*/
-            for (i = 0; i < N - cont; i++)
-            {
-
-                K_M_Y[i] = fa[i] - C_Y[i] - K_Y[i];
-
-            }
+            return result;
         }
     }
 }

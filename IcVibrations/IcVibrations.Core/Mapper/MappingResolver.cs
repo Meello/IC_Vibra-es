@@ -69,7 +69,7 @@ namespace IcVibrations.Core.Mapper
 
             return new OperationResponseData
             {
-                Result = output.AnalysisResult,
+                Result = output.Result,
                 Time = output.Time
             };
         }

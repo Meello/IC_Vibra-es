@@ -3,7 +3,7 @@ using Xunit;
 
 namespace IcVibrationsTest
 {
-    public class UnitTest1
+    public class MainMatrixTest
     {
         [Fact]
         public void Test1()

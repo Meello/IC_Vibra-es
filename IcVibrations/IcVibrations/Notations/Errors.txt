@@ -1,4 +1,5 @@
-﻿code = 001
+﻿==> Code initiating with 0 --> Validator
+code = 001
 message = Elements should be greatter than zero.
 
 code = 002
@@ -21,3 +22,13 @@ message = Width: {width} must be bigger than zero.
 
 code = 008
 message = Height: {height} must be bigger than zero.
+
+==> Code initiating with 1 --> Operations
+code = 101
+message = Size of matrix HardnessXDisplacement is incorrect: {size}. Correct size: {boundaryConditionsTrue}.
+
+code = 102
+message = Size of matrix DampingXVelocity is incorrect: {size}. Correct size: {boundaryConditionsTrue}.
+
+code = 103
+message = Size of matrix K_C_Y is incorrect: {size}. Correct size: {boundaryConditionsTrue}.

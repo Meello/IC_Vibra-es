@@ -6,8 +6,8 @@ namespace IcVibrations.Core.DTO
 {
     public class NewmarkMethodOutput
     {
-        public double[,] AnalysisResult { get; set; }
+        public List<double[]> Result { get; set; }
 
-        public double[] Time { get; set; }
+        public List<double> Time { get; set; }
     }
 }
