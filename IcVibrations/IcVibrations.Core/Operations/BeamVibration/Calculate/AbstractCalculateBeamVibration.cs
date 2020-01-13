@@ -20,6 +20,8 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
     {
         protected abstract NewmarkMethodInput CalculateParameters(CalculateBeamRequest<T> request, int degressFreedomMaximum, OperationResponseBase response);
 
+        private int degreesFreedomMaximum;
+
         //protected abstract string AnalysisExplanation();
 
         private readonly IBeamRequestValidator<T> _validator;
@@ -40,9 +42,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
-            int degreesFredomMaximum = this.DegreesFreedomMaximum(request.Data.ElementCount);
-
-            NewmarkMethodInput input = this.CalculateParameters(request, degreesFredomMaximum, response);
+            NewmarkMethodInput input = this.CalculateParameters(request, degreesFreedomMaximum, response);
 
             NewmarkMethodOutput output = this._newmarkMethod.CreateOutput(input, response);
 
@@ -54,8 +54,10 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         protected override CalculateBeamResponse ValidateOperation(CalculateBeamRequest<T> request)
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
-            
-            if (!this._validator.Execute(request.Data, response))
+
+            degreesFreedomMaximum = this.DegreesFreedomMaximum(request.Data.ElementCount);
+
+            if (!this._validator.Execute(request.Data, degreesFreedomMaximum, response))
             {
                 return response;
             }
@@ -63,7 +65,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             return response;
         }
         
-        private int DegreesFreedomMaximum(int nodes)
+        public int DegreesFreedomMaximum(int nodes)
         {
             int degreesFreedomMaximum = nodes * Constants.DegreesFreedom;
             return degreesFreedomMaximum;

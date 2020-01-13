@@ -30,7 +30,7 @@ namespace IcVibrations.DataContracts.Beam
 
         public double InitialAngularFrequency { get; set; }
 
-        public double AngularFrequencyDivision { get; set; }
+        public double DeltaAngularFrequency { get; set; }
 
         public double FinalAngularFrequency { get; set; }
     }

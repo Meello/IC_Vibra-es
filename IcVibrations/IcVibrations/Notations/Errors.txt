@@ -23,6 +23,42 @@ message = Width: {width} must be bigger than zero.
 code = 008
 message = Height: {height} must be bigger than zero.
 
+code = 009
+message = Invalid number of forces: {forces_count}. Min: 0. Max: {degreesFreedomMaximum}.
+
+code = 010
+message = Forces can't contain value zero.
+
+code = 011
+message = Invalid number of positionss: {forcePositions_count}. Min: 0. Max: {degreesFreedomMaximum}.
+
+code = 012
+message = Positions can't contain value greater than or equal {degreesFreedomMaximum}.
+
+code = 013
+message = Number of forces: {forces_count} and number of force node positions: {forceNodePositions_count()} must be equal.
+
+code = 014
+message = Initial time: {initialTime} must be greater than or equals to zero.
+
+code = 015
+message = Period division: {periodDivision} must be greater than zero.
+
+code = 016
+message = Period count: {periodCount} must be greater than zero.
+
+code = 017
+message = Initial angular frequency: {initialAngularFrequency} must be greater than or equals to zero.
+
+code = 018
+message = Delta angular frequency: {deltaAngularFrequency} must be greater than zero.
+
+code = 019
+message = Final angular frequency: {finalAngularFrequency} must be greater than zero.
+
+code = 020
+message = Delta angular frequency: {deltaAngularFrequency} must be smaller than the interval: {final - initial}
+
 ==> Code initiating with 1 --> Operations
 code = 101
 message = Size of matrix HardnessXDisplacement is incorrect: {size}. Correct size: {boundaryConditionsTrue}.
