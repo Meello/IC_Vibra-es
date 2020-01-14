@@ -286,7 +286,7 @@ namespace IcVibrations.Methods.NewmarkMethod
         {
             double[] deltaForce = this._arrayOperation.Subtract(input.Force, force_ant);
 
-            double[,] p1 = this.BuildMatrixP2(input.Mass, input.Damping);
+            double[,] p1 = this.BuildMatrixP1(input.Mass, input.Damping);
 
             double[,] p2 = this.BuildMatrixP2(input.Mass, input.Damping);
 
