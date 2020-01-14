@@ -18,5 +18,11 @@ namespace IcVibrations.Models.Beam
         public Fastening LastFastening { get; set; }
 
         public double Length { get; set; }
+
+        //public double[,] Mass { get; set; }
+
+        //public double[,] Hardness { get; set; }
+
+        //public double[,] Damping { get; set; }
     }
 }

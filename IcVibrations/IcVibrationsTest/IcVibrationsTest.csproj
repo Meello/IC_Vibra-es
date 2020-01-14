@@ -13,4 +13,11 @@
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IcVibrations.Common\IcVibrations.Common.csproj" />
+    <ProjectReference Include="..\IcVibrations.Core\IcVibrations.Core.csproj" />
+    <ProjectReference Include="..\IcVibrations.DataContract\IcVibrations.DataContracts.csproj" />
+    <ProjectReference Include="..\IcVibrations.Repository\IcVibrations.Repositories.csproj" />
+  </ItemGroup>
+
 </Project>

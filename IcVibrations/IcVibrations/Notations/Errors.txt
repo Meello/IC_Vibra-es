@@ -59,6 +59,15 @@ message = Final angular frequency: {finalAngularFrequency} must be greater than 
 code = 020
 message = Delta angular frequency: {deltaAngularFrequency} must be smaller than the interval: {final - initial}
 
+code = 021
+message = Thickness: {thickness} must be smaller than half of width: {width/2}.
+
+code = 022
+message = Thickness: {thickness} must be smaller than half of height: {height/2}.
+
+code = 023
+message = Thickness: {thickness} must be smaller than radius: {radius}.
+
 ==> Code initiating with 1 --> Operations
 code = 101
 message = Size of matrix HardnessXDisplacement is incorrect: {size}. Correct size: {boundaryConditionsTrue}.

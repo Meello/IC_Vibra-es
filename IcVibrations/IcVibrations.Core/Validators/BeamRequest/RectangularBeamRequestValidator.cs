@@ -10,7 +10,17 @@ namespace IcVibrations.Core.Validators.BeamRequest
     {
         protected override void ValidateShapeInput(RectangularBeamRequestData requestData, OperationResponseBase response)
         {
-            if(requestData.Width <= 0)
+            if(requestData.Thickness > requestData.Width/2)
+            {
+                response.AddError("021",$"Thickness: {requestData.Thickness} must be smaller than half of width: {requestData.Width}.");
+            }
+
+            if (requestData.Thickness > requestData.Height/2)
+            {
+                response.AddError("022", $"Thickness: {requestData.Thickness} must be smaller than half of height: {requestData.Height}.");
+            }
+
+            if (requestData.Width <= 0)
             {
                 response.AddError("007",$"Width: {requestData.Width} must be bigger than zero.");
             }
