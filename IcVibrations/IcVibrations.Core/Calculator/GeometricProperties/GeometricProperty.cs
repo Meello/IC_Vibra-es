@@ -22,7 +22,7 @@ namespace IcVibrations.Calculator.GeometricProperties
             double b = width;
             double t = thickness;
             
-            double area = (a * b) - ((a - 2 * t) * (a - 2 * t));
+            double area = (a * b) - ((a - 2 * t) * (b - 2 * t));
         
             return area;
         }

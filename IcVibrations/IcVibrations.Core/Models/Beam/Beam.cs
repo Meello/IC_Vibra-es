@@ -19,6 +19,8 @@ namespace IcVibrations.Models.Beam
 
         public double Length { get; set; }
 
+        public double[] Forces { get; set; }
+
         //public double[,] Mass { get; set; }
 
         //public double[,] Hardness { get; set; }

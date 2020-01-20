@@ -6,23 +6,13 @@ namespace IcVibrations.Methods.AuxiliarMethods
 {
     public class AuxiliarMethod : IAuxiliarMethod
     {
-        public double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions)
+        public double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, int trueBondaryContionCount)
         {
             int i, j, k, count1, count2;
 
-            int bondaryConditionsTrue = 0;
-
             int n = matrix.GetLength(0);
 
-            for (i = 0; i < bondaryConditions.GetLength(0); i++)
-            {
-                if(bondaryConditions[i] == true)
-                {
-                    bondaryConditionsTrue += 1;
-                }
-            }
-
-            double[,] matrixCC = new double[bondaryConditionsTrue, bondaryConditionsTrue];
+            double[,] matrixCC = new double[trueBondaryContionCount, trueBondaryContionCount];
 
             for (i = 0; i < n; i++)
             {
@@ -65,23 +55,13 @@ namespace IcVibrations.Methods.AuxiliarMethods
             return matrixCC;
         }
 
-        public double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions)
+        public double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions, int trueBondaryContionCount)
         {
             int i, count1 = 0;
 
-            int bondaryConditionsTrue = 0;
-
             int n = matrix.GetLength(0);
 
-            for (i = 0; i < bondaryConditions.GetLength(0); i++)
-            {
-                if (bondaryConditions[i] == true)
-                {
-                    bondaryConditionsTrue += 1;
-                }
-            }
-
-            double[] matrixCC = new double[bondaryConditionsTrue];
+            double[] matrixCC = new double[trueBondaryContionCount];
 
             for (i = 0; i < n; i++)
             {

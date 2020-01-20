@@ -16,15 +16,14 @@ namespace IcVibrations.Methods.NewmarkMethod
     public class NewmarkMethod : INewmarkMethod
     {
         // Parameters to Newmark Method
-        private double a0, a1, a2, a3, a4, a5, a6, a7;
-        // Degrees freedom maximum
-        private double glMax;
+        private double a0, a1, a2, a3, a4, a5;
         // Boundary condition true
         private int bcTrue;
         // Angular frequency 
         private double wf, wi, dw, w;
         // Time
-        private double dt, t0, pD, pC;
+        private double dt, t0;
+        private int pD, pC;
 
         private readonly IMainMatrix _mainMatrix;
         private readonly IAuxiliarMethod _auxiliarMethod;
@@ -42,20 +41,26 @@ namespace IcVibrations.Methods.NewmarkMethod
 
         public NewmarkMethodOutput CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
         {
-            NewmarkMethodOutput output = new NewmarkMethodOutput();
-
             int angularFrequencyLoopCount = (int)((wf - wi) / dw) + 1;
+
+            int resultSize = angularFrequencyLoopCount * pC * pD;
+
+            NewmarkMethodOutput output = new NewmarkMethodOutput
+            {
+                Result = new double[resultSize, bcTrue],
+                Time = new double[resultSize]
+            };
 
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
                 w = wi + (i * dw);
-
+                //dt = 0.1;
                 if (w != 0)
                 {
                     dt = (Math.PI * 2 / w) / pD;
                 }
                 else
-                { 
+                {
                     dt = (Math.PI * 2) / pD;
                 }
 
@@ -65,10 +70,8 @@ namespace IcVibrations.Methods.NewmarkMethod
                 a3 = Constants.Gama / (Constants.Beta);
                 a4 = 1 / (2 * Constants.Beta);
                 a5 = dt * ((Constants.Gama / (2 * Constants.Beta)) - 1);
-                a6 = dt * (1 - Constants.Gama);
-                a7 = Constants.Gama * dt;
 
-                output = this.Solution(input, response);
+                this.Solution(input, output, response);
             }
 
             return output;
@@ -79,15 +82,15 @@ namespace IcVibrations.Methods.NewmarkMethod
             NewmarkMethodInput input = new NewmarkMethodInput();
 
             // Calculate values
-            double[,] mass = this._mainMatrix.BuildMass(beam, degreesFreedomMaximum, requestData.ElementCount);
+            double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum, beam.ElementCount);
 
-            double[,] hardness = this._mainMatrix.BuildHardness(beam, degreesFreedomMaximum, requestData.ElementCount);
+            double[,] hardness = this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum, beam.ElementCount);
 
-            double[,] damping = this._mainMatrix.BuildDamping(mass, hardness, degreesFreedomMaximum);
+            double[,] damping = this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
 
-            double[] force = this._mainMatrix.BuildForce(requestData.Forces, requestData.ForceNodePositions, degreesFreedomMaximum);
+            double[] forces = beam.Forces;
 
-            bool[] bondaryCondition = this._mainMatrix.BuildBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            bool[] bondaryCondition = this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
 
             bcTrue = 0;
             for (int i = 0; i < degreesFreedomMaximum; i++)
@@ -99,15 +102,13 @@ namespace IcVibrations.Methods.NewmarkMethod
             }
 
             // Output values
-            glMax = degreesFreedomMaximum;
-            
-            input.Mass = this._auxiliarMethod.AplyBondaryConditions(mass, bondaryCondition);
+            input.Mass = this._auxiliarMethod.AplyBondaryConditions(mass, bondaryCondition, bcTrue);
 
-            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardness, bondaryCondition);
+            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardness, bondaryCondition, bcTrue);
 
-            input.Damping = this._auxiliarMethod.AplyBondaryConditions(damping, bondaryCondition);
+            input.Damping = this._auxiliarMethod.AplyBondaryConditions(damping, bondaryCondition, bcTrue);
 
-            input.Force = this._auxiliarMethod.AplyBondaryConditions(force, bondaryCondition);
+            input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, bcTrue);
 
             t0 = requestData.InitialTime;
 
@@ -124,37 +125,45 @@ namespace IcVibrations.Methods.NewmarkMethod
             return input;
         }
 
-        private NewmarkMethodOutput Solution(NewmarkMethodInput input, OperationResponseBase response)
+        private void Solution(NewmarkMethodInput input, NewmarkMethodOutput output, OperationResponseBase response)
         {
-            NewmarkMethodOutput output = new NewmarkMethodOutput();
-
-            StreamWriter streamWriter = new StreamWriter(@"C:\Workspace\IC VIbrações\IcVibrations\Solutions\RectangularBeamSolution.csv");
+            //StreamWriter streamWriter = new StreamWriter(@"C:\Users\bruno\OneDrive\Documentos\GitHub\IC_Vibra-es\IcVibrations\RectangularBeamSolution.csv");
 
             int i, jn, jp;
-            double time = 0;
+            
+            double time = t0;
+
+            int count = 0;
+
+            double[] force = new double[bcTrue];
+            for (i = 0; i < bcTrue; i++)
+            {
+                force[i] = input.Force[i];
+            }
 
             double[] y = new double[bcTrue];
-            double[] y_ant = new double[bcTrue];
-            double[] delta_y = new double[bcTrue];
+            double[] yAnt = new double[bcTrue];
+            double[] deltaY = new double[bcTrue];
 
             double[] vel = new double[bcTrue];
-            double[] vel_ant = new double[bcTrue];
-            double[] delta_vel = new double[bcTrue];
+            double[] velAnt = new double[bcTrue];
+            double[] deltaVel = new double[bcTrue];
 
             double[] acel = new double[bcTrue];
-            double[] acel_ant = new double[bcTrue];
-            double[] delta_acel = new double[bcTrue];
+            double[] acelAnt = new double[bcTrue];
+            double[] deltaAcel = new double[bcTrue];
 
-            double[] force_ant = new double[bcTrue];
+            double[] forceAnt = new double[bcTrue];
 
-            for (jp = 1; jp <= pC - 1; jp++)
+            for (jp = 0; jp < pC; jp++)
             {
-                for (jn = 1; jn <= pD - 1; jn++)            
+                for (jn = 0; jn < pD; jn++)            
                 {
-                    for (i = 0; i < bcTrue; i++)
-                    {
-                        input.Force[i] = input.Force[i] * Math.Sin(w * time);
-                    }
+                    //for (i = 0; i < bcTrue; i++)
+                    //{
+                    //    // Force can't initiate with 0
+                    //    input.Force[i] = force[i] * Math.Cos(w * time);
+                    //}
 
                     if (time == 0)
                     {
@@ -166,80 +175,84 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                         for (i = 0; i < bcTrue; i++)
                         {
-                            acel_ant[i] = y[i];                
+                            acelAnt[i] = acel[i];                
                         }
                     }
 
-                    if (jp > 0)
+                    if (jp >= 0)
                     {
-                        if (Math.Sqrt((w - 0.5) * (w - 0.5)) < 0.0001)
+                        if (w == 0)
                         {
-                            output.Result.Add(y);
-                            output.Time.Add(time);
-
-                            try
+                            for(int k = 0; k < bcTrue; k++)
                             {
-                                using (StreamWriter sw = streamWriter)
-                                {
-                                    sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
+                                output.Result[count, k] = y[k];
+                                output.Time[count] = time;
+                            }
 
-                                    sw.Close();
-                                }
-                            }
-                            catch
-                            {
-                                // Não quero que pare, só avise que deu erro.
-                                throw new Exception("Couldn't ope file.");
-                            }
+                            count += 1;
+                            
+                            //try
+                            //{
+                                //using (StreamWriter sw = streamWriter)
+                                //{
+                                    //sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
+
+                                    //sw.Close();
+                                //}
+                            //}
+                            //catch
+                            //{
+                                //// Não quero que pare, só avise que deu erro.
+                                //throw new Exception("Couldn't open file.");
+                            //}
                         }
                     }
 
-                    double[,] equivalentHardness = this.BuildEquivalentHardness(input.Mass, input.Damping, input.Hardness);
-                    double[] equivalentForce = this.BuildEquivalentForce(input, force_ant, vel, acel);
+                    double[,] equivalentHardness = this.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness);
+                    double[] equivalentForce = this.CalculateEquivalentForce(input, forceAnt, vel, acel);
 
                     double[,] equivalentHardnessInverse = this._arrayOperation.InverseMatrix(equivalentHardness);
 
-                    delta_y = this._arrayOperation.Multiply(equivalentForce,equivalentHardnessInverse);
+                    deltaY = this._arrayOperation.Multiply(equivalentForce,equivalentHardnessInverse);
 
                     for (i = 0; i < bcTrue; i++)
                     {
-                        delta_vel[i] = a1 * delta_y[i] - a3 * vel_ant[i] - a5 * acel_ant[i];
+                        deltaVel[i] = a1 * deltaY[i] - a3 * velAnt[i] - a5 * acelAnt[i];
                     }
 
                     for (i = 0; i < bcTrue; i++)
                     {
-                        delta_y[i + bcTrue] = a0 * delta_y[i] - a2 * vel_ant[i] - a4 * acel_ant[i];
+                        deltaAcel[i] = a0 * deltaY[i] - a2 * velAnt[i] - a4 * acelAnt[i];
                     }
 
                     for (i = 0; i < bcTrue; i++)
                     {
-                        y[i] = y_ant[i] + delta_y[i];
-                        vel[i] = vel_ant[i] + delta_vel[i];
-                        acel[i] = acel_ant[i] + delta_acel[i];
+                        y[i] = yAnt[i] + deltaY[i];
+                        vel[i] = velAnt[i] + deltaVel[i];
+                        acel[i] = acelAnt[i] + deltaAcel[i];
                     }
 
                     time += dt;
 
-                    for (i = 0; i < 3 * bcTrue; i++)
+                    for (i = 0; i < bcTrue; i++)
                     {
-                        y_ant[i] = y[i];
+                        yAnt[i] = y[i];
+                        velAnt[i] = vel[i];
+                        acelAnt[i] = acel[i];
                     }
 
                     for (i = 0; i < bcTrue; i++)
                     {
-                        force_ant[i] = input.Force[i];
+                        forceAnt[i] = input.Force[i];
                     }
                 }
             }
-
-            return output;
         }
 
-        private double[,] BuildEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness)
+        private double[,] CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness)
         {
             double[,] equivalentHardness = new double[bcTrue, bcTrue];
 
-            /* montagem da matriz massa*/
             for (int i = 0; i < bcTrue; i++)
             {
                 for (int j = 0; j < bcTrue; j++)
@@ -251,8 +264,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return equivalentHardness;
         }
 
-
-        private double[,] BuildMatrixP1(double[,] mass, double[,] damping)
+        private double[,] CalculateMatrixP1(double[,] mass, double[,] damping)
         {
             double[,] p1 = new double[bcTrue, bcTrue];
 
@@ -267,7 +279,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return p1;
         }
 
-        private double[,] BuildMatrixP2(double[,] mass, double[,] damping)
+        private double[,] CalculateMatrixP2(double[,] mass, double[,] damping)
         {
             double[,] p2 = new double[bcTrue, bcTrue];
 
@@ -282,13 +294,13 @@ namespace IcVibrations.Methods.NewmarkMethod
             return p2;
         }
 
-        private double[] BuildEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
+        private double[] CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
         {
             double[] deltaForce = this._arrayOperation.Subtract(input.Force, force_ant);
 
-            double[,] p1 = this.BuildMatrixP1(input.Mass, input.Damping);
+            double[,] p1 = this.CalculateMatrixP1(input.Mass, input.Damping);
 
-            double[,] p2 = this.BuildMatrixP2(input.Mass, input.Damping);
+            double[,] p2 = this.CalculateMatrixP2(input.Mass, input.Damping);
 
             double[] vel_p1 = this._arrayOperation.Multiply(p1, vel);
 

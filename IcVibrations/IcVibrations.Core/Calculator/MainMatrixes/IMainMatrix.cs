@@ -8,18 +8,18 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public interface IMainMatrix
     {
-        double[,] BuildMass(Beam beam, int degreesFreedomMaximum, int elements);
+        double[,] CalculateMass(Beam beam, int degreesFreedomMaximum, int elements);
 
-        double[,] BuildHardness(Beam beam, int degreesFreedomMaximum, int elements);
+        double[,] CalculateHardness(Beam beam, int degreesFreedomMaximum, int elements);
 
-        double[,] BuildDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum);
+        double[,] CalculateDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum);
 
-        double[,] BuildMassElement(double area, double density, double lengthElement);
+        double[,] CalculateMassElement(double area, double density, double lengthElement);
 
-        double[,] BuildHardnessElement(double momentInertia, double youngModulus, double lengthElement);
+        double[,] CalculateHardnessElement(double momentInertia, double youngModulus, double lengthElement);
 
-        double[] BuildForce(double[] forceValues, int[] forceNodePositions, int degreesFreedomMaximum);
+        double[] CalculateForce(double[] forceValues, int[] forceNodePositions, int degreesFreedomMaximum);
 
-        bool[] BuildBondaryCondition(Fastening fixacao1, Fastening fixacaoN, int degreesFreedomMaximum);
+        bool[] CalculateBondaryCondition(Fastening fixacao1, Fastening fixacaoN, int degreesFreedomMaximum);
     }
 }

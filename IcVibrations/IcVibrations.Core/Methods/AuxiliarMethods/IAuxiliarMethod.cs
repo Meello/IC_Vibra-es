@@ -6,8 +6,8 @@ namespace IcVibrations.Methods.AuxiliarMethods
 {
     public interface IAuxiliarMethod
     {
-        double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions);
+        double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, int trueBondaryConditionCount);
 
-        double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions);
+        double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions, int trueBondaryConditionCount);
     }
 }

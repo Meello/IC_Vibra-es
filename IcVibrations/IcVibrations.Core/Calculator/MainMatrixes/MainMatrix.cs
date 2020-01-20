@@ -10,7 +10,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public class MainMatrix : IMainMatrix
 	{
-		public double[,] BuildMassElement(double area, double specificMass, double length)
+		public double[,] CalculateMassElement(double area, double specificMass, double length)
 		{
 			double[,] massElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
@@ -34,7 +34,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return massElement;
 		}
 
-		public double[,] BuildHardnessElement(double momentInertia, double youngModulus, double length)
+		public double[,] CalculateHardnessElement(double momentInertia, double youngModulus, double length)
 		{
 			double[,] hardnessElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
@@ -58,7 +58,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardnessElement;
 		}
 
-		public double[,] BuildMass(Beam beam, int degreesFreedomMaximum, int elements)
+		public double[,] CalculateMass(Beam beam, int degreesFreedomMaximum, int elements)
         {
 			int[,] nodeCoordinates = this.NodeCoordinates(elements);
 			
@@ -70,7 +70,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			for (int n = 0; n < elements; n++)
 			{
-				double[,] massElement = this.BuildMassElement(beam.Profile.Area[n], beam.Material.SpecificMass, length);
+				double[,] massElement = this.CalculateMassElement(beam.Profile.Area[n], beam.Material.SpecificMass, length);
 
 				p = nodeCoordinates[n,0];
 				q = nodeCoordinates[n,1];
@@ -98,7 +98,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return mass;
 		}
 
-		public double[,] BuildHardness(Beam beam, int degreesFreedomMaximum, int elements)
+		public double[,] CalculateHardness(Beam beam, int degreesFreedomMaximum, int elements)
 		{
 			int[,] nodeCoordinates = this.NodeCoordinates(elements);
 			
@@ -110,7 +110,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			for (int n = 0; n < elements; n++)
 			{
-				double[,] hardnessElement = this.BuildHardnessElement(beam.Profile.MomentInertia[n], beam.Material.YoungModulus, length);
+				double[,] hardnessElement = this.CalculateHardnessElement(beam.Profile.MomentInertia[n], beam.Material.YoungModulus, length);
 
 				p = nodeCoordinates[n, 0];
 				q = nodeCoordinates[n, 1];
@@ -138,7 +138,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardness;
 		}
 
-		public double[,] BuildDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum)
+		public double[,] CalculateDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum)
 		{
 			double[,] damping = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 
@@ -153,26 +153,37 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return damping;
 		}
 		
-		public double[] BuildForce(double[] forceValues, int[] forcePosition, int degreesFreedomMaximum)
+		public double[] CalculateForce(double[] forceValues, int[] forcePosition, int degreesFreedomMaximum)
 		{
 			double[] force = new double[degreesFreedomMaximum];
 			
 			for (int i = 0; i < forceValues.Count(); i++)
 			{
-				force[2*forcePosition[i]] = forceValues[i];
+				force[2 * forcePosition[i]] = forceValues[i];
 			}
 
 			return force;
 		}
 
-		public bool[] BuildBondaryCondition(Fastening firstFastening, Fastening lastFastening, int degreesFreedomMaximum)
+		public bool[] CalculateBondaryCondition(Fastening firstFastening, Fastening lastFastening, int degreesFreedomMaximum)
 		{
 			bool[] bondaryCondition = new bool[degreesFreedomMaximum];
 
-			bondaryCondition[0] = firstFastening.Displacement;
-			bondaryCondition[1] = firstFastening.Angle;
-			bondaryCondition[degreesFreedomMaximum - 1] = lastFastening.Displacement;
-			bondaryCondition[degreesFreedomMaximum] = lastFastening.Angle;
+			for (int i = 0; i < degreesFreedomMaximum; i++)
+			{
+				if(i == 0 || i == degreesFreedomMaximum - 2)
+				{
+					bondaryCondition[i] = firstFastening.Displacement;
+				}
+				else if(i == 1 || i == degreesFreedomMaximum - 1)
+				{
+					bondaryCondition[i] = firstFastening.Angle;
+				}
+				else
+				{
+					bondaryCondition[i] = true;
+				}
+			}
 
 			return bondaryCondition;
 		}

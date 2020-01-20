@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.DTO;
+using IcVibrations.Core.Models;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.Methods.AuxiliarMethods;
@@ -43,17 +44,25 @@ namespace IcVibrations.Core.Mapper
 
     public class MappingResolver : IMappingResolver
     {
-        public Beam AddValues(BeamRequestData beamRequestData)
+        public Beam BuildFrom(BeamRequestData beamRequestData)
         {
             if (beamRequestData == null)
             {
                 return null;
             }
 
+            double[] force = new double[(beamRequestData.ElementCount + 1) * Constants.DegreesFreedom];
+
+            for (int i = 0; i < beamRequestData.Forces.Length; i++)
+            {
+                force[2 * beamRequestData.ForceNodePositions[i]] = beamRequestData.Forces[i];
+            }
+
             return new Beam
             {
                 ElementCount = beamRequestData.ElementCount,
                 FirstFastening = FasteningFactory.Create(beamRequestData.FirstFastening),
+                Forces = force,
                 LastFastening = FasteningFactory.Create(beamRequestData.LastFastening),
                 Length = beamRequestData.Length,
                 Material = MaterialFactory.Create(beamRequestData.Material)
