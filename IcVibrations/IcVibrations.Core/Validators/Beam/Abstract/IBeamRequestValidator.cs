@@ -5,9 +5,9 @@ using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.Models.Beam;
 
-namespace IcVibrations.Core.Validators.BeamRequest
+namespace IcVibrations.Core.Validators.Beam
 {
-    public interface IBeamRequestValidator<T> where T : CalculateBeamRequestData
+    public interface IBeamRequestValidator<T> where T : BeamRequestData
     {
         bool Execute(T requestData, int degreesFreedomMaximum, OperationResponseBase response);
     }

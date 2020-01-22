@@ -10,7 +10,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 {
     public interface INewmarkMethod
     {
-        NewmarkMethodInput CreateInput(CalculateBeamRequestData requestData, Beam beam, int degreesFreedomMaximum);
+        NewmarkMethodInput CreateInput(NewmarkMethodParameter requestData, Beam beam, int degreesFreedomMaximum);
 
         NewmarkMethodOutput CreateOutput(NewmarkMethodInput input, OperationResponseBase response);
     }

@@ -58,8 +58,10 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardnessElement;
 		}
 
-		public double[,] CalculateMass(Beam beam, int degreesFreedomMaximum, int elements)
+		public double[,] CalculateMass(Beam beam, int degreesFreedomMaximum)
         {
+			int elements = beam.ElementCount;
+
 			int[,] nodeCoordinates = this.NodeCoordinates(elements);
 			
 			int p, q, r, s;
@@ -98,8 +100,10 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return mass;
 		}
 
-		public double[,] CalculateHardness(Beam beam, int degreesFreedomMaximum, int elements)
+		public double[,] CalculateHardness(Beam beam, int degreesFreedomMaximum)
 		{
+			int elements = beam.ElementCount;
+
 			int[,] nodeCoordinates = this.NodeCoordinates(elements);
 			
 			int p, q, r, s;

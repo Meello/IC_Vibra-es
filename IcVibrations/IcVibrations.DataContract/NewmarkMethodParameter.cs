@@ -4,10 +4,8 @@ using System.Text;
 
 namespace IcVibrations.DataContracts
 {
-    public class OperationRequestBaseData
+    public class NewmarkMethodParameter
     {
-        public int ElementCount { get; set; }
-
         public double InitialTime { get; set; }
 
         public int PeriodDivion { get; set; }

@@ -77,14 +77,14 @@ namespace IcVibrations.Methods.NewmarkMethod
             return output;
         }
 
-        public NewmarkMethodInput CreateInput(CalculateBeamRequestData requestData, Beam beam, int degreesFreedomMaximum)
+        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, int degreesFreedomMaximum)
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
             // Calculate values
-            double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum, beam.ElementCount);
+            double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            double[,] hardness = this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum, beam.ElementCount);
+            double[,] hardness = this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
 
             double[,] damping = this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
 
@@ -110,17 +110,17 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, bcTrue);
 
-            t0 = requestData.InitialTime;
+            t0 = newmarkMethodParameter.InitialTime;
 
-            pD = requestData.PeriodDivion;
+            pD = newmarkMethodParameter.PeriodDivion;
             
-            pC = requestData.PeriodCount;
+            pC = newmarkMethodParameter.PeriodCount;
             
-            wi = requestData.InitialAngularFrequency;
+            wi = newmarkMethodParameter.InitialAngularFrequency;
             
-            dw = requestData.DeltaAngularFrequency;
+            dw = newmarkMethodParameter.DeltaAngularFrequency;
             
-            wf = requestData.FinalAngularFrequency;
+            wf = newmarkMethodParameter.FinalAngularFrequency;
 
             return input;
         }

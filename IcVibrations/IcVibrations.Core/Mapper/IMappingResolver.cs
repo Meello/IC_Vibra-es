@@ -10,7 +10,7 @@ namespace IcVibrations.Core.Mapper
 {
     public interface IMappingResolver
     {
-        Beam BuildFrom(CalculateBeamRequestData circularBeamRequestData);
+        Beam BuildFrom(BeamRequestData circularBeamRequestData);
 
         OperationResponseData BuildFrom(NewmarkMethodOutput output);
     }

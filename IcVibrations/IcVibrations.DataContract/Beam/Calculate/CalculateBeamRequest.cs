@@ -5,13 +5,16 @@ using System.Text;
 namespace IcVibrations.DataContracts.Beam.Calculate
 {
     public class CalculateBeamRequest<T> : OperationRequestBase 
-        where T : CalculateBeamRequestData
+        where T : BeamRequestData
     {
-        public CalculateBeamRequest(T requestData)
+        public CalculateBeamRequest(T beamData, NewmarkMethodParameter methodParameterData)
         {
-            Data = requestData;
+            BeamData = beamData;
+            MethodParameterData = methodParameterData;
         }
 
-        public T Data { get; }
+        public T BeamData { get; }
+
+        public NewmarkMethodParameter MethodParameterData { get; }
     }
 }

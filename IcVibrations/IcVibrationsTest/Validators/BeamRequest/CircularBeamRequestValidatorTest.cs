@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using IcVibrations.Core.Validators.BeamRequest;
+using IcVibrations.Core.Validators.Beam;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrationsTest.Validators.BeamRequest.TestDatas;
@@ -27,7 +27,7 @@ namespace IcVibrationsTest.Validators.BeamRequest
             };
 
             // Act
-            this.ValidateShapeInput(requestData, responseBase);
+            this.ValidateProfileInput(requestData, responseBase);
 
             // Assert
             responseBase.Errors.Count

@@ -44,7 +44,7 @@ namespace IcVibrations.Core.Mapper
 
     public class MappingResolver : IMappingResolver
     {
-        public Beam BuildFrom(CalculateBeamRequestData beamRequestData)
+        public Beam BuildFrom(BeamRequestData beamRequestData)
         {
             if (beamRequestData == null)
             {

@@ -8,9 +8,9 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public interface IMainMatrix
     {
-        double[,] CalculateMass(Beam beam, int degreesFreedomMaximum, int elements);
+        double[,] CalculateMass(Beam beam, int degreesFreedomMaximum);
 
-        double[,] CalculateHardness(Beam beam, int degreesFreedomMaximum, int elements);
+        double[,] CalculateHardness(Beam beam, int degreesFreedomMaximum);
 
         double[,] CalculateDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum);
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IcVibrations.Core.Operations;
 using IcVibrations.Core.Operations.BeamVibration.Calculate;
+using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,9 @@ namespace IC_Vibrations.Controllers
         }
 
         [HttpPost("rectangular")]
-        public ActionResult<CalculateBeamResponse> CalculateRectangular(RectangularBeamRequestData requestData)
+        public ActionResult<CalculateBeamResponse> CalculateRectangular(RectangularBeamRequestData beamData, NewmarkMethodParameter methodParameterData)
         {
-            var request = new CalculateBeamRequest<RectangularBeamRequestData>(requestData);
+            var request = new CalculateBeamRequest<RectangularBeamRequestData>(beamData, methodParameterData);
             CalculateBeamResponse response = this._rectangularCalculateBeamVibration.Process(request);
 
             if (!response.Success)
@@ -42,9 +43,9 @@ namespace IC_Vibrations.Controllers
         }
 
         [HttpPost("circular")]
-        public ActionResult<CalculateBeamResponse> CalculateCircular(CircularBeamRequestData requestData)
+        public ActionResult<CalculateBeamResponse> CalculateCircular(CircularBeamRequestData beamData, NewmarkMethodParameter methodParameterData)
         {
-            var request = new CalculateBeamRequest<CircularBeamRequestData>(requestData);
+            var request = new CalculateBeamRequest<CircularBeamRequestData>(beamData, methodParameterData);
             CalculateBeamResponse response = this._circularCalculateBeamVibration.Process(request);
 
             if (!response.Success)

@@ -6,6 +6,8 @@ namespace IcVibrations.DataContracts.Beam
 {
     public class BeamRequestData
     {
+        public int ElementCount { get; set; }
+
         public string Material { get; set; }
 
         public double Thickness { get; set; }
@@ -19,5 +21,17 @@ namespace IcVibrations.DataContracts.Beam
         public double[] Forces { get; set; }
 
         public int[] ForceNodePositions { get; set; }
+    }
+
+    public class CircularBeamRequestData : BeamRequestData
+    {
+        public double Diameter { get; set; }
+    }
+
+    public class RectangularBeamRequestData : BeamRequestData
+    {
+        public double Height { get; set; }
+
+        public double Width { get; set; }
     }
 }

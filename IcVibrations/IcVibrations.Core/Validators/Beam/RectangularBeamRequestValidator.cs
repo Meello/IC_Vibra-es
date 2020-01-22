@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IcVibrations.Core.Validators.BeamRequest
+namespace IcVibrations.Core.Validators.Beam
 {
     public class RectangularBeamRequestValidator : AbstractBeamRequestValidator<RectangularBeamRequestData>
     {
-        protected override void ValidateShapeInput(RectangularBeamRequestData requestData, OperationResponseBase response)
+        protected override void ValidateProfileInput(RectangularBeamRequestData requestData, OperationResponseBase response)
         {
             if(requestData.Thickness > requestData.Width/2)
             {

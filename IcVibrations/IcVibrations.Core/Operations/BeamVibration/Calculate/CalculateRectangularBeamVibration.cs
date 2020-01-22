@@ -5,7 +5,8 @@ using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Models;
 using IcVibrations.Core.Operations.BeamVibration.Calculate;
-using IcVibrations.Core.Validators.BeamRequest;
+using IcVibrations.Core.Validators.Beam;
+using IcVibrations.Core.Validators.MethodParameters;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
@@ -29,9 +30,10 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         public CalculateRectangularBeamVibration(
             IArrayOperation arrayOperation,
             IGeometricProperty geometricProperty,
-            IBeamRequestValidator<RectangularBeamRequestData> validator,
+            IBeamRequestValidator<RectangularBeamRequestData> beamRequestValidator,
+            IMethodParameterValidator methodParameterValidator,
             INewmarkMethod newmarkMethod,
-            IMappingResolver mappingResolver) : base(validator, newmarkMethod, mappingResolver)
+            IMappingResolver mappingResolver) : base(beamRequestValidator, methodParameterValidator, newmarkMethod, mappingResolver)
         {
             this._arrayOperation = arrayOperation;
             this._geometricProperty = geometricProperty;
@@ -41,25 +43,25 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
         protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<RectangularBeamRequestData> request, int degreesFreedomMaximum, OperationResponseBase response)
         {
-            Beam beam = this._mappingResolver.BuildFrom(request.Data);
+            Beam beam = this._mappingResolver.BuildFrom(request.BeamData);
 
             beam.Profile = new RectangularProfile
             {
-                Height = request.Data.Height,
-                Width = request.Data.Width,
-                Thickness = request.Data.Thickness
+                Height = request.BeamData.Height,
+                Width = request.BeamData.Width,
+                Thickness = request.BeamData.Thickness
             };
 
             // Input values
-            double area = this._geometricProperty.Area(request.Data.Height, request.Data.Width, request.Data.Thickness);
+            double area = this._geometricProperty.Area(request.BeamData.Height, request.BeamData.Width, request.BeamData.Thickness);
 
-            double momentInertia = this._geometricProperty.MomentInertia(request.Data.Height, request.Data.Width, request.Data.Thickness);
+            double momentInertia = this._geometricProperty.MomentInertia(request.BeamData.Height, request.BeamData.Width, request.BeamData.Thickness);
 
-            beam.Profile.Area = this._arrayOperation.Create(area, request.Data.ElementCount);
+            beam.Profile.Area = this._arrayOperation.Create(area, request.BeamData.ElementCount);
 
-            beam.Profile.MomentInertia = this._arrayOperation.Create(momentInertia, request.Data.ElementCount);
+            beam.Profile.MomentInertia = this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
 
-            NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.Data, beam, degreesFreedomMaximum);
+            NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.MethodParameterData, beam, degreesFreedomMaximum);
 
             return input;
         }
