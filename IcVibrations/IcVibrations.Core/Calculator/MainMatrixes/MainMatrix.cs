@@ -157,9 +157,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return damping;
 		}
 
-		public double[,] CalculatePiezoelectricElementMass(double area, double density, double elementLength)
+		public double[,] CalculatePiezoelectricElementMass(double width, double height, double density, double elementLength)
 		{
-			double[,] piezoelectricElementMass = new double[,];
+			double[,] piezoelectricElementMass = new double[Constants.PiezoelectricElementMassMatrixSize, Constants.PiezoelectricElementMassMatrixSize];
+
+			double 
+
+			piezoelectricElementMass[0, 0] = ;
 
 			return piezoelectricElementMass;
 		}

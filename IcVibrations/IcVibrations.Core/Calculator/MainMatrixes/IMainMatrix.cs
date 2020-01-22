@@ -18,7 +18,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[,] CalculateBeamHardnessElement(double momentInertia, double youngModulus, double elementLength);
 
-        double[,] CalculatePiezoelectricElementMass(double area, double density, double elementLength);
+        double[,] CalculatePiezoelectricElementMass(double width, double height, double density, double elementLength);
 
         bool[] CalculateBeamBondaryCondition(Fastening fixacao1, Fastening fixacaoN, int degreesFreedomMaximum);
     }
