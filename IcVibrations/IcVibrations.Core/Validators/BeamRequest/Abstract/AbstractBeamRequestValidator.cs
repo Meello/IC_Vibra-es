@@ -11,7 +11,7 @@ using static IcVibrations.Common.Enum;
 
 namespace IcVibrations.Core.Validators.BeamRequest
 {
-    public abstract class AbstractBeamRequestValidator<T> : IBeamRequestValidator<T> where T : BeamRequestData
+    public abstract class AbstractBeamRequestValidator<T> : IBeamRequestValidator<T> where T : CalculateBeamRequestData
     {
         public bool Execute(T requestData, int degreesFreedomMaximum, OperationResponseBase response)
         {

@@ -22,7 +22,7 @@ namespace IC_Vibrations.Controllers
         }
 
         [HttpGet]
-        public ActionResult<CalculatePiezoelectricResponse> Calculate(PiezoelectricRequestData requestData)
+        public ActionResult<CalculatePiezoelectricResponse> Calculate(CalculatePiezoelectricRequestData requestData)
         {
             CalculatePiezoelectricRequest request = new CalculatePiezoelectricRequest(requestData);
             CalculatePiezoelectricResponse response = this._calculatePiezoelectric.Process(request);

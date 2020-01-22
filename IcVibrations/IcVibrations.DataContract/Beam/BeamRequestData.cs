@@ -4,10 +4,8 @@ using System.Text;
 
 namespace IcVibrations.DataContracts.Beam
 {
-    public abstract class BeamRequestData
+    public class BeamRequestData
     {
-        public int ElementCount { get; set; }
-
         public string Material { get; set; }
 
         public double Thickness { get; set; }
@@ -21,29 +19,5 @@ namespace IcVibrations.DataContracts.Beam
         public double[] Forces { get; set; }
 
         public int[] ForceNodePositions { get; set; }
-
-        public double InitialTime { get; set; }
-
-        public int PeriodDivion { get; set; }
-
-        public int PeriodCount { get; set; }
-
-        public double InitialAngularFrequency { get; set; }
-
-        public double DeltaAngularFrequency { get; set; }
-
-        public double FinalAngularFrequency { get; set; }
-    }
-
-    public class CircularBeamRequestData : BeamRequestData
-    {
-        public double Diameter { get; set; }
-    }
-
-    public class RectangularBeamRequestData : BeamRequestData
-    {
-        public double Height { get; set; }
-
-        public double Width { get; set; }
     }
 }

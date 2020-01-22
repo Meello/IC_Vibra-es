@@ -9,7 +9,11 @@ namespace IcVibrations.Core.Operations.Piezoelectric.Calculate
     {
         protected override CalculatePiezoelectricResponse ProcessOperation(CalculatePiezoelectricRequest request)
         {
-            throw new NotImplementedException();
+            CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
+
+
+
+            return response;
         }
 
         protected override CalculatePiezoelectricResponse ValidateOperation(CalculatePiezoelectricRequest request)

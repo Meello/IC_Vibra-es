@@ -54,7 +54,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
                 w = wi + (i * dw);
-                //dt = 0.1;
+
                 if (w != 0)
                 {
                     dt = (Math.PI * 2 / w) / pD;
@@ -77,7 +77,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return output;
         }
 
-        public NewmarkMethodInput CreateInput(BeamRequestData requestData, Beam beam, int degreesFreedomMaximum)
+        public NewmarkMethodInput CreateInput(CalculateBeamRequestData requestData, Beam beam, int degreesFreedomMaximum)
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 

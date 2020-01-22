@@ -6,11 +6,11 @@ namespace IcVibrations.DataContracts.Piezoelectric.Calculate
 {
     public class CalculatePiezoelectricRequest : OperationRequestBase
     {
-        public CalculatePiezoelectricRequest(PiezoelectricRequestData requestData)
+        public CalculatePiezoelectricRequest(CalculatePiezoelectricRequestData requestData)
         {
             Data = requestData;
         }
 
-        public PiezoelectricRequestData Data { get; }
+        public CalculatePiezoelectricRequestData Data { get; }
     }
 }

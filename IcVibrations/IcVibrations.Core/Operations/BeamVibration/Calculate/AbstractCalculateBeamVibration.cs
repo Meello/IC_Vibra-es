@@ -16,7 +16,7 @@ using System.Text;
 namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 {
     public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> 
-        where T : BeamRequestData
+        where T : CalculateBeamRequestData
     {
         protected abstract NewmarkMethodInput CalculateParameters(CalculateBeamRequest<T> request, int degressFreedomMaximum, OperationResponseBase response);
 
