@@ -82,15 +82,15 @@ namespace IcVibrations.Methods.NewmarkMethod
             NewmarkMethodInput input = new NewmarkMethodInput();
 
             // Calculate values
-            double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+            double[,] mass = this._mainMatrix.CalculateBeamMass(beam, degreesFreedomMaximum);
 
-            double[,] hardness = this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
+            double[,] hardness = this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
 
-            double[,] damping = this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
+            double[,] damping = this._mainMatrix.CalculateBeamDamping(mass, hardness, degreesFreedomMaximum);
 
             double[] forces = beam.Forces;
 
-            bool[] bondaryCondition = this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            bool[] bondaryCondition = this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
 
             bcTrue = 0;
             for (int i = 0; i < degreesFreedomMaximum; i++)

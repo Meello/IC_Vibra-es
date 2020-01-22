@@ -10,7 +10,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public class MainMatrix : IMainMatrix
 	{
-		public double[,] CalculateMassElement(double area, double specificMass, double length)
+		public double[,] CalculateBeamMassElement(double area, double specificMass, double length)
 		{
 			double[,] massElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
@@ -34,7 +34,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return massElement;
 		}
 
-		public double[,] CalculateHardnessElement(double momentInertia, double youngModulus, double length)
+		public double[,] CalculateBeamHardnessElement(double momentInertia, double youngModulus, double length)
 		{
 			double[,] hardnessElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
@@ -58,7 +58,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardnessElement;
 		}
 
-		public double[,] CalculateMass(Beam beam, int degreesFreedomMaximum)
+		public double[,] CalculateBeamMass(Beam beam, int degreesFreedomMaximum)
         {
 			int elements = beam.ElementCount;
 
@@ -72,7 +72,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			for (int n = 0; n < elements; n++)
 			{
-				double[,] massElement = this.CalculateMassElement(beam.Profile.Area[n], beam.Material.SpecificMass, length);
+				double[,] massElement = this.CalculateBeamMassElement(beam.Profile.Area[n], beam.Material.SpecificMass, length);
 
 				p = nodeCoordinates[n,0];
 				q = nodeCoordinates[n,1];
@@ -100,7 +100,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return mass;
 		}
 
-		public double[,] CalculateHardness(Beam beam, int degreesFreedomMaximum)
+		public double[,] CalculateBeamHardness(Beam beam, int degreesFreedomMaximum)
 		{
 			int elements = beam.ElementCount;
 
@@ -114,7 +114,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			for (int n = 0; n < elements; n++)
 			{
-				double[,] hardnessElement = this.CalculateHardnessElement(beam.Profile.MomentInertia[n], beam.Material.YoungModulus, length);
+				double[,] hardnessElement = this.CalculateBeamHardnessElement(beam.Profile.MomentInertia[n], beam.Material.YoungModulus, length);
 
 				p = nodeCoordinates[n, 0];
 				q = nodeCoordinates[n, 1];
@@ -142,7 +142,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardness;
 		}
 
-		public double[,] CalculateDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum)
+		public double[,] CalculateBeamDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum)
 		{
 			double[,] damping = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 
@@ -156,20 +156,15 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			return damping;
 		}
-		
-		public double[] CalculateForce(double[] forceValues, int[] forcePosition, int degreesFreedomMaximum)
-		{
-			double[] force = new double[degreesFreedomMaximum];
-			
-			for (int i = 0; i < forceValues.Count(); i++)
-			{
-				force[2 * forcePosition[i]] = forceValues[i];
-			}
 
-			return force;
+		public double[,] CalculatePiezoelectricElementMass(double area, double density, double elementLength)
+		{
+			double[,] piezoelectricElementMass = new double[,];
+
+			return piezoelectricElementMass;
 		}
 
-		public bool[] CalculateBondaryCondition(Fastening firstFastening, Fastening lastFastening, int degreesFreedomMaximum)
+		public bool[] CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, int degreesFreedomMaximum)
 		{
 			bool[] bondaryCondition = new bool[degreesFreedomMaximum];
 
