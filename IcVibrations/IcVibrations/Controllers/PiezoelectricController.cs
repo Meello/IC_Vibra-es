@@ -14,18 +14,18 @@ namespace IC_Vibrations.Controllers
     [Route("api/v1/piezoelectric")]
     public class PiezoelectricController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<CalculatePiezoelectricResponse> Calculate(CalculatePiezoelectricRequestData requestData)
-        {
-            CalculatePiezoelectricRequest request = new CalculatePiezoelectricRequest(requestData);
-            CalculatePiezoelectricResponse response = this._calculatePiezoelectric.Process(request);
+        //[HttpGet]
+        //public ActionResult<CalculatePiezoelectricResponse> Calculate(CalculatePiezoelectricRequestData requestData)
+        //{
+        //    CalculatePiezoelectricRequest request = new CalculatePiezoelectricRequest(requestData);
+        //    CalculatePiezoelectricResponse response = this._calculatePiezoelectric.Process(request);
 
-            if(!response.Success)
-            {
-                return BadRequest(response);
-            }
+        //    if(!response.Success)
+        //    {
+        //        return BadRequest(response);
+        //    }
 
-            return Ok(response);
-        }
+        //    return Ok(response);
+        //}
     }
 }

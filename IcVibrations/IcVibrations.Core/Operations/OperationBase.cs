@@ -14,17 +14,14 @@ namespace IcVibrations.Core.Operations
         {
             TResponse response = new TResponse();
 
-            //Quando trabalhar com serviços externos --> usar try, catch
             try
             {
-                //validar
                 response = ValidateOperation(request);
                 if(!response.Success)
                 {
                     return response;
                 }
 
-                //operar
                 response = ProcessOperation(request);
             }
             catch (Exception ex)

@@ -14,22 +14,24 @@ namespace IcVibrations.Calculator.MainMatrixes
 		{
 			double[,] massElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
-			massElement[0, 0] = 156 * ((area * specificMass * length) / 420);
-			massElement[0, 1] = 22 * length * ((area * specificMass * length) / 420);
-			massElement[0, 2] = 54 * ((area * specificMass * length) / 420);
-			massElement[0, 3] = -13 * length * ((area * specificMass * length) / 420);
-			massElement[1, 0] = 22 * length * ((area * specificMass * length) / 420);
-			massElement[1, 1] = 4 * length * length * ((area * specificMass * length) / 420);
-			massElement[1, 2] = 13 * length * ((area * specificMass * length) / 420);
-			massElement[1, 3] = -3 * length * length * ((area * specificMass * length) / 420);
-			massElement[2, 0] = 54 * ((area * specificMass * length) / 420);
-			massElement[2, 1] = 13 * length * ((area * specificMass * length) / 420);
-			massElement[2, 2] = 156 * ((area * specificMass * length) / 420);
-			massElement[2, 3] = -22 * length * ((area * specificMass * length) / 420);
-			massElement[3, 0] = -13 * length * ((area * specificMass * length) / 420);
-			massElement[3, 1] = -3 * length * length * ((area * specificMass * length) / 420);
-			massElement[3, 2] = -22 * length * ((area * specificMass * length) / 420);
-			massElement[3, 3] = 4 * length * length * ((area * specificMass * length) / 420);
+			double constant = area * specificMass * length / 420;
+
+			massElement[0, 0] = 156 * constant;
+			massElement[0, 1] = 22 * length * constant;
+			massElement[0, 2] = 54 * constant;
+			massElement[0, 3] = -13 * length * constant;
+			massElement[1, 0] = 22 * length * constant;
+			massElement[1, 1] = 4 * length * length * constant;
+			massElement[1, 2] = 13 * length * constant;
+			massElement[1, 3] = -3 * length * length * constant;
+			massElement[2, 0] = 54 * constant;
+			massElement[2, 1] = 13 * length * constant;
+			massElement[2, 2] = 156 * constant;
+			massElement[2, 3] = -22 * length * constant;
+			massElement[3, 0] = -13 * length * constant;
+			massElement[3, 1] = -3 * length * length * constant;
+			massElement[3, 2] = -22 * length * constant;
+			massElement[3, 3] = 4 * length * length * constant;
 
 			return massElement;
 		}
@@ -38,6 +40,8 @@ namespace IcVibrations.Calculator.MainMatrixes
 		{
 			double[,] hardnessElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
+			double constant = momentInertia * youngModulus / Math.Pow(length, 3);
+
 			hardnessElement[0, 0] = 12 * momentInertia * youngModulus / Math.Pow(length, 3);
 			hardnessElement[0, 1] = 6 * momentInertia  * youngModulus  / Math.Pow(length, 2);
 			hardnessElement[0, 2] = -12 * momentInertia * youngModulus / Math.Pow(length, 3);
@@ -45,13 +49,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 			hardnessElement[1, 0] = 6 * momentInertia * youngModulus / Math.Pow(length, 2);
 			hardnessElement[1, 1] = 4 * momentInertia * youngModulus / length;
 			hardnessElement[1, 2] = -(6 * momentInertia * youngModulus / Math.Pow(length, 2));
-			hardnessElement[1, 3] = (4 * momentInertia * youngModulus / length) / 2;
+			hardnessElement[1, 3] = 2 * momentInertia * youngModulus / length;
 			hardnessElement[2, 0] = -(12 * momentInertia * youngModulus / Math.Pow(length, 3));
 			hardnessElement[2, 1] = -(6 * momentInertia * youngModulus / Math.Pow(length, 2));
 			hardnessElement[2, 2] = 12 * momentInertia * youngModulus / Math.Pow(length, 3);
 			hardnessElement[2, 3] = -(6 * momentInertia * youngModulus / Math.Pow(length, 2));
 			hardnessElement[3, 0] = 6 * momentInertia * youngModulus / Math.Pow(length, 2);
-			hardnessElement[3, 1] = 4 * momentInertia * youngModulus / length / 2;
+			hardnessElement[3, 1] = 2 * momentInertia * youngModulus / length;
 			hardnessElement[3, 2] = -(6 * momentInertia * youngModulus / Math.Pow(length, 2));
 			hardnessElement[3, 3] = 4 * momentInertia * youngModulus / length;
 
@@ -157,15 +161,56 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return damping;
 		}
 
-		public double[,] CalculatePiezoelectricElementMass(double width, double height, double density, double elementLength)
+		public double[,] CalculatePiezoelectricElementMass(double area, double specificMass, double length)
 		{
-			double[,] piezoelectricElementMass = new double[Constants.PiezoelectricElementMassMatrixSize, Constants.PiezoelectricElementMassMatrixSize];
+			double[,] massElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
-			double 
+			double constant = area * specificMass * length / 420;
 
-			piezoelectricElementMass[0, 0] = ;
+			massElement[0, 0] = 156 * constant;
+			massElement[0, 1] = 22 * length * constant;
+			massElement[0, 2] = 54 * constant;
+			massElement[0, 3] = -13 * length * constant;
+			massElement[1, 0] = 22 * length * constant;
+			massElement[1, 1] = 4 * length * length * constant;
+			massElement[1, 2] = 13 * length * constant;
+			massElement[1, 3] = -3 * length * length * constant;
+			massElement[2, 0] = 54 * constant;
+			massElement[2, 1] = 13 * length * constant;
+			massElement[2, 2] = 156 * constant;
+			massElement[2, 3] = -22 * length * constant;
+			massElement[3, 0] = -13 * length * constant;
+			massElement[3, 1] = -3 * length * length * constant;
+			massElement[3, 2] = -22 * length * constant;
+			massElement[3, 3] = 4 * length * length * constant;
 
-			return piezoelectricElementMass;
+			return massElement;
+		}
+
+		public double[,] CalculatePiezoelectricElementHardness(double elasticityToConstantElectricField, double momentInertia, double length)
+		{
+			double[,] hardnessElement = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
+
+			double constant = momentInertia * elasticityToConstantElectricField / Math.Pow(length, 3);
+
+			hardnessElement[0, 0] = 12 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 3);
+			hardnessElement[0, 1] = 6 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 2);
+			hardnessElement[0, 2] = -12 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 3);
+			hardnessElement[0, 3] = 6 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 2);
+			hardnessElement[1, 0] = 6 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 2);
+			hardnessElement[1, 1] = 4 * momentInertia * elasticityToConstantElectricField / length;
+			hardnessElement[1, 2] = -(6 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 2));
+			hardnessElement[1, 3] = 2 * momentInertia * elasticityToConstantElectricField / length;
+			hardnessElement[2, 0] = -(12 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 3));
+			hardnessElement[2, 1] = -(6 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 2));
+			hardnessElement[2, 2] = 12 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 3);
+			hardnessElement[2, 3] = -(6 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 2));
+			hardnessElement[3, 0] = 6 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 2);
+			hardnessElement[3, 1] = 2 * momentInertia * elasticityToConstantElectricField / length;
+			hardnessElement[3, 2] = -(6 * momentInertia * elasticityToConstantElectricField / Math.Pow(length, 2));
+			hardnessElement[3, 3] = 4 * momentInertia * elasticityToConstantElectricField / length;
+
+			return hardnessElement;
 		}
 
 		public bool[] CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, int degreesFreedomMaximum)

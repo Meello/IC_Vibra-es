@@ -46,16 +46,18 @@ namespace IcVibrations
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
             
             // Beam Operations
-            services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
-            services.AddScoped<IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse>, CalculateCircularBeamVibration>();
+            services.AddScoped<AbstractCalculateBeamVibration<CircularBeamRequestData>, CalculateCircularBeamVibration>();
+            services.AddScoped<AbstractCalculateBeamVibration<RectangularBeamRequestData>, CalculateRectangularBeamVibration>();
+
             // Beam Operations Base
+            services.AddScoped<IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse>, CalculateCircularBeamVibration>();
             services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
 
             // Piezoelectric Operations
             //services.AddScoped<ICalculatePiezoelectricVibration, AbstractCalculatePiezoelectricVibration>();
             // Piezoelectric Operations Base
             //services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, AbstractCalculatePiezoelectricVibration>();
-            
+
             // Validator
             services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
             services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
