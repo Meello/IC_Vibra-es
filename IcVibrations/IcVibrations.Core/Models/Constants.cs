@@ -20,8 +20,6 @@ namespace IcVibrations.Core.Models
 
         public const double Mi = 0.005;
 
-        //public const int PiezoelectricElementMassMatrixSize = 4;
-
-        //public const int PiezoelectricElementHardnessMatrixSize = 4;
+        public const int PiezoelectricCapacitanceMatrixSize = 2;
     }
 }

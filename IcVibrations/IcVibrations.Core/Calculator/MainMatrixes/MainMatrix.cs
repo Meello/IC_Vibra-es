@@ -250,5 +250,37 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			return nodeCoordinates;
 		}
+
+		public double[,] CalculatePiezoelectricElectromechanicalCoupling(double piezoelectricWidth, double piezoelectricHeight, double beamHeight, double piezoelectricLength, double piezoelectricStrain)
+		{
+			double[,] electromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricCapacitanceMatrixSize];
+
+			double constant = -(piezoelectricStrain * piezoelectricWidth * piezoelectricLength / 2) * (2 * beamHeight * piezoelectricHeight + Math.Pow(piezoelectricHeight, 2));
+
+			electromechanicalCoupling[0, 0] = 0;
+			electromechanicalCoupling[0, 1] = 0;
+			electromechanicalCoupling[1, 0] = -piezoelectricLength * constant;
+			electromechanicalCoupling[1, 1] = piezoelectricLength * constant;
+			electromechanicalCoupling[2, 0] = 0;
+			electromechanicalCoupling[2, 1] = piezoelectricLength * constant;
+			electromechanicalCoupling[3, 0] = piezoelectricLength * constant;
+			electromechanicalCoupling[3, 1] = -piezoelectricLength * constant;
+
+			return electromechanicalCoupling;
+		}
+
+		public double[,] CalculatePiezoelectricCapacitance(double area, double length, double heigth, double dielectricConstantsToConstantStrain)
+		{
+			double[,] piezoelectricCapacitance = new double[Constants.PiezoelectricCapacitanceMatrixSize, Constants.PiezoelectricCapacitanceMatrixSize];
+
+			double constant = -dielectricConstantsToConstantStrain * area * length / Math.Pow(heigth, 2);
+
+			piezoelectricCapacitance[0, 0] = constant;
+			piezoelectricCapacitance[0, 1] = -constant;
+			piezoelectricCapacitance[1, 0] = -constant;
+			piezoelectricCapacitance[1, 1] = constant;
+
+			return piezoelectricCapacitance;
+		}
 	}
 }

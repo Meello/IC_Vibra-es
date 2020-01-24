@@ -22,9 +22,9 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[,] CalculatePiezoelectricElementHardness(double elasticityToConstantElectricField, double MomentInertia, double length);
 
-        double[,] CalculatePiezoelectricElectromechanicalCoupling(double v1, double v2, double v3, double v4, double v5);
+        double[,] CalculatePiezoelectricElectromechanicalCoupling(double piezoelectricWidth, double piezoelectricHeight, double beamHeight, double piezoelectricLength, double piezoelectricStrain);
 
-        double[,] CalculatePiezoelectricPiezoelectricCapacitance();
+        double[,] CalculatePiezoelectricCapacitance(double area, double length, double heigth, double dielectricConstantsToConstantStrain);
 
         bool[] CalculateBeamBondaryCondition(Fastening fixacao1, Fastening fixacaoN, int degreesFreedomMaximum);
     }
