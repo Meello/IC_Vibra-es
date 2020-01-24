@@ -274,5 +274,22 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
             return arraySum;
         }
+
+        public double[,] TransposeMatrix(double[,] matrix)
+        {
+            int row = matrix.GetLength(0);
+            int column = matrix.GetLength(1);
+            double[,] matrixTransposed = new double[row, column];
+
+            for (int i = 0; i < row; i++)
+            {
+                for (int j = 0; j < column; j++)
+                {
+                    matrixTransposed[j, i] = matrix[i, j];
+                }
+            }
+
+            return matrixTransposed;
+        }
     }
 }

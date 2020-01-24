@@ -31,6 +31,8 @@ namespace IcVibrations.Core.Operations.Piezoelectric.Calculate
 
             int degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
+
+
             return response;
         }
 
@@ -45,7 +47,7 @@ namespace IcVibrations.Core.Operations.Piezoelectric.Calculate
                 return response;
             }
 
-            // Validar piezoelectric
+            // Validate piezoelectric
 
             if (!this._beamRequestValidator.Execute(request.BeamData, degreesFreedomMaximum, response))
             {

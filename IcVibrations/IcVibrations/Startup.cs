@@ -5,10 +5,12 @@ using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Operations;
 using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Operations.Piezoelectric.Calculate;
+using IcVibrations.Core.Operations.PiezoelectricVibration.Calculate;
 using IcVibrations.Core.Validators.Beam;
 using IcVibrations.Core.Validators.MethodParameters;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
+using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.DataContracts.Piezoelectric.Calculate;
 using IcVibrations.Methods.AuxiliarMethods;
 using IcVibrations.Methods.NewmarkMethod;
@@ -50,13 +52,14 @@ namespace IcVibrations
             services.AddScoped<AbstractCalculateBeamVibration<RectangularBeamRequestData>, CalculateRectangularBeamVibration>();
 
             // Beam Operations Base
-            services.AddScoped<IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse>, CalculateCircularBeamVibration>();
-            services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
+            //services.AddScoped<IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse>, CalculateCircularBeamVibration>();
+            //services.AddScoped<IOperationBase<CalculateBeamRequest<RectangularBeamRequestData>, CalculateBeamResponse>, CalculateRectangularBeamVibration>();
 
             // Piezoelectric Operations
-            //services.AddScoped<ICalculatePiezoelectricVibration, AbstractCalculatePiezoelectricVibration>();
+            services.AddScoped<AbstractCalculatePiezoelectricVibration<CircularPiezoelectricRequestData, CircularBeamRequestData>, CalculateCircularPiezoelectricVibration>();
+
             // Piezoelectric Operations Base
-            //services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, AbstractCalculatePiezoelectricVibration>();
+            services.AddScoped<IOperationBase<CalculatePiezoelectricRequest<CircularPiezoelectricRequestData, CircularBeamRequestData>, CalculatePiezoelectricResponse>, CalculateCircularPiezoelectricVibration>();
 
             // Validator
             services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();

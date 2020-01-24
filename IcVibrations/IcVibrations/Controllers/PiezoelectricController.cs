@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using IcVibrations.Core.Operations.Piezoelectric.Calculate;
+using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.DataContracts.Piezoelectric.Calculate;
 using Microsoft.AspNetCore.Mvc;
@@ -14,18 +15,19 @@ namespace IC_Vibrations.Controllers
     [Route("api/v1/piezoelectric")]
     public class PiezoelectricController : ControllerBase
     {
-        //[HttpGet]
-        //public ActionResult<CalculatePiezoelectricResponse> Calculate(CalculatePiezoelectricRequestData requestData)
-        //{
-        //    CalculatePiezoelectricRequest request = new CalculatePiezoelectricRequest(requestData);
-        //    CalculatePiezoelectricResponse response = this._calculatePiezoelectric.Process(request);
+        [HttpPost("circular")]
+        public ActionResult<CalculatePiezoelectricResponse> Calculate(
+            [FromServices] AbstractCalculatePiezoelectricVibration<CircularPiezoelectricRequestData, CircularBeamRequestData> calculatePiezoelectricVibration,
+            [FromBody] CalculatePiezoelectricRequest<CircularPiezoelectricRequestData, CircularBeamRequestData> request)
+        {
+            CalculatePiezoelectricResponse response = calculatePiezoelectricVibration.Process(request);
 
-        //    if(!response.Success)
-        //    {
-        //        return BadRequest(response);
-        //    }
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
 
-        //    return Ok(response);
-        //}
+            return Ok(response);
+        }
     }
 }

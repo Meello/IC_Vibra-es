@@ -9,17 +9,17 @@ namespace IcVibrations.DataContracts.Piezoelectric.Calculate
         where TPiezoelectric: PiezoelectricRequestData
         where TBeam: BeamRequestData
     {
-        public CalculatePiezoelectricRequest(TPiezoelectric piezoelectricRequestData, NewmarkMethodParameter methodParameterData, TBeam beamRequestData)
+        public CalculatePiezoelectricRequest(TBeam beamData, TPiezoelectric piezoelectricRequestData, NewmarkMethodParameter methodParameterData)
         {
+            BeamData = beamData;
             PiezoelectricRequestData = piezoelectricRequestData;
             MethodParameterData = methodParameterData;
-            BeamData = beamRequestData;
         }
+
+        public TBeam BeamData { get; }
 
         public TPiezoelectric PiezoelectricRequestData { get; }
 
         public NewmarkMethodParameter MethodParameterData { get; }
-
-        public TBeam BeamData { get; }
     }
 }

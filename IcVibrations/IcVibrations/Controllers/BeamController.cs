@@ -16,14 +16,6 @@ namespace IC_Vibrations.Controllers
     [Route("api/v1/beam")]
     public class BeamController : ControllerBase
     {
-        private readonly IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse> _circularCalculateBeamVibration;
-
-        public BeamController(
-            IOperationBase<CalculateBeamRequest<CircularBeamRequestData>, CalculateBeamResponse> circularCalculateBeamVibration)
-        {
-            this._circularCalculateBeamVibration = circularCalculateBeamVibration;
-        }
-
         [HttpPost("rectangular")]
         public ActionResult<CalculateBeamResponse> CalculateRectangular(
             [FromServices] AbstractCalculateBeamVibration<RectangularBeamRequestData> calculateRectangularBeamVibration, 

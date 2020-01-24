@@ -7,7 +7,7 @@ using IcVibrations.Models.Beam;
 
 namespace IcVibrations.Core.Validators.Beam
 {
-    public interface IBeamRequestValidator<T> where T : BeamRequestData
+    public interface IBeamRequestValidator<T> where T : DataContracts.Beam.BeamRequestData
     {
         bool Execute(T requestData, int degreesFreedomMaximum, OperationResponseBase response);
     }

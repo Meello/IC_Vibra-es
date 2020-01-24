@@ -15,4 +15,8 @@
     <ProjectReference Include="..\IcVibrations.DataContract\IcVibrations.DataContracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\Piezoelectric\Abstract\" />
+  </ItemGroup>
+
 </Project>
