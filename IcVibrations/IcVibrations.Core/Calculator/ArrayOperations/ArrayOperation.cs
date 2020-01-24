@@ -7,17 +7,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 {
     public class ArrayOperation : IArrayOperation
     {
-        public double[] AddValues(double[] array, int[] position, double[] value)
-        {
-            for (int i = 0; i < position.Length; i++)
-            {
-                array[position[i]] = value[i];
-            }
-
-            return array;
-        }
-
-        public double[] Create(double value, int size)
+        public double[] Create(double value, uint size)
         {
             double[] newArray = new double[size];
 

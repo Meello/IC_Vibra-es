@@ -41,7 +41,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             this._mappingResolver = mappingResolver;
         }
 
-        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<RectangularBeamRequestData> request, int degreesFreedomMaximum, OperationResponseBase response)
+        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<RectangularBeamRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             Beam beam = this._mappingResolver.BuildFrom(request.BeamData);
 

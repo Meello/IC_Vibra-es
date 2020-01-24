@@ -14,7 +14,7 @@ namespace IcVibrations.Core.Validators.Beam
     public abstract class AbstractBeamRequestValidator<T> : IBeamRequestValidator<T> 
         where T : BeamRequestData
     {
-        public bool Execute(T beamData, int degreesFreedomMaximum, OperationResponseBase response)
+        public bool Execute(T beamData, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             this.ValidateElementCount(beamData.ElementCount, response);
 
@@ -42,7 +42,7 @@ namespace IcVibrations.Core.Validators.Beam
 
         protected abstract void ValidateProfileInput(T beamData, OperationResponseBase response);
 
-        private void ValidateElementCount(int elementCount, OperationResponseBase response)
+        private void ValidateElementCount(uint elementCount, OperationResponseBase response)
         {
             if (elementCount <= 1)
             {
@@ -83,7 +83,7 @@ namespace IcVibrations.Core.Validators.Beam
             }
         }
 
-        private void ValidateForce(double[] forces, int degreesFreedomMaximum, OperationResponseBase response)
+        private void ValidateForce(double[] forces, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             if(forces.Count() <= 0 || forces.Count() > degreesFreedomMaximum)
             {
@@ -95,7 +95,7 @@ namespace IcVibrations.Core.Validators.Beam
             }
         }
 
-        private void ValidateForceNodePosition(int[] forcePositions, int degreesFreedomMaximum, OperationResponseBase response)
+        private void ValidateForceNodePosition(int[] forcePositions, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             if (forcePositions.Count() <= 0 || forcePositions.Count() > degreesFreedomMaximum)
             {
@@ -107,7 +107,7 @@ namespace IcVibrations.Core.Validators.Beam
             }
         }
 
-        private void ValidateForceValueAndPosition(double[] forces, int[] forceNodePositions, int degreesFreedomMaximum, OperationResponseBase response)
+        private void ValidateForceValueAndPosition(double[] forces, int[] forceNodePositions, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             this.ValidateForce(forces, degreesFreedomMaximum, response);
 

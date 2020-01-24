@@ -7,7 +7,7 @@ namespace IcVibrations.Models.Beam
 {
     public class Beam
     {
-        public int ElementCount { get; set; }
+        public uint ElementCount { get; set; }
 
         public Material Material { get; set; }
 

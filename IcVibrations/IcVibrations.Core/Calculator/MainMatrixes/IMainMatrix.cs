@@ -16,16 +16,16 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[,] CalculatePiezoelectricElementHardness(double momentInertia, double elasticityToConstantElectricField, double length);
 
-        double[,] CalculateBeamMass(Beam beam, int degreesFreedomMaximum);
+        double[,] CalculateBeamMass(Beam beam, uint degreesFreedomMaximum);
 
-        double[,] CalculateBeamHardness(Beam beam, int degreesFreedomMaximum);
+        double[,] CalculateBeamHardness(Beam beam, uint degreesFreedomMaximum);
 
-        double[,] CalculateBeamDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum);
+        double[,] CalculateBeamDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum);
 
         double[,] CalculatePiezoelectricElectromechanicalCoupling(double piezoelectricWidth, double piezoelectricHeight, double beamHeight, double piezoelectricLength, double piezoelectricStrain);
 
         double[,] CalculatePiezoelectricCapacitance(double area, double length, double heigth, double dielectricConstantsToConstantStrain);
 
-        bool[] CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, int degreesFreedomMaximum);
+        bool[] CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum);
     }
 }

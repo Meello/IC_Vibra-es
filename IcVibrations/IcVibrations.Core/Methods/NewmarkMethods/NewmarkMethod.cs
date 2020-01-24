@@ -77,7 +77,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return output;
         }
 
-        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, int degreesFreedomMaximum)
+        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum)
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
@@ -125,7 +125,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return input;
         }
 
-        private void Solution(NewmarkMethodInput input, NewmarkMethodOutput output, OperationResponseBase response)
+        public void Solution(NewmarkMethodInput input, NewmarkMethodOutput output, OperationResponseBase response)
         {
             //StreamWriter streamWriter = new StreamWriter(@"C:\Users\bruno\OneDrive\Documentos\GitHub\IC_Vibra-es\IcVibrations\RectangularBeamSolution.csv");
 
@@ -249,7 +249,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             }
         }
 
-        private double[,] CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness)
+        public double[,] CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness)
         {
             double[,] equivalentHardness = new double[bcTrue, bcTrue];
 
@@ -264,7 +264,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return equivalentHardness;
         }
 
-        private double[,] CalculateMatrixP1(double[,] mass, double[,] damping)
+        public double[,] CalculateMatrixP1(double[,] mass, double[,] damping)
         {
             double[,] p1 = new double[bcTrue, bcTrue];
 
@@ -279,7 +279,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return p1;
         }
 
-        private double[,] CalculateMatrixP2(double[,] mass, double[,] damping)
+        public double[,] CalculateMatrixP2(double[,] mass, double[,] damping)
         {
             double[,] p2 = new double[bcTrue, bcTrue];
 
@@ -294,7 +294,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return p2;
         }
 
-        private double[] CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
+        public double[] CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
         {
             double[] deltaForce = this._arrayOperation.Subtract(input.Force, force_ant);
 
@@ -311,7 +311,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return equivalentForce;
         }
 
-        private double[] CreateMatrix_K_C_Y(NewmarkMethodInput input, double[] displacement, OperationResponseBase response)
+        public double[] CreateMatrix_K_C_Y(NewmarkMethodInput input, double[] displacement, OperationResponseBase response)
         {
             double[] matrix_K_Y = this._arrayOperation.Multiply(input.Hardness, displacement);
 

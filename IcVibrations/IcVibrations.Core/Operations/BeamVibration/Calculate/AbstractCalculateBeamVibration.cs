@@ -19,7 +19,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
     public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> 
         where T : BeamRequestData
     {
-        protected abstract NewmarkMethodInput CalculateParameters(CalculateBeamRequest<T> request, int degressFreedomMaximum, OperationResponseBase response);
+        protected abstract NewmarkMethodInput CalculateParameters(CalculateBeamRequest<T> request, uint degressFreedomMaximum, OperationResponseBase response);
 
         //protected abstract string AnalysisExplanation();
 
@@ -44,7 +44,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
-            int degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
+            uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
             NewmarkMethodInput input = this.CalculateParameters(request, degreesFreedomMaximum, response);
 
@@ -59,7 +59,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
-            int degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
+            uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
             if(!this._methodParameterValidator.Execute(request.MethodParameterData, response))
             {
@@ -74,9 +74,9 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             return response;
         }
         
-        public int DegreesFreedomMaximum(int element)
+        public uint DegreesFreedomMaximum(uint element)
         {
-            int degreesFreedomMaximum = (element + 1) * Constants.DegreesFreedom;
+            uint degreesFreedomMaximum = (element + 1) * Constants.DegreesFreedom;
             return degreesFreedomMaximum;
         }
     }

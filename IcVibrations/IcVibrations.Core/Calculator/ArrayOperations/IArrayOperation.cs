@@ -8,23 +8,21 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
     {
         double[,] InverseMatrix(double[,] matrix);
 
-        double[,] Multiply(double[,] array1, double[,] array2);
+        double[,] Multiply(double[,] matrix1, double[,] matrix2);
 
-        double[] Multiply(double[,] array1, double[] array2);
+        double[] Multiply(double[,] matrix, double[] array);
 
-        double[] Multiply(double[] array1, double[,] array2);
+        double[] Multiply(double[] array, double[,] matrix);
 
-        double[,] Subtract(double[,] array1, double[,] array2);
+        double[,] Subtract(double[,] matrix1, double[,] matrix2);
         
         double[] Subtract(double[] array1, double[] array2);
 
-        double[,] Sum(double[,] array1, double[,] array2);
+        double[,] Sum(double[,] matrix1, double[,] matrix2);
         
         double[] Sum(double[] array1, double[] array2);
         
-        double[] Create(double value, int size);
-
-        double[] AddValues(double[] array, int[] positions, double[] values);
+        double[] Create(double value, uint size);
 
         double[,] TransposeMatrix(double[,] matrix);
     }

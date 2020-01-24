@@ -114,13 +114,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardnessElement;
 		}
 
-		public double[,] CalculateBeamMass(Beam beam, int degreesFreedomMaximum)
+		public double[,] CalculateBeamMass(Beam beam, uint degreesFreedomMaximum)
         {
-			int elements = beam.ElementCount;
+			uint elements = beam.ElementCount;
 
-			int[,] nodeCoordinates = this.NodeCoordinates(elements);
+			uint[,] nodeCoordinates = this.NodeCoordinates(elements);
 			
-			int p, q, r, s;
+			uint p, q, r, s;
 			
 			double[,] mass = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 			
@@ -156,13 +156,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return mass;
 		}
 
-		public double[,] CalculateBeamHardness(Beam beam, int degreesFreedomMaximum)
+		public double[,] CalculateBeamHardness(Beam beam, uint degreesFreedomMaximum)
 		{
-			int elements = beam.ElementCount;
+			uint elements= beam.ElementCount;
 
-			int[,] nodeCoordinates = this.NodeCoordinates(elements);
+			uint[,] nodeCoordinates = this.NodeCoordinates(elements);
 			
-			int p, q, r, s;
+			uint p, q, r, s;
 
 			double[,] hardness = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 
@@ -199,7 +199,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardness;
 		}
 
-		public double[,] CalculateBeamDamping(double[,] mass, double[,] hardness, int degreesFreedomMaximum)
+		public double[,] CalculateBeamDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum)
 		{
 			double[,] damping = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 
@@ -214,7 +214,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return damping;
 		}
 
-		public bool[] CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, int degreesFreedomMaximum)
+		public bool[] CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum)
 		{
 			bool[] bondaryCondition = new bool[degreesFreedomMaximum];
 
@@ -237,13 +237,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return bondaryCondition;
 		}
 
-		private int[,] NodeCoordinates(int elements)
+		private uint[,] NodeCoordinates(uint elements)
 		{
-			int[,] nodeCoordinates = new int[elements + 1, Constants.DegreesFreedomElement];
+			uint[,] nodeCoordinates = new uint[elements + 1, Constants.DegreesFreedomElement];
 
-			for (int i = 0; i < elements + 1; i++)
+			for (uint i = 0; i < elements + 1; i++)
 			{
-				for (int j = 0; j < Constants.DegreesFreedomElement; j++)
+				for (uint j = 0; j < Constants.DegreesFreedomElement; j++)
 				{
 					nodeCoordinates[i, j] = 2 * i + j;
 				}

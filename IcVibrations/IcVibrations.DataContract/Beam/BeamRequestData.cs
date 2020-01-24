@@ -6,7 +6,7 @@ namespace IcVibrations.DataContracts.Beam
 {
     public class BeamRequestData
     {
-        public int ElementCount { get; set; }
+        public uint ElementCount { get; set; }
 
         public string Material { get; set; }
 

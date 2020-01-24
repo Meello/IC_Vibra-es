@@ -29,7 +29,7 @@ namespace IcVibrations.Core.Operations.Piezoelectric.Calculate
         {
             CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
 
-            int degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
+            uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
 
 
@@ -40,7 +40,7 @@ namespace IcVibrations.Core.Operations.Piezoelectric.Calculate
         {
             CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
 
-            int degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
+            uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
             if (!this._methodParameterValidator.Execute(request.MethodParameterData, response))
             {
@@ -57,9 +57,9 @@ namespace IcVibrations.Core.Operations.Piezoelectric.Calculate
             return response;
         }
 
-        public int DegreesFreedomMaximum(int element)
+        public uint DegreesFreedomMaximum(uint element)
         {
-            int degreesFreedomMaximum = (element + 1) * Constants.DegreesFreedom;
+            uint degreesFreedomMaximum = (element + 1) * Constants.DegreesFreedom;
             return degreesFreedomMaximum;
         }
     }

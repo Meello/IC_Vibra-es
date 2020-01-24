@@ -39,7 +39,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             this._newmarkMethod = newmarkMethod;
         }
 
-        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<CircularBeamRequestData> request, int degreesFreedomMaximum, OperationResponseBase response)
+        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<CircularBeamRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             Beam beam = this._mappingResolver.BuildFrom(request.BeamData);
 
