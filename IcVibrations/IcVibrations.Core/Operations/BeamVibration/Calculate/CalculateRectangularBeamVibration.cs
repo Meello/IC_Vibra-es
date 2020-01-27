@@ -10,7 +10,7 @@ using IcVibrations.Core.Validators.MethodParameters;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
-using IcVibrations.Methods.AuxiliarMethods;
+using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
 using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;

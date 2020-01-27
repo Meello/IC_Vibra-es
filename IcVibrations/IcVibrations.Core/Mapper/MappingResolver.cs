@@ -3,7 +3,7 @@ using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
-using IcVibrations.Methods.AuxiliarMethods;
+using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
 using System;

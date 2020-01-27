@@ -5,7 +5,7 @@ using IcVibrations.Core.Models;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
-using IcVibrations.Methods.AuxiliarMethods;
+using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
@@ -27,12 +27,12 @@ namespace IcVibrations.Methods.NewmarkMethod
         private int pD, pC;
 
         private readonly IMainMatrix _mainMatrix;
-        private readonly IAuxiliarMethod _auxiliarMethod;
+        private readonly IAuxiliarOperation _auxiliarMethod;
         private readonly IArrayOperation _arrayOperation;
 
         public NewmarkMethod(
             IMainMatrix mainMatrix,
-            IAuxiliarMethod auxiliarMethod,
+            IAuxiliarOperation auxiliarMethod,
             IArrayOperation arrayOperation)
         {
             this._mainMatrix = mainMatrix;

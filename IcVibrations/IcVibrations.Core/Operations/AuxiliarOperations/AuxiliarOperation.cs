@@ -1,10 +1,12 @@
-﻿using System;
+﻿using IcVibrations.Core.DTO;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
-namespace IcVibrations.Methods.AuxiliarMethods
+namespace IcVibrations.Methods.AuxiliarOperations
 {
-    public class AuxiliarMethod : IAuxiliarMethod
+    public class AuxiliarOperation : IAuxiliarOperation
     {
         public double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, int trueBondaryContionCount)
         {
@@ -74,5 +76,25 @@ namespace IcVibrations.Methods.AuxiliarMethods
 
             return matrixCC;
         }
+
+        //public void WriteInFile(string path, NewmarkMethodOutput output)
+        //{
+        //    StreamWriter streamWriter = new StreamWriter(path);
+
+        //    try
+        //    {
+        //        using (StreamWriter sw = streamWriter)
+        //        {
+        //            sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
+
+        //            sw.Close();
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        // Não quero que pare, só avise que deu erro.
+        //        throw new Exception("Couldn't open file.");
+        //    }
+        ////}
     }
 }

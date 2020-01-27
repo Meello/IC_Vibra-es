@@ -316,13 +316,18 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			for (int n = 0; n < elementCount; n++)
 			{
-				double[,] piezoelectricElementElectromechanicalCoupling = this.CalculatePiezoelectricElementElectromechanicalCoupling(piezoelectric, beamHeight);
+				double[,] piezoelectricElementElectromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricElementMatrixSize];
+
+				if (piezoelectric.ElementsWithPiezoelectric.Contains(n))
+				{
+					piezoelectricElementElectromechanicalCoupling = this.CalculatePiezoelectricElementElectromechanicalCoupling(piezoelectric, beamHeight);	
+				}
 
 				for (int i = 2 * n; i < 2 * n + Constants.DegreesFreedomElement; i++)
 				{
 					for (int j = n; j < n + Constants.PiezoelectricElementMatrixSize; j++)
 					{
-						piezoelectricElectromechanicalCoupling[i, j] = piezoelectricElementElectromechanicalCoupling[i - 2 * n, j - n];
+						piezoelectricElectromechanicalCoupling[i, j] += piezoelectricElementElectromechanicalCoupling[i - 2 * n, j - n];
 					}
 				}
 			}
@@ -336,13 +341,15 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 			for (int n = 0; n < elementCount; n++)
 			{
-				double[,] piezoelectricElementCapacitance = this.CalculatePiezoelectricElementCapacitance(piezoelectric.Profile.Area[n], piezoelectric.ElementLength, piezoelectric.Profile.Height, piezoelectric.DielectricConstantToConstantStrain);
+				double[,] piezoelectricElementCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
+				
+				this.CalculatePiezoelectricElementCapacitance(piezoelectric.Profile.Area[n], piezoelectric.ElementLength, piezoelectric.Profile.Height, piezoelectric.DielectricConstantToConstantStrain);
 
 				for (int i = n; i < n + Constants.PiezoelectricElementMatrixSize; i++)
 				{
 					for (int j = n; j < n + Constants.PiezoelectricElementMatrixSize; j++)
 					{
-						piezoelectricCapacitance[i, j] = piezoelectricElementCapacitance[i - n, j - n];
+						piezoelectricCapacitance[i, j] += piezoelectricElementCapacitance[i - n, j - n];
 					}
 				}
 			}
@@ -461,3 +468,6 @@ namespace IcVibrations.Calculator.MainMatrixes
 		}
 	}
 }
+
+// Implementar a lógica de que, quando o elemento não possuir piezoelétrico, a matrix do elemento é zero 
+// ==> PARA TODAS AS MATRIZES RELACIONADAS AO PIEZOELÉTRICO

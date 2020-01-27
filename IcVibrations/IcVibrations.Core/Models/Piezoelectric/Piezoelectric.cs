@@ -20,5 +20,7 @@ namespace IcVibrations.Core.Models.Piezoelectric
         public RectangularProfile Profile { get; set; }
 
         public int[] ElementsWithPiezoelectric { get; set; }
+
+        // OLHAR NA TESE DE MESTRADO ==> TEM TUDO O QUE PRECISA LÁ
     }
 }

@@ -11,7 +11,7 @@ using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.DataContracts.Piezoelectric.Calculate;
-using IcVibrations.Methods.AuxiliarMethods;
+using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,7 +43,7 @@ namespace IcVibrations
             services.AddScoped<IMappingResolver, MappingResolver>();
             
             // Methods
-            services.AddScoped<IAuxiliarMethod, AuxiliarMethod>();
+            services.AddScoped<IAuxiliarOperation, AuxiliarOperation>();
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
             
             // Beam Operations
