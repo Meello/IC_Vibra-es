@@ -2,6 +2,7 @@
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
+using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.Methods.AuxiliarMethods;
@@ -77,16 +78,25 @@ namespace IcVibrations.Methods.NewmarkMethod
             return output;
         }
 
+        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
+        {
+            NewmarkMethodInput input = new NewmarkMethodInput();
+            
+            //double[,] beamMass = this._mainMatrix.CalculateBeamMass
+
+            return input;
+        }
+
         public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum)
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
             // Calculate values
-            double[,] mass = this._mainMatrix.CalculateBeamMass(beam, degreesFreedomMaximum);
+            double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            double[,] hardness = this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
+            double[,] hardness = this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
 
-            double[,] damping = this._mainMatrix.CalculateBeamDamping(mass, hardness, degreesFreedomMaximum);
+            double[,] damping = this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
 
             double[] forces = beam.Forces;
 

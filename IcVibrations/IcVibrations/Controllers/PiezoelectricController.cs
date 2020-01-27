@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using IcVibrations.Core.Operations.Piezoelectric.Calculate;
+using IcVibrations.Core.Operations.PiezoelectricVibration.Calculate;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.DataContracts.Piezoelectric.Calculate;
@@ -15,10 +15,10 @@ namespace IC_Vibrations.Controllers
     [Route("api/v1/piezoelectric")]
     public class PiezoelectricController : ControllerBase
     {
-        [HttpPost("circular")]
+        [HttpPost]
         public ActionResult<CalculatePiezoelectricResponse> Calculate(
-            [FromServices] AbstractCalculatePiezoelectricVibration<CircularPiezoelectricRequestData, CircularBeamRequestData> calculatePiezoelectricVibration,
-            [FromBody] CalculatePiezoelectricRequest<CircularPiezoelectricRequestData, CircularBeamRequestData> request)
+            [FromServices] CalculatePiezoelectricVibration calculatePiezoelectricVibration,
+            [FromBody] CalculatePiezoelectricRequest request)
         {
             CalculatePiezoelectricResponse response = calculatePiezoelectricVibration.Process(request);
 

@@ -11,8 +11,6 @@ namespace IcVibrations.Models.Beam.Characteristics
         public double[] Area { get; set; }
 
         public double[] MomentInertia { get; set; }
-
-        //public abstract List<double> ProfileParameters { get; set; }
     }
 
     public class RectangularProfile : Profile

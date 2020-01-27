@@ -5,20 +5,18 @@ using System.Text;
 
 namespace IcVibrations.DataContracts.Piezoelectric.Calculate
 {
-    public class CalculatePiezoelectricRequest<TPiezoelectric,TBeam> : OperationRequestBase
-        where TPiezoelectric: PiezoelectricRequestData
-        where TBeam: BeamRequestData
+    public class CalculatePiezoelectricRequest: OperationRequestBase
     {
-        public CalculatePiezoelectricRequest(TBeam beamData, TPiezoelectric piezoelectricRequestData, NewmarkMethodParameter methodParameterData)
+        public CalculatePiezoelectricRequest(RectangularBeamRequestData beamData, PiezoelectricRequestData piezoelectricRequestData, NewmarkMethodParameter methodParameterData)
         {
             BeamData = beamData;
             PiezoelectricRequestData = piezoelectricRequestData;
             MethodParameterData = methodParameterData;
         }
 
-        public TBeam BeamData { get; }
+        public RectangularBeamRequestData BeamData { get; }
 
-        public TPiezoelectric PiezoelectricRequestData { get; }
+        public PiezoelectricRequestData PiezoelectricRequestData { get; }
 
         public NewmarkMethodParameter MethodParameterData { get; }
     }

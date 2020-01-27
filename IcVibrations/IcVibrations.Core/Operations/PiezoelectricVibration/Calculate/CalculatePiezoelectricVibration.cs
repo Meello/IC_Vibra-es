@@ -8,24 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IcVibrations.Core.Operations.Piezoelectric.Calculate
+namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
 {
-    public abstract class AbstractCalculatePiezoelectricVibration<TPiezoelectric, TBeam> : OperationBase<CalculatePiezoelectricRequest<TPiezoelectric, TBeam>, CalculatePiezoelectricResponse> 
-        where TPiezoelectric: PiezoelectricRequestData
-        where TBeam: BeamRequestData
+    public abstract class CalculatePiezoelectricVibration : OperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, ICalculatePiezoelectricVibration
     {
         private readonly IMethodParameterValidator _methodParameterValidator;
-        private readonly IBeamRequestValidator<TBeam> _beamRequestValidator;
+        private readonly IBeamRequestValidator<BeamRequestData> _beamRequestValidator;
 
-        public AbstractCalculatePiezoelectricVibration(
+        public CalculatePiezoelectricVibration(
             IMethodParameterValidator methodParameterValidator,
-            IBeamRequestValidator<TBeam> beamRequestValidator)
+            IBeamRequestValidator<BeamRequestData> beamRequestValidator)
         {
             this._methodParameterValidator = methodParameterValidator;
             this._beamRequestValidator = beamRequestValidator;
         }
 
-        protected override CalculatePiezoelectricResponse ProcessOperation(CalculatePiezoelectricRequest<TPiezoelectric, TBeam> request)
+        protected override CalculatePiezoelectricResponse ProcessOperation(CalculatePiezoelectricRequest request)
         {
             CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
 
@@ -36,7 +34,7 @@ namespace IcVibrations.Core.Operations.Piezoelectric.Calculate
             return response;
         }
 
-        protected override CalculatePiezoelectricResponse ValidateOperation(CalculatePiezoelectricRequest<TPiezoelectric, TBeam> request)
+        protected override CalculatePiezoelectricResponse ValidateOperation(CalculatePiezoelectricRequest request)
         {
             CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
 

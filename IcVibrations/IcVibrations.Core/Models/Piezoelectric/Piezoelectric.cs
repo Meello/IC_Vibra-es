@@ -7,7 +7,17 @@ namespace IcVibrations.Core.Models.Piezoelectric
 {
     public class Piezoelectric
     {
-        public Profile Profile { get; set; }
+        public double ElementLength { get; set; }
+
+        public double DielectricConstantToConstantStrain { get; set; }
+
+        public double SpecificMass { get; set; }
+
+        public double PiezoelectricStress { get; set; }
+
+        public double ElasticityToConstantElectricField { get; set; }
+
+        public RectangularProfile Profile { get; set; }
 
         public int[] ElementsWithPiezoelectric { get; set; }
     }

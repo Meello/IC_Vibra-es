@@ -18,8 +18,10 @@ namespace IcVibrations.Core.Models
 
         public const double Gama = 0.5;
 
+        public const double Alpha = 0.005;
+
         public const double Mi = 0.005;
 
-        public const int PiezoelectricCapacitanceMatrixSize = 2;
+        public const int PiezoelectricElementMatrixSize = 2;
     }
 }
