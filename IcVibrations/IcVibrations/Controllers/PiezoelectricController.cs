@@ -17,7 +17,7 @@ namespace IC_Vibrations.Controllers
     {
         [HttpPost]
         public ActionResult<CalculatePiezoelectricResponse> Calculate(
-            [FromServices] CalculatePiezoelectricVibration calculatePiezoelectricVibration,
+            [FromServices] ICalculatePiezoelectricVibration calculatePiezoelectricVibration,
             [FromBody] CalculatePiezoelectricRequest request)
         {
             CalculatePiezoelectricResponse response = calculatePiezoelectricVibration.Process(request);

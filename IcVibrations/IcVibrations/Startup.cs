@@ -54,12 +54,14 @@ namespace IcVibrations
             services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
 
             // Piezoelectric Operations Base
-//            services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, CalculatePiezoelectricVibration>();
+            //services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, CalculatePiezoelectricVibration>();
 
             // Validator
             services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
             services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
             services.AddScoped<IMethodParameterValidator, MethodParameterValidator>();
+
+            services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

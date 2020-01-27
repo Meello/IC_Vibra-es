@@ -13,11 +13,11 @@ namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
     public abstract class CalculatePiezoelectricVibration : OperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, ICalculatePiezoelectricVibration
     {
         private readonly IMethodParameterValidator _methodParameterValidator;
-        private readonly IBeamRequestValidator<BeamRequestData> _beamRequestValidator;
+        private readonly IBeamRequestValidator<RectangularBeamRequestData> _beamRequestValidator;
 
         public CalculatePiezoelectricVibration(
             IMethodParameterValidator methodParameterValidator,
-            IBeamRequestValidator<BeamRequestData> beamRequestValidator)
+            IBeamRequestValidator<RectangularBeamRequestData> beamRequestValidator)
         {
             this._methodParameterValidator = methodParameterValidator;
             this._beamRequestValidator = beamRequestValidator;
