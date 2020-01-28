@@ -1,4 +1,6 @@
 ﻿using IcVibrations.Core.DTO;
+using IcVibrations.DataContracts;
+using IcVibrations.DataContracts.Piezoelectric.Calculate;
 using System;
 using System.Collections.Generic;
 using System.IO;

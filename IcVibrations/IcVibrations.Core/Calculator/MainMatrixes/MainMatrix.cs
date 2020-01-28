@@ -72,11 +72,11 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return elementHardness;
 		}
 
-		public double[,] CalculatePiezoelectricElementHardness(double elasticityToConstantElectricField, double momentInertia, double length)
+		public double[,] CalculatePiezoelectricElementHardness(double elasticityConstant, double momentInertia, double length)
 		{
 			double[,] elementHardness = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
-			double constant = momentInertia * elasticityToConstantElectricField / Math.Pow(length, 3);
+			double constant = momentInertia * elasticityConstant / Math.Pow(length, 3);
 
 			elementHardness[0, 0] = 12 * constant;
 			elementHardness[0, 1] = 6 * length * constant;
@@ -235,7 +235,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 		{
 			double[,] electromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricElementMatrixSize];
 
-			double constant = -(piezoelectric.PiezoelectricStress * piezoelectric.Profile.Width * piezoelectric.ElementLength / 2) * (2 * beamHeight * piezoelectric.Profile.Height + Math.Pow(piezoelectric.Profile.Height, 2));
+			double constant = -(piezoelectric.DielectricPermissiveness * piezoelectric.Profile.Width * piezoelectric.ElementLength / 2) * (2 * beamHeight * piezoelectric.Profile.Height + Math.Pow(piezoelectric.Profile.Height, 2));
 
 			electromechanicalCoupling[0, 0] = 0;
 			electromechanicalCoupling[0, 1] = 0;
@@ -249,11 +249,11 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return electromechanicalCoupling;
 		}
 
-		public double[,] CalculatePiezoelectricElementCapacitance(double area, double length, double heigth, double dielectricConstantToConstantStrain)
+		public double[,] CalculatePiezoelectricElementCapacitance(double area, double length, double heigth, double dielectricConstant)
 		{
 			double[,] piezoelectricCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
 
-			double constant = -dielectricConstantToConstantStrain * area * length / Math.Pow(heigth, 2);
+			double constant = -dielectricConstant * area * length / Math.Pow(heigth, 2);
 
 			piezoelectricCapacitance[0, 0] = constant;
 			piezoelectricCapacitance[0, 1] = -constant;
@@ -281,7 +281,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
 				if(piezoelectric.ElementsWithPiezoelectric.Contains(n))
 				{
-					piezoelectricElementHardness = this.CalculatePiezoelectricElementHardness(piezoelectric.ElasticityToConstantElectricField, piezoelectric.Profile.MomentInertia[n], length);
+					piezoelectricElementHardness = this.CalculatePiezoelectricElementHardness(piezoelectric.ElasticityConstant, piezoelectric.Profile.MomentInertia[n], length);
 				}
 
 				p = nodeCoordinates[n, 0];
@@ -343,7 +343,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 			{
 				double[,] piezoelectricElementCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
 				
-				this.CalculatePiezoelectricElementCapacitance(piezoelectric.Profile.Area[n], piezoelectric.ElementLength, piezoelectric.Profile.Height, piezoelectric.DielectricConstantToConstantStrain);
+				this.CalculatePiezoelectricElementCapacitance(piezoelectric.Profile.Area[n], piezoelectric.ElementLength, piezoelectric.Profile.Height, piezoelectric.DielectricConstant);
 
 				for (int i = n; i < n + Constants.PiezoelectricElementMatrixSize; i++)
 				{

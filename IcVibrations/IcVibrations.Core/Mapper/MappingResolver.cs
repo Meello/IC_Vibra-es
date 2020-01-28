@@ -1,8 +1,10 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
+using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
+using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
@@ -44,7 +46,39 @@ namespace IcVibrations.Core.Mapper
 
     public class MappingResolver : IMappingResolver
     {
-        public Beam BuildFrom(BeamRequestData beamRequestData)
+        public Beam BuildFrom(CircularBeamRequestData circularBeamRequestData)
+        {
+            if (circularBeamRequestData == null)
+            {
+                return null;
+            }
+
+            double[] force = new double[(circularBeamRequestData.ElementCount + 1) * Constants.DegreesFreedom];
+
+            for (int i = 0; i < circularBeamRequestData.Forces.Length; i++)
+            {
+                force[2 * circularBeamRequestData.ForceNodePositions[i]] = circularBeamRequestData.Forces[i];
+            }
+
+            return new Beam
+            {
+                ElementCount = circularBeamRequestData.ElementCount,
+                FirstFastening = FasteningFactory.Create(circularBeamRequestData.FirstFastening),
+                Forces = force,
+                LastFastening = FasteningFactory.Create(circularBeamRequestData.LastFastening),
+                Length = circularBeamRequestData.Length,
+                Material = MaterialFactory.Create(circularBeamRequestData.Material),
+                Profile = new CircularProfile
+                {
+                    Area = default,
+                    Diameter = circularBeamRequestData.Diameter,
+                    MomentInertia = default,
+                    Thickness = circularBeamRequestData.Thickness
+                }
+            };
+        }
+
+        public Beam BuildFrom(RectangularBeamRequestData beamRequestData)
         {
             if (beamRequestData == null)
             {
@@ -65,7 +99,43 @@ namespace IcVibrations.Core.Mapper
                 Forces = force,
                 LastFastening = FasteningFactory.Create(beamRequestData.LastFastening),
                 Length = beamRequestData.Length,
-                Material = MaterialFactory.Create(beamRequestData.Material)
+                Material = MaterialFactory.Create(beamRequestData.Material),
+                Profile = new RectangularProfile
+                {
+                    Area = default,
+                    Height = beamRequestData.Height,
+                    MomentInertia = default,
+                    Thickness = beamRequestData.Thickness,
+                    Width = beamRequestData.Width
+                }
+            };
+        }
+
+        public Piezoelectric BuildFrom(PiezoelectricRequestData piezoelectricRequestData)
+        {
+            if(piezoelectricRequestData == null)
+            {
+                return null;
+            }
+
+            return new Piezoelectric
+            {
+                DielectricConstant = piezoelectricRequestData.DielectricConstant,
+                DielectricPermissiveness = piezoelectricRequestData.DielectricPermissiveness,
+                ElasticityConstant = piezoelectricRequestData.ElasticityConstant,
+                ElementLength = piezoelectricRequestData.ElementLength,
+                ElementsWithPiezoelectric = piezoelectricRequestData.ElementsWithPiezoelectric,
+                PiezoelectricConstant = piezoelectricRequestData.PiezoelectricConstant,
+                Profile = new RectangularProfile
+                {
+                    Area = default,
+                    Height = piezoelectricRequestData.Height,
+                    MomentInertia = default,
+                    Thickness = piezoelectricRequestData.Thickness,
+                    Width = piezoelectricRequestData.Width
+                },
+                SpecificMass = piezoelectricRequestData.SpecificMass,
+                YoungModulus = piezoelectricRequestData.YoungModulus
             };
         }
 

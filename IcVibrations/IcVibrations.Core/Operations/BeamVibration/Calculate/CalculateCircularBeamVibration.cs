@@ -43,12 +43,6 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         {
             Beam beam = this._mappingResolver.BuildFrom(request.BeamData);
 
-            beam.Profile = new CircularProfile
-            {
-                Diameter = request.BeamData.Diameter,
-                Thickness = request.BeamData.Thickness
-            };
-
             // Input values
             double area = this._geometricProperty.Area(request.BeamData.Diameter, request.BeamData.Thickness);
 

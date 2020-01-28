@@ -43,9 +43,16 @@ namespace IcVibrations
             services.AddScoped<IMappingResolver, MappingResolver>();
             
             // Methods
-            services.AddScoped<IAuxiliarOperation, AuxiliarOperation>();
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
-            
+
+            // Validators
+            services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
+            services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
+            services.AddScoped<IMethodParameterValidator, MethodParameterValidator>();
+
+            // Auxiliar Operations
+            services.AddScoped<IAuxiliarOperation, AuxiliarOperation>();
+
             // Beam Operations
             services.AddScoped<AbstractCalculateBeamVibration<CircularBeamRequestData>, CalculateCircularBeamVibration>();
             services.AddScoped<AbstractCalculateBeamVibration<RectangularBeamRequestData>, CalculateRectangularBeamVibration>();
@@ -54,14 +61,7 @@ namespace IcVibrations
             services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
 
             // Piezoelectric Operations Base
-            //services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, CalculatePiezoelectricVibration>();
-
-            // Validator
-            services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
-            services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
-            services.AddScoped<IMethodParameterValidator, MethodParameterValidator>();
-
-            services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
+            services.AddScoped<IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, CalculatePiezoelectricVibration>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
