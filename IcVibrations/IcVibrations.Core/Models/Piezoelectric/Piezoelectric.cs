@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IcVibrations.Core.Models.Piezoelectric
 {
-    public class Piezoelectric
+    public abstract class Piezoelectric
     {
         public double YoungModulus { get; set; }
 
@@ -25,8 +25,17 @@ namespace IcVibrations.Core.Models.Piezoelectric
         
         public double SpecificMass { get; set; }
 
-        public RectangularProfile Profile { get; set; }
+        public GeometricProperty GeometricProperty { get; set; }
 
-        public int[] ElementsWithPiezoelectric { get; set; }
+        public double Thickness { get; set; }
+
+        public uint[] ElementsWithPiezoelectric { get; set; }
+    }
+
+    public class RectangularPiezoelectric : Piezoelectric
+    {
+        public double Height { get; set; }
+
+        public double Width { get; set; }
     }
 }

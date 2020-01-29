@@ -20,7 +20,7 @@ namespace IcVibrations.DataContracts.Piezoelectric
 
         public double SpecificMass { get; set; }
 
-        public int[] ElementsWithPiezoelectric { get; set; }
+        public uint[] ElementsWithPiezoelectric { get; set; }
         
         public double Thickness { get; set; }
 

@@ -39,15 +39,17 @@ namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
         {
             CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
 
-            Beam beam = this._mappingResolver.BuildFrom(request.BeamData);
+            RectangularBeam beam = this._mappingResolver.BuildFrom(request.BeamData);
 
-            Piezoelectric piezoelectric = this._mappingResolver.BuildFrom(request.PiezoelectricRequestData);
+            RectangularPiezoelectric piezoelectric = this._mappingResolver.BuildFrom(request.PiezoelectricRequestData);
 
             uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
-            NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.MethodParameterData,beam,piezoelectric,degreesFreedomMaximum);
+            NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.MethodParameterData, beam, piezoelectric, degreesFreedomMaximum);
 
             NewmarkMethodOutput output = this._newmarkMethod.CreateOutput(input, response);
+
+            response.Data = this._mappingResolver.BuildFrom(output);
 
             return response;
         }

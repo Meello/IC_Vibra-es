@@ -12,11 +12,11 @@ namespace IcVibrations.Core.Mapper
 {
     public interface IMappingResolver
     {
-        Beam BuildFrom(CircularBeamRequestData circularBeamRequestData);
+        CircularBeam BuildFrom(CircularBeamRequestData circularBeamRequestData);
 
-        Beam BuildFrom(RectangularBeamRequestData rectangularBeamRequestData);
+        RectangularBeam BuildFrom(RectangularBeamRequestData rectangularBeamRequestData);
 
-        Piezoelectric BuildFrom(PiezoelectricRequestData piezoelectricRequestData);
+        RectangularPiezoelectric BuildFrom(PiezoelectricRequestData piezoelectricRequestData);
 
         OperationResponseData BuildFrom(NewmarkMethodOutput output);
     }

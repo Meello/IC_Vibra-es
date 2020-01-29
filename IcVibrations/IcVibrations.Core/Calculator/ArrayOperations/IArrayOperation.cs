@@ -24,6 +24,8 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
         
         double[] Create(double value, uint size);
 
+        double[] Create(double value, uint size, uint[] positions);
+
         double[,] TransposeMatrix(double[,] matrix);
     }
 }

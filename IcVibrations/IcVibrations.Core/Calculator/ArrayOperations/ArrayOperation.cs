@@ -19,6 +19,18 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return newArray;
         }
 
+        public double[] Create(double value, uint size, uint[] positions)
+        {
+            double[] newArray = new double[size];
+
+            for (int i = 0; i < positions.Length; i++)
+            {
+                newArray[positions[i] - 1] = value;
+            }
+
+            return newArray;
+        }
+
         public double[,] InverseMatrix(double[,] matrix)
         {
             if(matrix.GetLength(0) != matrix.GetLength(1))

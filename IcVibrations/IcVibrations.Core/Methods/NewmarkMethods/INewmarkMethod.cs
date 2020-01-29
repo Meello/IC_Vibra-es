@@ -13,7 +13,7 @@ namespace IcVibrations.Methods.NewmarkMethod
     {
         NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum);
 
-        NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum);
+        NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, RectangularBeam beam, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum);
 
         NewmarkMethodOutput CreateOutput(NewmarkMethodInput input, OperationResponseBase response);
     }

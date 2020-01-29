@@ -1,4 +1,5 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
+﻿using IcVibrations.Calculator.GeometricProperties;
+using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
@@ -29,15 +30,18 @@ namespace IcVibrations.Methods.NewmarkMethod
         private readonly IMainMatrix _mainMatrix;
         private readonly IAuxiliarOperation _auxiliarMethod;
         private readonly IArrayOperation _arrayOperation;
+        private readonly IGeometricProperty _geometricProperty;
 
         public NewmarkMethod(
             IMainMatrix mainMatrix,
             IAuxiliarOperation auxiliarMethod,
-            IArrayOperation arrayOperation)
+            IArrayOperation arrayOperation,
+            IGeometricProperty geometricProperty)
         {
             this._mainMatrix = mainMatrix;
             this._auxiliarMethod = auxiliarMethod;
             this._arrayOperation = arrayOperation;
+            this._geometricProperty = geometricProperty;
         }
 
         public NewmarkMethodOutput CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
@@ -78,11 +82,47 @@ namespace IcVibrations.Methods.NewmarkMethod
             return output;
         }
 
-        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
+        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, RectangularBeam beam, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum)
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
-            
-            //double[,] beamMass = this._mainMatrix.CalculateBeamMass
+
+            uint piezoelectricDegreesFreedomMaximum = beam.ElementCount + 1;
+
+            // Calculate geometric properties
+            double beamArea = this._geometricProperty.Area(beam.Height, beam.Width, beam.Thickness);
+
+            double beamMomentInertia = this._geometricProperty.MomentInertia(beam.Height, beam.Width, beam.Thickness);
+
+            double piezoelectricArea = this._geometricProperty.Area(piezoelectric.Height, piezoelectric.Width, piezoelectric.Thickness);
+
+            double piezoelectricMomentInertia = this._geometricProperty.MomentInertia(piezoelectric.Height, piezoelectric.Width, piezoelectric.Thickness);
+
+            // Create geometric properties matrixes
+            beam.GeometricProperty.Area = this._arrayOperation.Create(beamArea, beam.ElementCount);
+
+            beam.GeometricProperty.MomentInertia = this._arrayOperation.Create(beamMomentInertia, beam.ElementCount);
+
+            piezoelectric.GeometricProperty.Area = this._arrayOperation.Create(piezoelectricArea, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric);
+
+            piezoelectric.GeometricProperty.MomentInertia = this._arrayOperation.Create(piezoelectricMomentInertia, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric);
+
+            // Calculate basic matrix
+            double[,] mass = this._mainMatrix.CalculateMass(beam, piezoelectric, degreesFreedomMaximum);
+
+            double[,] hardness = this._mainMatrix.CalculateHardness(beam, piezoelectric, degreesFreedomMaximum);
+
+            double[,] piezoelectricElectromechanicalCoupling = this._mainMatrix.CalculatePiezoelectricElectromechanicalCoupling(beam.Height, beam.ElementCount, piezoelectric, degreesFreedomMaximum);
+
+            double[,] piezoelectricCapacitance = this._mainMatrix.CalculatePiezoelectricCapacitance(piezoelectric, beam.ElementCount);
+
+            // Calculate input
+            input.Mass = this._mainMatrix.CalculateEquivalentMass(mass, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
+
+            input.Hardness = this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
+
+            input.Damping = this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
+
+            input.Force = beam.Forces;
 
             return input;
         }
@@ -94,7 +134,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             // Calculate values
             double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            double[,] hardness = this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
+            double[,] hardness = this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
 
             double[,] damping = this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
 

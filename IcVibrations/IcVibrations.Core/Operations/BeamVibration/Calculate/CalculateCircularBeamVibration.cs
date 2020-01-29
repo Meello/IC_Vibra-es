@@ -41,16 +41,16 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
         protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<CircularBeamRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
         {
-            Beam beam = this._mappingResolver.BuildFrom(request.BeamData);
+            CircularBeam beam = this._mappingResolver.BuildFrom(request.BeamData);
 
             // Input values
             double area = this._geometricProperty.Area(request.BeamData.Diameter, request.BeamData.Thickness);
 
             double momentInertia = this._geometricProperty.MomentInertia(request.BeamData.Diameter, request.BeamData.Thickness);
 
-            beam.Profile.Area = this._arrayOperation.Create(area, request.BeamData.ElementCount);
+            beam.GeometricProperty.Area = this._arrayOperation.Create(area, request.BeamData.ElementCount);
 
-            beam.Profile.MomentInertia = this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
+            beam.GeometricProperty.MomentInertia = this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
 
             NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.MethodParameterData, beam, degreesFreedomMaximum);
 

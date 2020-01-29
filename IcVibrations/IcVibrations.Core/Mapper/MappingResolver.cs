@@ -46,7 +46,7 @@ namespace IcVibrations.Core.Mapper
 
     public class MappingResolver : IMappingResolver
     {
-        public Beam BuildFrom(CircularBeamRequestData circularBeamRequestData)
+        public CircularBeam BuildFrom(CircularBeamRequestData circularBeamRequestData)
         {
             if (circularBeamRequestData == null)
             {
@@ -60,7 +60,7 @@ namespace IcVibrations.Core.Mapper
                 force[2 * circularBeamRequestData.ForceNodePositions[i]] = circularBeamRequestData.Forces[i];
             }
 
-            return new Beam
+            return new CircularBeam
             {
                 ElementCount = circularBeamRequestData.ElementCount,
                 FirstFastening = FasteningFactory.Create(circularBeamRequestData.FirstFastening),
@@ -68,17 +68,17 @@ namespace IcVibrations.Core.Mapper
                 LastFastening = FasteningFactory.Create(circularBeamRequestData.LastFastening),
                 Length = circularBeamRequestData.Length,
                 Material = MaterialFactory.Create(circularBeamRequestData.Material),
-                Profile = new CircularProfile
+                Diameter = circularBeamRequestData.Diameter,
+                Thickness = circularBeamRequestData.Thickness,
+                GeometricProperty = new GeometricProperty
                 {
                     Area = default,
-                    Diameter = circularBeamRequestData.Diameter,
-                    MomentInertia = default,
-                    Thickness = circularBeamRequestData.Thickness
+                    MomentInertia = default
                 }
             };
         }
 
-        public Beam BuildFrom(RectangularBeamRequestData beamRequestData)
+        public RectangularBeam BuildFrom(RectangularBeamRequestData beamRequestData)
         {
             if (beamRequestData == null)
             {
@@ -92,7 +92,7 @@ namespace IcVibrations.Core.Mapper
                 force[2 * beamRequestData.ForceNodePositions[i]] = beamRequestData.Forces[i];
             }
 
-            return new Beam
+            return new RectangularBeam
             {
                 ElementCount = beamRequestData.ElementCount,
                 FirstFastening = FasteningFactory.Create(beamRequestData.FirstFastening),
@@ -100,25 +100,25 @@ namespace IcVibrations.Core.Mapper
                 LastFastening = FasteningFactory.Create(beamRequestData.LastFastening),
                 Length = beamRequestData.Length,
                 Material = MaterialFactory.Create(beamRequestData.Material),
-                Profile = new RectangularProfile
+                Height = beamRequestData.Height,
+                Thickness = beamRequestData.Thickness,
+                Width = beamRequestData.Width,
+                GeometricProperty = new GeometricProperty
                 {
                     Area = default,
-                    Height = beamRequestData.Height,
-                    MomentInertia = default,
-                    Thickness = beamRequestData.Thickness,
-                    Width = beamRequestData.Width
+                    MomentInertia = default
                 }
             };
         }
 
-        public Piezoelectric BuildFrom(PiezoelectricRequestData piezoelectricRequestData)
+        public RectangularPiezoelectric BuildFrom(PiezoelectricRequestData piezoelectricRequestData)
         {
             if(piezoelectricRequestData == null)
             {
                 return null;
             }
 
-            return new Piezoelectric
+            return new RectangularPiezoelectric
             {
                 DielectricConstant = piezoelectricRequestData.DielectricConstant,
                 DielectricPermissiveness = piezoelectricRequestData.DielectricPermissiveness,
@@ -126,14 +126,14 @@ namespace IcVibrations.Core.Mapper
                 ElementLength = piezoelectricRequestData.ElementLength,
                 ElementsWithPiezoelectric = piezoelectricRequestData.ElementsWithPiezoelectric,
                 PiezoelectricConstant = piezoelectricRequestData.PiezoelectricConstant,
-                Profile = new RectangularProfile
+                GeometricProperty = new GeometricProperty
                 {
                     Area = default,
-                    Height = piezoelectricRequestData.Height,
-                    MomentInertia = default,
-                    Thickness = piezoelectricRequestData.Thickness,
-                    Width = piezoelectricRequestData.Width
+                    MomentInertia = default
                 },
+                Height = piezoelectricRequestData.Height,
+                Thickness = piezoelectricRequestData.Thickness,
+                Width = piezoelectricRequestData.Width,
                 SpecificMass = piezoelectricRequestData.SpecificMass,
                 YoungModulus = piezoelectricRequestData.YoungModulus
             };
@@ -148,6 +148,8 @@ namespace IcVibrations.Core.Mapper
 
             return new OperationResponseData
             {
+                AngularFrequency = output.AngularFrequency,
+                Force = output.Force,
                 Result = output.Result,
                 Time = output.Time
             };

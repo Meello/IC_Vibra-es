@@ -8,8 +8,12 @@ namespace IcVibrations.DataContracts
     {
         //public string AnalysisExplanation { get; set; }
 
+        public double[] Time { get; set; }
+
+        public double[] AngularFrequency { get; set; }
+
         public double[,] Result { get; set; }
 
-        public double[] Time { get; set; }
+        public double[] Force { get; set; }
     }
 }
