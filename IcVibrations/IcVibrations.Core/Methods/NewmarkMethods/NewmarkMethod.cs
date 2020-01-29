@@ -26,6 +26,8 @@ namespace IcVibrations.Methods.NewmarkMethod
         // Time
         private double dt, t0;
         private int pD, pC;
+        // Result index
+        private int resultIndex;
 
         private readonly IMainMatrix _mainMatrix;
         private readonly IAuxiliarOperation _auxiliarMethod;
@@ -50,6 +52,8 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             int resultSize = angularFrequencyLoopCount * pC * pD;
 
+            resultIndex = 0;
+
             NewmarkMethodOutput output = new NewmarkMethodOutput
             {
                 YResult = new double[resultSize, bcTrue],
@@ -60,6 +64,8 @@ namespace IcVibrations.Methods.NewmarkMethod
                 Time = new double[resultSize]
             };
 
+
+            // More iterations make the application slower
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
                 w = wi + (i * dw);
@@ -187,8 +193,6 @@ namespace IcVibrations.Methods.NewmarkMethod
             
             double time = t0;
 
-            int count = 0;
-
             double[] force = new double[bcTrue];
             for (i = 0; i < bcTrue; i++)
             {
@@ -237,16 +241,16 @@ namespace IcVibrations.Methods.NewmarkMethod
                     {
                         for(int k = 0; k < bcTrue; k++)
                         {
-                            output.Force[count, k] = input.Force[k];
-                            output.YResult[count, k] = y[k];
-                            output.VelResult[count, k] = vel[k];
-                            output.AcelResult[count, k] = acel[k];
+                            output.Force[resultIndex, k] = input.Force[k];
+                            output.YResult[resultIndex, k] = y[k];
+                            output.VelResult[resultIndex, k] = vel[k];
+                            output.AcelResult[resultIndex, k] = acel[k];
                         }
 
-                        output.AngularFrequency[count] = w;
-                        output.Time[count] = time;
+                        output.AngularFrequency[resultIndex] = w;
+                        output.Time[resultIndex] = time;
                         
-                        count += 1;
+                        resultIndex += 1;
                         
                         //try
                         //{
