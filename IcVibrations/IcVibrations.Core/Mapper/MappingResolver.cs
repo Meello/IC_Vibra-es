@@ -149,9 +149,11 @@ namespace IcVibrations.Core.Mapper
             return new OperationResponseData
             {
                 AngularFrequency = output.AngularFrequency,
-                Force = output.Force,
-                Result = output.Result,
-                Time = output.Time
+                Time = output.Time,
+                YResult = output.YResult,
+                VelResult = output.VelResult,
+                AcelResult = output.AcelResult,
+                Force = output.Force
             };
         }
     }

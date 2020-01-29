@@ -10,8 +10,12 @@ namespace IcVibrations.Core.DTO
 
         public double[] AngularFrequency { get; set; }
 
-        public double[,] Result { get; set; }
+        public double[,] YResult { get; set; }
 
-        public double[] Force { get; set; }
+        public double[,] VelResult { get; set; }
+        
+        public double[,] AcelResult { get; set; }
+
+        public double[,] Force { get; set; }
     }
 }

@@ -52,7 +52,11 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             NewmarkMethodOutput output = new NewmarkMethodOutput
             {
-                Result = new double[resultSize, bcTrue],
+                YResult = new double[resultSize, bcTrue],
+                VelResult = new double[resultSize, bcTrue],
+                AcelResult = new double[resultSize, bcTrue],
+                AngularFrequency = new double[resultSize],
+                Force = new double[resultSize, bcTrue],
                 Time = new double[resultSize]
             };
 
@@ -209,11 +213,11 @@ namespace IcVibrations.Methods.NewmarkMethod
             {
                 for (jn = 0; jn < pD; jn++)            
                 {
-                    //for (i = 0; i < bcTrue; i++)
-                    //{
-                    //    // Force can't initiate with 0
-                    //    input.Force[i] = force[i] * Math.Cos(w * time);
-                    //}
+                    for (i = 0; i < bcTrue; i++)
+                    {
+                        // Force can't initiate in 0?
+                        input.Force[i] = force[i] * Math.Cos(w * time);
+                    }
 
                     if (time == 0)
                     {
@@ -231,31 +235,33 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                     if (jp >= 0)
                     {
-                        if (w == 0)
+                        for(int k = 0; k < bcTrue; k++)
                         {
-                            for(int k = 0; k < bcTrue; k++)
-                            {
-                                output.Result[count, k] = y[k];
-                                output.Time[count] = time;
-                            }
-
-                            count += 1;
-                            
-                            //try
-                            //{
-                                //using (StreamWriter sw = streamWriter)
-                                //{
-                                    //sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
-
-                                    //sw.Close();
-                                //}
-                            //}
-                            //catch
-                            //{
-                                //// Não quero que pare, só avise que deu erro.
-                                //throw new Exception("Couldn't open file.");
-                            //}
+                            output.Force[count, k] = input.Force[k];
+                            output.YResult[count, k] = y[k];
+                            output.VelResult[count, k] = vel[k];
+                            output.AcelResult[count, k] = acel[k];
                         }
+
+                        output.AngularFrequency[count] = w;
+                        output.Time[count] = time;
+                        
+                        count += 1;
+                        
+                        //try
+                        //{
+                            //using (StreamWriter sw = streamWriter)
+                            //{
+                                //sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
+                        
+                                //sw.Close();
+                            //}
+                        //}
+                        //catch
+                        //{
+                            //// Não quero que pare, só avise que deu erro.
+                            //throw new Exception("Couldn't open file.");
+                        //}
                     }
 
                     double[,] equivalentHardness = this.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness);
@@ -344,6 +350,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             return p2;
         }
 
+        // For pulsating force
         public double[] CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
         {
             double[] deltaForce = this._arrayOperation.Subtract(input.Force, force_ant);

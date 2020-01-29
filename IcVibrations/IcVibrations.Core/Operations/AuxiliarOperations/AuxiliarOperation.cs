@@ -97,6 +97,6 @@ namespace IcVibrations.Methods.AuxiliarOperations
         //        // Não quero que pare, só avise que deu erro.
         //        throw new Exception("Couldn't open file.");
         //    }
-        ////}
+        //}
     }
 }
