@@ -9,7 +9,7 @@ namespace IcVibrations.Core.Validators.Beam
 {
     public class CircularBeamRequestValidator : AbstractBeamRequestValidator<CircularBeamRequestData>
     {
-        protected override void ValidateProfileInput(CircularBeamRequestData requestData, OperationResponseBase response)
+        protected override void AbstractValidate(CircularBeamRequestData requestData, OperationResponseBase response)
         {
             if (requestData.Thickness > requestData.Diameter/2)
             {

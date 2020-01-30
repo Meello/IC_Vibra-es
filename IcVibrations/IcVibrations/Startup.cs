@@ -4,11 +4,13 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Operations;
 using IcVibrations.Core.Operations.BeamVibration.Calculate;
+using IcVibrations.Core.Operations.BeamVibration.CalculateWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Operations.PiezoelectricVibration.Calculate;
 using IcVibrations.Core.Validators.Beam;
 using IcVibrations.Core.Validators.MethodParameters;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
+using IcVibrations.DataContracts.Beam.CalculateWithDynamicVibrationAbsorber;
 using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.DataContracts.Piezoelectric.Calculate;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -56,6 +58,9 @@ namespace IcVibrations
             // Beam Operations
             services.AddScoped<AbstractCalculateBeamVibration<CircularBeamRequestData>, CalculateCircularBeamVibration>();
             services.AddScoped<AbstractCalculateBeamVibration<RectangularBeamRequestData>, CalculateRectangularBeamVibration>();
+
+            // BeamWithDva Operations
+            services.AddScoped<AbstractCalculateBeamVibration<CircularBeamWithDvaRequestData>, CalculateCircularBeamWithDvaVibration>();
 
             // Piezoelectric Operations
             services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();

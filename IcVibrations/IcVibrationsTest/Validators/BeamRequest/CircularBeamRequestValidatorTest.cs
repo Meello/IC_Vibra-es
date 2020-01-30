@@ -27,7 +27,7 @@ namespace IcVibrationsTest.Validators.BeamRequest
             };
 
             // Act
-            this.ValidateProfileInput(requestData, responseBase);
+            this.AbstractValidate(requestData, responseBase);
 
             // Assert
             responseBase.Errors.Count

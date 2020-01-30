@@ -30,7 +30,7 @@ namespace IcVibrations.Core.Validators.Beam
 
             this.ValidateForceValueAndPosition(beamData.Forces, beamData.ForceNodePositions, degreesFreedomMaximum, response);
             
-            this.ValidateProfileInput(beamData, response);
+            this.AbstractValidate(beamData, response);
 
             if(response.Errors.Count > 0)
             {
@@ -40,7 +40,7 @@ namespace IcVibrations.Core.Validators.Beam
             return true;
         }
 
-        protected abstract void ValidateProfileInput(T beamData, OperationResponseBase response);
+        protected abstract void AbstractValidate(T beamData, OperationResponseBase response);
 
         private void ValidateElementCount(uint elementCount, OperationResponseBase response)
         {

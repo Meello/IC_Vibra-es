@@ -8,7 +8,7 @@ namespace IcVibrations.Core.Validators.Beam
 {
     public class RectangularBeamRequestValidator : AbstractBeamRequestValidator<RectangularBeamRequestData>
     {
-        protected override void ValidateProfileInput(RectangularBeamRequestData requestData, OperationResponseBase response)
+        protected override void AbstractValidate(RectangularBeamRequestData requestData, OperationResponseBase response)
         {
             if(requestData.Thickness > requestData.Width/2)
             {
