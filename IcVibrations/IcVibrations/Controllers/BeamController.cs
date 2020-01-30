@@ -41,11 +41,11 @@ namespace IC_Vibrations.Controllers
         }
 
         [HttpPost("circular/dynamic-vibration-absorber")]
-        public ActionResult<CalculateBeamWithDvaResponse> Calculate(
+        public ActionResult<CalculateBeamResponse> Calculate(
             [FromServices] AbstractCalculateBeamVibration<CircularBeamWithDvaRequestData> calculateCircularBeamWithDvaVibration,
             [FromBody] CalculateBeamWithDvaRequest<CircularBeamWithDvaRequestData> request)
         {
-            CalculateBeamWithDvaResponse response = calculateCircularBeamWithDvaVibration.Process(request) as CalculateBeamWithDvaResponse;
+            CalculateBeamResponse response = calculateCircularBeamWithDvaVibration.Process(request);
 
             if(!response.Success)
             {

@@ -188,8 +188,8 @@ namespace IcVibrations.Core.Mapper
                 AngularFrequency = output.AngularFrequency,
                 Time = output.Time,
                 YResult = output.YResult,
-                VelResult = output.VelResult,
-                AcelResult = output.AcelResult,
+                //VelResult = output.VelResult,
+                //AcelResult = output.AcelResult,
                 Force = output.Force
             };
         }

@@ -7,6 +7,8 @@ using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.Core.Operations.BeamVibration.CalculateWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Operations.PiezoelectricVibration.Calculate;
 using IcVibrations.Core.Validators.Beam;
+using IcVibrations.Core.Validators.BeamWithDynamicVibrationAbsorber;
+using IcVibrations.Core.Validators.DynamicVibrationAbsorber;
 using IcVibrations.Core.Validators.MethodParameters;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
@@ -47,11 +49,6 @@ namespace IcVibrations
             // Methods
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
 
-            // Validators
-            services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
-            services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
-            services.AddScoped<IMethodParameterValidator, MethodParameterValidator>();
-
             // Auxiliar Operations
             services.AddScoped<IAuxiliarOperation, AuxiliarOperation>();
 
@@ -65,6 +62,13 @@ namespace IcVibrations
             // Piezoelectric Operations
             services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
 
+            // Validators
+            services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
+            services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
+            services.AddScoped<IBeamRequestValidator<CircularBeamWithDvaRequestData>, CircularBeamWithDvaValidator>();
+            services.AddScoped<IMethodParameterValidator, MethodParameterValidator>();
+            services.AddScoped<IDvaValidator, DvaValidator>();
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSwaggerGen(c =>

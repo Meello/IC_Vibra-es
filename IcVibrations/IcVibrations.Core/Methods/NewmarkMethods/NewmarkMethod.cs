@@ -149,7 +149,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             double[,] massWithDva = this._arrayOperation.AddValue(mass, beam.DvaMasses, beam.DvaNodePositions);
 
-            double[,] hardnessWithDva = this._arrayOperation.AddValue(hardness, beam.DvaHardnesses, beam.DvaNodePositions); ;
+            double[,] hardnessWithDva = this._arrayOperation.AddValue(hardness, beam.DvaHardnesses, beam.DvaNodePositions);
 
             double[,] dampingWithDva = this._mainMatrix.CalculateDamping(massWithDva, hardnessWithDva, degreesFreedomMaximum);
 
@@ -292,18 +292,21 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                     if (jp >= 0)
                     {
-                        for(int k = 0; k < bcTrue; k++)
+                        if(w == 50)
                         {
-                            output.Force[resultIndex, k] = input.Force[k];
-                            output.YResult[resultIndex, k] = y[k];
-                            output.VelResult[resultIndex, k] = vel[k];
-                            output.AcelResult[resultIndex, k] = acel[k];
-                        }
+                            for(int k = 0; k < bcTrue; k++)
+                            {
+                                output.Force[resultIndex, k] = input.Force[k];
+                                output.YResult[resultIndex, k] = y[k];
+                                //output.VelResult[resultIndex, k] = vel[k];
+                                //output.AcelResult[resultIndex, k] = acel[k];
+                            }
 
-                        output.AngularFrequency[resultIndex] = w;
-                        output.Time[resultIndex] = time;
-                        
-                        resultIndex += 1;
+                            output.AngularFrequency[resultIndex] = w;
+                            output.Time[resultIndex] = time;
+                            
+                            resultIndex += 1;
+                        }
                         
                         //try
                         //{

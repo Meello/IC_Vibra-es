@@ -1,0 +1,34 @@
+{
+  "BeamData": {
+    "Diameter": 0.03175,
+    "DvaMasses": [
+      0, 0
+    ],
+    "DvaHardnesses": [
+      32340, 32340
+    ],
+    "DvaNodePositions": [
+      6,44
+    ],
+    "ElementCount": 67,
+    "Material": "Steel4130",
+    "Thickness": 0.0021,
+    "FirstFastening": "Fixed",
+    "LastFastening": "Fixed",
+    "Length": 0.335,
+    "Forces": [
+      -115
+    ],
+    "ForceNodePositions": [
+      25
+    ]
+  },
+  "MethodParameterData": {
+    "InitialTime": 0,
+    "PeriodDivion": 10,
+    "PeriodCount": 10,
+    "InitialAngularFrequency": 49,
+    "DeltaAngularFrequency": 1,
+    "FinalAngularFrequency": 50
+  }
+}

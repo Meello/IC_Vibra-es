@@ -21,7 +21,7 @@ namespace IcVibrations.Core.Validators.DynamicVibrationAbsorber
             {
                 response.AddError("009", $"Invalid number of dva masses: {requestData.DvaMasses.Count()}. Min: 0. Max: {requestData.DvaMasses}.");
             }
-            else if (requestData.DvaMasses.Contains(0))
+            else if (requestData.DvaMasses.Any(value => value < 0))
             {
                 response.AddError("010", "Dva masses can't contain value zero.");
             }
