@@ -14,7 +14,7 @@ namespace IcVibrations.Core.Validators.Beam
     public abstract class AbstractBeamRequestValidator<T> : IBeamRequestValidator<T> 
         where T : BeamRequestData
     {
-        public bool Execute(T beamData, uint degreesFreedomMaximum, OperationResponseBase response)
+        public bool Execute(T beamData, OperationResponseBase response)
         {
             this.ValidateElementCount(beamData.ElementCount, response);
 
@@ -28,7 +28,7 @@ namespace IcVibrations.Core.Validators.Beam
 
             this.ValidateLength(beamData.Length, response);
 
-            this.ValidateForceValueAndPosition(beamData.Forces, beamData.ForceNodePositions, degreesFreedomMaximum, response);
+            this.ValidateForceValueAndPosition(beamData.Forces, beamData.ForceNodePositions, beamData.ElementCount, response);
             
             this.AbstractValidate(beamData, response);
 
@@ -83,11 +83,11 @@ namespace IcVibrations.Core.Validators.Beam
             }
         }
 
-        private void ValidateForce(double[] forces, uint degreesFreedomMaximum, OperationResponseBase response)
+        private void ValidateForce(double[] forces, uint elementCount, OperationResponseBase response)
         {
-            if(forces.Count() <= 0 || forces.Count() > degreesFreedomMaximum)
+            if(forces.Count() <= 0 || forces.Count() > elementCount)
             {
-                response.AddError("009",$"Invalid number of forces: {forces.Count()}. Min: 0. Max: {degreesFreedomMaximum}.");
+                response.AddError("009",$"Invalid number of forces: {forces.Count()}. Min: 0. Max: {elementCount}.");
             }
             else if(forces.Contains(0))
             {
@@ -95,23 +95,23 @@ namespace IcVibrations.Core.Validators.Beam
             }
         }
 
-        private void ValidateForceNodePosition(int[] forcePositions, uint degreesFreedomMaximum, OperationResponseBase response)
+        private void ValidateForceNodePosition(int[] forcePositions, uint elementCount, OperationResponseBase response)
         {
-            if (forcePositions.Count() <= 0 || forcePositions.Count() > degreesFreedomMaximum)
+            if (forcePositions.Count() <= 0 || forcePositions.Count() > elementCount)
             {
-                response.AddError("011", $"Invalid number of positionss: {forcePositions.Count()}. Min: 0. Max: {degreesFreedomMaximum}.");
+                response.AddError("011", $"Invalid number of positionss: {forcePositions.Count()}. Min: 0. Max: {elementCount}.");
             }
-            else if (forcePositions.Any(p => p >= degreesFreedomMaximum))
+            else if (forcePositions.Any(p => p > elementCount))
             {
-                response.AddError("012", $"Positions can't contain value greater than or equal {degreesFreedomMaximum}.");
+                response.AddError("012", $"Positions can't contain value greater than or equal {elementCount}.");
             }
         }
 
-        private void ValidateForceValueAndPosition(double[] forces, int[] forceNodePositions, uint degreesFreedomMaximum, OperationResponseBase response)
+        private void ValidateForceValueAndPosition(double[] forces, int[] forceNodePositions, uint elementCount, OperationResponseBase response)
         {
-            this.ValidateForce(forces, degreesFreedomMaximum, response);
+            this.ValidateForce(forces, elementCount, response);
 
-            this.ValidateForceNodePosition(forceNodePositions, degreesFreedomMaximum, response);
+            this.ValidateForceNodePosition(forceNodePositions, elementCount, response);
 
             if(forces.Count() != forceNodePositions.Count())
             {

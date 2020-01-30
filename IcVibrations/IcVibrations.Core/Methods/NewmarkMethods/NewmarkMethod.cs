@@ -3,6 +3,7 @@ using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
+using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
@@ -133,6 +134,58 @@ namespace IcVibrations.Methods.NewmarkMethod
             input.Damping = this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
 
             input.Force = beam.Forces;
+
+            return input;
+        }
+
+        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, BeamWithDva beam, uint degreesFreedomMaximum)
+        {
+            NewmarkMethodInput input = new NewmarkMethodInput();
+
+            // Calculate values
+            double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+
+            double[,] hardness = this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
+
+            double[,] massWithDva = this._arrayOperation.AddValue(mass, beam.DvaMasses, beam.DvaNodePositions);
+
+            double[,] hardnessWithDva = this._arrayOperation.AddValue(hardness, beam.DvaHardnesses, beam.DvaNodePositions); ;
+
+            double[,] dampingWithDva = this._mainMatrix.CalculateDamping(massWithDva, hardnessWithDva, degreesFreedomMaximum);
+
+            double[] forces = beam.Forces;
+
+            bool[] bondaryCondition = this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+
+            bcTrue = 0;
+            for (int i = 0; i < degreesFreedomMaximum; i++)
+            {
+                if (bondaryCondition[i] == true)
+                {
+                    bcTrue += 1;
+                }
+            }
+
+            // Output values
+            input.Mass = this._auxiliarMethod.AplyBondaryConditions(massWithDva, bondaryCondition, bcTrue);
+
+            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardnessWithDva, bondaryCondition, bcTrue);
+
+            input.Damping = this._auxiliarMethod.AplyBondaryConditions(dampingWithDva, bondaryCondition, bcTrue);
+
+            input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, bcTrue);
+
+            t0 = newmarkMethodParameter.InitialTime;
+
+            pD = newmarkMethodParameter.PeriodDivion;
+
+            pC = newmarkMethodParameter.PeriodCount;
+
+            wi = newmarkMethodParameter.InitialAngularFrequency;
+
+            dw = newmarkMethodParameter.DeltaAngularFrequency;
+
+            wf = newmarkMethodParameter.FinalAngularFrequency;
 
             return input;
         }

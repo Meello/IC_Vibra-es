@@ -1,12 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace IcVibrations.Core.Calculator.ArrayOperations
 {
     public class ArrayOperation : IArrayOperation
     {
+        public double[,] AddValue(double[,] matrixToAdd, double[] values, uint[] valueNodePositions)
+        {
+            if (!int.Equals(values.Length, valueNodePositions.Length))
+            {
+                throw new Exception($"Quantity of values: {values.Length} must be equals the quantity of value node positions: {valueNodePositions.Length}.");
+            }
+
+            int size = values.Length;
+
+            for (int i = 0; i < size; i++)
+            {
+                matrixToAdd[2 * (valueNodePositions[i] - 1), 2 * (valueNodePositions[i] - 1)] += values[i];
+            }
+
+            return matrixToAdd;
+        }
+
         public double[] Create(double value, uint size)
         {
             double[] newArray = new double[size];

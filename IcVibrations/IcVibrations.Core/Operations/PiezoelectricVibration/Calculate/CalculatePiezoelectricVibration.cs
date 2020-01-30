@@ -58,8 +58,6 @@ namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
         {
             CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
 
-            uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
-
             if (!this._methodParameterValidator.Execute(request.MethodParameterData, response))
             {
                 return response;
@@ -67,7 +65,7 @@ namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
 
             // Validate piezoelectric
 
-            if (!this._beamRequestValidator.Execute(request.BeamData, degreesFreedomMaximum, response))
+            if (!this._beamRequestValidator.Execute(request.BeamData, response))
             {
                 return response;
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IcVibrations.DataContracts.Beam.CalculateWithDynamicVibrationAbsorber
+namespace IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber
 {
     public class BeamWithDvaRequestData : BeamRequestData
     {
@@ -10,18 +10,18 @@ namespace IcVibrations.DataContracts.Beam.CalculateWithDynamicVibrationAbsorber
 
         public double[] DvaHardnesses { get; set; }
 
-        public int[] DvaNodePositions { get; set; }
+        public uint[] DvaNodePositions { get; set; }
     }
 
     public class CircularBeamWithDvaRequestData : BeamWithDvaRequestData
     {
-        public double BeamDiameter { get; set; }
+        public double Diameter { get; set; }
     }
 
     public class RectangularBeamWithDvaRequestData : BeamWithDvaRequestData
     {
-        public double BeamHeight { get; set; }
+        public double Height { get; set; }
 
-        public double BeamWidth { get; set; }
+        public double Width { get; set; }
     }
 }

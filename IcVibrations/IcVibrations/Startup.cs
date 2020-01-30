@@ -10,7 +10,7 @@ using IcVibrations.Core.Validators.Beam;
 using IcVibrations.Core.Validators.MethodParameters;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
-using IcVibrations.DataContracts.Beam.CalculateWithDynamicVibrationAbsorber;
+using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.DataContracts.Piezoelectric.Calculate;
 using IcVibrations.Methods.AuxiliarOperations;

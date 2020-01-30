@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Core.Operations.BeamVibration.Calculate;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
+using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IC_Vibrations.Controllers
@@ -10,7 +11,7 @@ namespace IC_Vibrations.Controllers
     public class BeamController : ControllerBase
     {
         [HttpPost("rectangular")]
-        public ActionResult<CalculateBeamResponse> CalculateRectangular(
+        public ActionResult<CalculateBeamResponse> Calculate(
             [FromServices] AbstractCalculateBeamVibration<RectangularBeamRequestData> calculateRectangularBeamVibration, 
             [FromBody] CalculateBeamRequest<RectangularBeamRequestData> request)
         {
@@ -25,13 +26,28 @@ namespace IC_Vibrations.Controllers
         }
 
         [HttpPost("circular")]
-        public ActionResult<CalculateBeamResponse> CalculateCircular(
+        public ActionResult<CalculateBeamResponse> Calculate(
             [FromServices] AbstractCalculateBeamVibration<CircularBeamRequestData> calculateCircularBeamVibration,
             [FromBody] CalculateBeamRequest<CircularBeamRequestData> request)
         {
             CalculateBeamResponse response = calculateCircularBeamVibration.Process(request);
 
             if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost("circular/dynamic-vibration-absorber")]
+        public ActionResult<CalculateBeamWithDvaResponse> Calculate(
+            [FromServices] AbstractCalculateBeamVibration<CircularBeamWithDvaRequestData> calculateCircularBeamWithDvaVibration,
+            [FromBody] CalculateBeamWithDvaRequest<CircularBeamWithDvaRequestData> request)
+        {
+            CalculateBeamWithDvaResponse response = calculateCircularBeamWithDvaVibration.Process(request) as CalculateBeamWithDvaResponse;
+
+            if(!response.Success)
             {
                 return BadRequest(response);
             }

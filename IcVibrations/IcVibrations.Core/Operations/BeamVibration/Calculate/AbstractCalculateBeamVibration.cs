@@ -59,14 +59,12 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
-            uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
-
             if(!this._methodParameterValidator.Execute(request.MethodParameterData, response))
             {
                 return response;
             }
 
-            if (!this._beamRequestValidator.Execute(request.BeamData, degreesFreedomMaximum, response))
+            if (!this._beamRequestValidator.Execute(request.BeamData, response))
             {
                 return response;
             }

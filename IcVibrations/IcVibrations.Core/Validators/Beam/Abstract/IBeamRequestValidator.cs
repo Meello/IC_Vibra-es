@@ -10,6 +10,6 @@ namespace IcVibrations.Core.Validators.Beam
     public interface IBeamRequestValidator<T> 
         where T : BeamRequestData
     {
-        bool Execute(T requestData, uint degreesFreedomMaximum, OperationResponseBase response);
+        bool Execute(T requestData, OperationResponseBase response);
     }
 }

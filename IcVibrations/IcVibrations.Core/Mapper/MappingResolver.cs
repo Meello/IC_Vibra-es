@@ -1,9 +1,11 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
+using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
+using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Models.Beam;
@@ -46,6 +48,41 @@ namespace IcVibrations.Core.Mapper
 
     public class MappingResolver : IMappingResolver
     {
+        public CircularBeamWithDva BuildFrom(CircularBeamWithDvaRequestData requestData)
+        {
+            if(requestData == null)
+            {
+                return null;
+            }
+
+            double[] forces = new double[(requestData.ElementCount + 1) * Constants.DegreesFreedom];
+
+            for (int i = 0; i < requestData.Forces.Length; i++)
+            {
+                forces[2 * (requestData.ForceNodePositions[i] - 1)] = requestData.Forces[i];
+            }
+
+            return new CircularBeamWithDva
+            {
+                Diameter = requestData.Diameter,
+                DvaHardnesses = requestData.DvaHardnesses,
+                DvaMasses = requestData.DvaMasses,
+                DvaNodePositions = requestData.DvaNodePositions,
+                ElementCount = requestData.ElementCount,
+                FirstFastening = FasteningFactory.Create(requestData.FirstFastening),
+                Forces = forces,
+                GeometricProperty = new GeometricProperty
+                {
+                    Area = default,
+                    MomentInertia = default
+                },
+                LastFastening = FasteningFactory.Create(requestData.LastFastening),
+                Length = requestData.Length,
+                Material = MaterialFactory.Create(requestData.Material),
+                Thickness = requestData.Thickness
+            };
+        }
+
         public CircularBeam BuildFrom(CircularBeamRequestData circularBeamRequestData)
         {
             if (circularBeamRequestData == null)
@@ -53,18 +90,18 @@ namespace IcVibrations.Core.Mapper
                 return null;
             }
 
-            double[] force = new double[(circularBeamRequestData.ElementCount + 1) * Constants.DegreesFreedom];
+            double[] forces = new double[(circularBeamRequestData.ElementCount + 1) * Constants.DegreesFreedom];
 
             for (int i = 0; i < circularBeamRequestData.Forces.Length; i++)
             {
-                force[2 * circularBeamRequestData.ForceNodePositions[i]] = circularBeamRequestData.Forces[i];
+                forces[2 * (circularBeamRequestData.ForceNodePositions[i] - 1)] = circularBeamRequestData.Forces[i];
             }
 
             return new CircularBeam
             {
                 ElementCount = circularBeamRequestData.ElementCount,
                 FirstFastening = FasteningFactory.Create(circularBeamRequestData.FirstFastening),
-                Forces = force,
+                Forces = forces,
                 LastFastening = FasteningFactory.Create(circularBeamRequestData.LastFastening),
                 Length = circularBeamRequestData.Length,
                 Material = MaterialFactory.Create(circularBeamRequestData.Material),
@@ -89,7 +126,7 @@ namespace IcVibrations.Core.Mapper
 
             for (int i = 0; i < beamRequestData.Forces.Length; i++)
             {
-                force[2 * beamRequestData.ForceNodePositions[i]] = beamRequestData.Forces[i];
+                force[2 * (beamRequestData.ForceNodePositions[i] - 1)] = beamRequestData.Forces[i];
             }
 
             return new RectangularBeam
