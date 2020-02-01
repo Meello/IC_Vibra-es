@@ -14,7 +14,7 @@ namespace IcVibrations.DataContracts
 
         public double InitialAngularFrequency { get; set; }
 
-        public double DeltaAngularFrequency { get; set; }
+        public double? DeltaAngularFrequency { get; set; }
 
         public double FinalAngularFrequency { get; set; }
     }

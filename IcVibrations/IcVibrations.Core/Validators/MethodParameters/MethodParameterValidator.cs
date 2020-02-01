@@ -16,7 +16,7 @@ namespace IcVibrations.Core.Validators.MethodParameters
 
             this.ValidatePeriodCount(methodParameters.PeriodCount, response);
 
-            this.ValidateAngularFrequency(methodParameters.InitialAngularFrequency, methodParameters.DeltaAngularFrequency, methodParameters.FinalAngularFrequency, response);
+            this.ValidateAngularFrequency(methodParameters.InitialAngularFrequency, methodParameters.DeltaAngularFrequency.Value, methodParameters.FinalAngularFrequency, response);
 
             if(response.Errors.Count() > 0)
             {
@@ -57,19 +57,17 @@ namespace IcVibrations.Core.Validators.MethodParameters
                 response.AddError("017", $"Initial angular frequency: {initialAngularFrequency} must be greater than or equals to zero.");
             }
 
-            if (deltaAngularFrequency <= 0)
-            {
-                response.AddError("018", $"Delta angular frequency: {deltaAngularFrequency} must be greater than zero.");
-            }
-
             if (finalAngularFrequency <= 0)
             {
                 response.AddError("019", $"Final angular frequency: {finalAngularFrequency} must be greater than zero.");
             }
 
-            if (deltaAngularFrequency > finalAngularFrequency - initialAngularFrequency)
+            if(deltaAngularFrequency != default)
             {
-                response.AddError("020", $"Delta angular frequency: {deltaAngularFrequency} must be smaller than the interval: {finalAngularFrequency - initialAngularFrequency}.");
+                if (deltaAngularFrequency > finalAngularFrequency - initialAngularFrequency)
+                {
+                    response.AddError("020", $"Delta angular frequency: {deltaAngularFrequency} must be smaller than the interval: {finalAngularFrequency - initialAngularFrequency}.");
+                }
             }
         }
     }

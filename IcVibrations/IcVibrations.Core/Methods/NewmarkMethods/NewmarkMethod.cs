@@ -49,7 +49,16 @@ namespace IcVibrations.Methods.NewmarkMethod
 
         public NewmarkMethodOutput CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
         {
-            int angularFrequencyLoopCount = (int)((wf - wi) / dw) + 1;
+            int angularFrequencyLoopCount;
+            if (dw != 0)
+            {
+                angularFrequencyLoopCount = (int)((wf - wi) / dw) + 1;
+            }
+            else
+            {
+                angularFrequencyLoopCount = 1;
+
+            }
 
             int resultSize = angularFrequencyLoopCount * pC * pD;
 
@@ -57,12 +66,12 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             NewmarkMethodOutput output = new NewmarkMethodOutput
             {
-                YResult = new double[resultSize / 2, bcTrue],
-                VelResult = new double[resultSize / 2, bcTrue],
-                AcelResult = new double[resultSize / 2, bcTrue],
-                AngularFrequency = new double[resultSize / 2],
-                Force = new double[resultSize / 2, bcTrue],
-                Time = new double[resultSize / 2]
+                YResult = new double[resultSize, bcTrue],
+                VelResult = new double[resultSize, bcTrue],
+                AcelResult = new double[resultSize, bcTrue],
+                AngularFrequency = new double[resultSize],
+                Force = new double[resultSize, bcTrue],
+                Time = new double[resultSize]
             };
 
 
@@ -183,7 +192,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             wi = newmarkMethodParameter.InitialAngularFrequency;
 
-            dw = newmarkMethodParameter.DeltaAngularFrequency;
+            dw = newmarkMethodParameter.DeltaAngularFrequency.Value;
 
             wf = newmarkMethodParameter.FinalAngularFrequency;
 
@@ -231,7 +240,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             
             wi = newmarkMethodParameter.InitialAngularFrequency;
             
-            dw = newmarkMethodParameter.DeltaAngularFrequency;
+            dw = newmarkMethodParameter.DeltaAngularFrequency.Value;
             
             wf = newmarkMethodParameter.FinalAngularFrequency;
 
