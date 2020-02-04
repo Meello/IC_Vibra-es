@@ -71,7 +71,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             
             return response;
         }
-        
+         
         public uint DegreesFreedomMaximum(uint element)
         {
             uint degreesFreedomMaximum = (element + 1) * Constants.DegreesFreedom;

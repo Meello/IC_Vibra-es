@@ -23,6 +23,8 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[,] CalculateMass(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum);
 
+        double[,] CalculateMass(Beam beam, double[] dvaMasses, double[] dvaNodePositions);
+
         double[,] CalculateBeamHardness(Beam beam, uint degreesFreedomMaximum);
 
         double[,] CalculateHardness(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum);
