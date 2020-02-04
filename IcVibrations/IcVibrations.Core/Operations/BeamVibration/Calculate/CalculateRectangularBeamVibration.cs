@@ -39,18 +39,10 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             this._mappingResolver = mappingResolver;
         }
 
-        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<RectangularBeamRequestData> request, int degreesFreedomMaximum, OperationResponseBase response)
+        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<RectangularBeamRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
         {
-            Beam beam = this._mappingResolver.AddValues(request.Data);
-
-            // Como ter acesso aos valores do perfil retangular?
-            beam.Profile = new RectangularProfile
-            {
-                Height = request.Data.Height,
-                Width = request.Data.Width,
-                Thickness = request.Data.Thickness
-            };
-
+            RectangularBeam beam = this._mappingResolver.BuildFrom(request.BeamData);
+            
             // Input values
             double area = this._geometricProperty.Area(request.Data.Height, request.Data.Width, request.Data.Thickness);
 
