@@ -4,18 +4,18 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 {
     public class ArrayOperation : IArrayOperation
     {
-        public double[,] AddValue(double[,] matrixToAdd, double[] values, uint[] valueNodePositions)
+        public double[,] AddValue(double[,] matrixToAdd, double[] values, uint[] nodePositions)
         {
-            if (!int.Equals(values.Length, valueNodePositions.Length))
+            if (!int.Equals(values.Length, nodePositions.Length))
             {
-                throw new Exception($"Quantity of values: {values.Length} must be equals the quantity of value node positions: {valueNodePositions.Length}.");
+                throw new Exception($"Quantity of values: {values.Length} must be equals the quantity of value node positions: {nodePositions.Length}.");
             }
 
             int size = values.Length;
 
             for (int i = 0; i < size; i++)
             {
-                matrixToAdd[2 * (valueNodePositions[i] - 1), 2 * (valueNodePositions[i] - 1)] += values[i];
+                matrixToAdd[2 * (nodePositions[i] - 1), 2 * (nodePositions[i] - 1)] += values[i];
             }
 
             return matrixToAdd;
@@ -47,7 +47,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
         public double[,] InverseMatrix(double[,] matrix)
         {
-            if(matrix.GetLength(0) != matrix.GetLength(1))
+            if (matrix.GetLength(0) != matrix.GetLength(1))
             {
                 throw new Exception("It is just possible to inverse a qudratic matrix.");
             }
@@ -113,6 +113,78 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return matrizInv;
         }
 
+        public double[,] InverseMatrix(double[,] matrix, int size)
+        {
+            double[,] matrixToInverse = new double[size, size];
+            int n = size;
+            double[,] inversedMatrix = new double[n, n];
+            double pivot, p;
+            int i, j, k, l;
+
+            for (i = 0; i < size; i++)
+            {
+                for (j = 0; j < size; j++)
+                {
+                    matrixToInverse[i, j] = matrix[i, j];
+                }
+            }
+
+            for (i = 0; i < n; i++)
+            {
+                for (j = 0; j < n; j++)
+                {
+                    if (i == j)
+                    {
+                        inversedMatrix[i, j] = 1;
+                    }
+                    else
+                    {
+                        inversedMatrix[i, j] = 0;
+                    }
+                }
+            }
+
+            // Triangularization
+            for (i = 0; i < n; i++)
+            {
+                pivot = matrixToInverse[i, i];
+
+                for (l = 0; l < n; l++)
+                {
+                    matrixToInverse[i, l] = matrixToInverse[i, l] / pivot;
+                    inversedMatrix[i, l] = inversedMatrix[i, l] / pivot;
+                }
+
+                for (k = i + 1; k < n; k++)
+                {
+                    p = matrixToInverse[k, i];
+
+                    for (j = 0; j < n; j++)
+                    {
+                        matrixToInverse[k, j] = matrixToInverse[k, j] - (p * matrixToInverse[i, j]);
+                        inversedMatrix[k, j] = inversedMatrix[k, j] - (p * inversedMatrix[i, j]);
+                    }
+                }
+            }
+
+            // Retrosubstitution
+            for (i = n - 1; i >= 0; i--)
+            {
+                for (k = i - 1; k >= 0; k--)
+                {
+                    p = matrixToInverse[k, i];
+
+                    for (j = n - 1; j >= 0; j--)
+                    {
+                        matrixToInverse[k, j] = matrixToInverse[k, j] - (p * matrixToInverse[i, j]);
+                        inversedMatrix[k, j] = inversedMatrix[k, j] - (p * inversedMatrix[i, j]);
+                    }
+                }
+            }
+
+            return inversedMatrix;
+        }
+
         public double[,] Multiply(double[,] array1, double[,] array2)
         {
             int rows1 = array1.GetLength(0);
@@ -120,7 +192,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             int rows2 = array2.GetLength(0);
             int columns2 = array2.GetLength(1);
 
-            if(columns1 != rows2)
+            if (columns1 != rows2)
             {
                 throw new Exception("Error in multiplication operation.");
             }
@@ -192,7 +264,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
                 for (int j = 0; j < size1; j++)
                 {
-                    sum += array1[j] * array2[j,i];
+                    sum += array1[j] * array2[j, i];
                 }
 
                 arrayMultiplication[i] = sum;
@@ -208,7 +280,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             int rows2 = array2.GetLength(0);
             int columns2 = array2.GetLength(1);
 
-            if(rows1 != rows2 || columns1 != columns2)
+            if (rows1 != rows2 || columns1 != columns2)
             {
                 throw new Exception("Can't subtract matrixes with differents sizes.");
             }

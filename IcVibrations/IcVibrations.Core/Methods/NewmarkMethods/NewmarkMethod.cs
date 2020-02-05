@@ -156,9 +156,9 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             double[,] hardness = this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
 
-            double[,] massWithDva = this._arrayOperation.AddValue(mass, beam.DvaMasses, beam.DvaNodePositions);
+            double[,] massWithDva = this._mainMatrix.CalculateMassWithDva(mass, beam.DvaMasses, beam.DvaNodePositions);
 
-            double[,] hardnessWithDva = this._arrayOperation.AddValue(hardness, beam.DvaHardnesses, beam.DvaNodePositions);
+            double[,] hardnessWithDva = this._mainMatrix.CalculateBeamHardnessWithDva(hardness, beam.DvaHardnesses, beam.DvaNodePositions);
 
             double[,] dampingWithDva = this._mainMatrix.CalculateDamping(massWithDva, hardnessWithDva, degreesFreedomMaximum);
 
@@ -287,7 +287,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                     if (time == 0)
                     {
-                        double[,] massInverse = this._arrayOperation.InverseMatrix(input.Mass);
+                        double[,] massInverse = this._arrayOperation.InverseMatrix(input.Mass, bcTrue);
 
                         double[] matrix_K_C_Y = this.CreateMatrix_K_C_Y(input, y, response);
 

@@ -8,6 +8,8 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
     {
         double[,] InverseMatrix(double[,] matrix);
 
+        double[,] InverseMatrix(double[,] matrix, int size);
+
         double[,] Multiply(double[,] matrix1, double[,] matrix2);
 
         double[] Multiply(double[,] matrix, double[] array);

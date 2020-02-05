@@ -23,11 +23,11 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         double[,] CalculateMass(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum);
 
-        double[,] CalculateMassWithDva(double[,] beamMass, double[] dvaMasses, double[] dvaNodePositions);
+        double[,] CalculateMassWithDva(double[,] beamMass, double[] dvaMasses, uint[] dvaNodePositions);
 
         double[,] CalculateBeamHardness(Beam beam, uint degreesFreedomMaximum);
 
-        double[,] CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, double[] dvaNodePositions);
+        double[,] CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions);
 
         double[,] CalculateHardness(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum);
 
