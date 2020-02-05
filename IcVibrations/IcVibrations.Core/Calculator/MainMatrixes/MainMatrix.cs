@@ -4,13 +4,11 @@ using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace IcVibrations.Calculator.MainMatrixes
 {
-    public class MainMatrix : IMainMatrix
+	public class MainMatrix : IMainMatrix
 	{
 		private readonly IArrayOperation _arrayOperation;
 
@@ -96,6 +94,38 @@ namespace IcVibrations.Calculator.MainMatrixes
 			elementHardness[3, 3] = 4 * Math.Pow(length, 2) * constant;
 
 			return elementHardness;
+		}
+
+		public double[,] CalculatePiezoelectricElementElectromechanicalCoupling(RectangularPiezoelectric piezoelectric, double beamHeight)
+		{
+			double[,] electromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricElementMatrixSize];
+
+			double constant = -(piezoelectric.DielectricPermissiveness * piezoelectric.Width * piezoelectric.ElementLength / 2) * (2 * beamHeight * piezoelectric.Height + Math.Pow(piezoelectric.Height, 2));
+
+			electromechanicalCoupling[0, 0] = 0;
+			electromechanicalCoupling[0, 1] = 0;
+			electromechanicalCoupling[1, 0] = -piezoelectric.ElementLength * constant;
+			electromechanicalCoupling[1, 1] = piezoelectric.ElementLength * constant;
+			electromechanicalCoupling[2, 0] = 0;
+			electromechanicalCoupling[2, 1] = piezoelectric.ElementLength * constant;
+			electromechanicalCoupling[3, 0] = piezoelectric.ElementLength * constant;
+			electromechanicalCoupling[3, 1] = -piezoelectric.ElementLength * constant;
+
+			return electromechanicalCoupling;
+		}
+
+		public double[,] CalculatePiezoelectricElementCapacitance(double area, double length, double heigth, double dielectricConstant)
+		{
+			double[,] piezoelectricCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
+
+			double constant = -dielectricConstant * area * length / Math.Pow(heigth, 2);
+
+			piezoelectricCapacitance[0, 0] = constant;
+			piezoelectricCapacitance[0, 1] = -constant;
+			piezoelectricCapacitance[1, 0] = -constant;
+			piezoelectricCapacitance[1, 1] = constant;
+
+			return piezoelectricCapacitance;
 		}
 
 		public double[,] CalculateMass(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
@@ -231,37 +261,6 @@ namespace IcVibrations.Calculator.MainMatrixes
 			return hardness;
 		}
 
-		public double[,] CalculatePiezoelectricElementElectromechanicalCoupling(RectangularPiezoelectric piezoelectric, double beamHeight)
-		{
-			double[,] electromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricElementMatrixSize];
-
-			double constant = -(piezoelectric.DielectricPermissiveness * piezoelectric.Width * piezoelectric.ElementLength / 2) * (2 * beamHeight * piezoelectric.Height + Math.Pow(piezoelectric.Height, 2));
-
-			electromechanicalCoupling[0, 0] = 0;
-			electromechanicalCoupling[0, 1] = 0;
-			electromechanicalCoupling[1, 0] = -piezoelectric.ElementLength * constant;
-			electromechanicalCoupling[1, 1] = piezoelectric.ElementLength * constant;
-			electromechanicalCoupling[2, 0] = 0;
-			electromechanicalCoupling[2, 1] = piezoelectric.ElementLength * constant;
-			electromechanicalCoupling[3, 0] = piezoelectric.ElementLength * constant;
-			electromechanicalCoupling[3, 1] = -piezoelectric.ElementLength * constant;
-
-			return electromechanicalCoupling;
-		}
-
-		public double[,] CalculatePiezoelectricElementCapacitance(double area, double length, double heigth, double dielectricConstant)
-		{
-			double[,] piezoelectricCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
-
-			double constant = -dielectricConstant * area * length / Math.Pow(heigth, 2);
-
-			piezoelectricCapacitance[0, 0] = constant;
-			piezoelectricCapacitance[0, 1] = -constant;
-			piezoelectricCapacitance[1, 0] = -constant;
-			piezoelectricCapacitance[1, 1] = constant;
-
-			return piezoelectricCapacitance;
-		}
 		public double[,] CalculateHardness(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
 		{
 			uint elementCount = beam.ElementCount;
@@ -465,6 +464,16 @@ namespace IcVibrations.Calculator.MainMatrixes
 			}
 
 			return nodeCoordinates;
+		}
+
+		public double[,] CalculateMassWithDva(double[,] beamMass, double[] dvaMasses, double[] dvaNodePositions)
+		{
+			throw new NotImplementedException();
+		}
+
+		public double[,] CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, double[] dvaNodePositions)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
