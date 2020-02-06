@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Calculator.ArrayOperations
 {
     public sealed class ArrayOperation : IArrayOperation
     {
-        public double[,] AddValue(double[,] matrixToAdd, double[] values, uint[] nodePositions, string matrixName)
+        public Task<double[,]> AddValue(double[,] matrixToAdd, double[] values, uint[] nodePositions, string matrixName)
         {
             if (!int.Equals(values.Length, nodePositions.Length))
             {
@@ -18,10 +19,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 matrixToAdd[2 * (nodePositions[i] - 1), 2 * (nodePositions[i] - 1)] += values[i];
             }
 
-            return matrixToAdd;
+            return Task.FromResult(matrixToAdd);
         }
 
-        public double[] Create(double value, uint size)
+        public Task<double[]> Create(double value, uint size)
         {
             double[] newArray = new double[size];
 
@@ -30,10 +31,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 newArray[i] = value;
             }
 
-            return newArray;
+            return Task.FromResult(newArray);
         }
 
-        public double[] Create(double value, uint size, uint[] positions, string arrayName)
+        public Task<double[]> Create(double value, uint size, uint[] positions, string arrayName)
         {
             double[] newArray = new double[size];
 
@@ -43,16 +44,16 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 {
                     newArray[positions[i] - 1] = value;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw new Exception($"Error creating {arrayName}. {ex.Message}.");
                 }
             }
 
-            return newArray;
+            return Task.FromResult(newArray);
         }
 
-        public double[,] InverseMatrix(double[,] matrix, string matrixName)
+        public Task<double[,]> InverseMatrix(double[,] matrix, string matrixName)
         {
             if (matrix.GetLength(0) != matrix.GetLength(1))
             {
@@ -117,17 +118,17 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 }
             }
 
-            return matrizInv;
+            return Task.FromResult(matrizInv);
         }
 
-        public double[,] InverseMatrix(double[,] matrix, int size, string matrixName)
+        public Task<double[,]> InverseMatrix(double[,] matrix, int size, string matrixName)
         {
             if (matrix.GetLength(0) != matrix.GetLength(1))
             {
                 throw new Exception($"Error inversing {matrixName}. It is just possible to inverse a quadratic matrix. Sizes: {matrix.GetLength(0)}, {matrix.GetLength(1)}.");
             }
 
-            if(matrix.GetLength(0) < size)
+            if (matrix.GetLength(0) < size)
             {
                 throw new Exception($"Error inversing {matrixName}. The size passed: {size} can't be bigger than the matrix sizes: {matrix.GetLength(0)}, {matrix.GetLength(1)}.");
             }
@@ -199,10 +200,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 }
             }
 
-            return result;
+            return Task.FromResult(result);
         }
 
-        public double[,] Multiply(double[,] array1, double[,] array2, string matrixesName)
+        public Task<double[,]> Multiply(double[,] array1, double[,] array2, string matrixesName)
         {
             int rows1 = array1.GetLength(0);
             int columns1 = array1.GetLength(1);
@@ -231,10 +232,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 }
             }
 
-            return arrayMultiplication;
+            return Task.FromResult(arrayMultiplication);
         }
 
-        public double[] Multiply(double[,] array1, double[] array2, string matrixesName)
+        public Task<double[]> Multiply(double[,] array1, double[] array2, string matrixesName)
         {
             int rows1 = array1.GetLength(0);
             int columns1 = array1.GetLength(1);
@@ -259,10 +260,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 arrayMultiplication[i] = sum;
             }
 
-            return arrayMultiplication;
+            return Task.FromResult(arrayMultiplication);
         }
 
-        public double[] Multiply(double[] array1, double[,] array2, string matrixesName)
+        public Task<double[]> Multiply(double[] array1, double[,] array2, string matrixesName)
         {
             int size1 = array1.Length;
             int rows2 = array2.GetLength(0);
@@ -287,10 +288,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 arrayMultiplication[i] = sum;
             }
 
-            return arrayMultiplication;
+            return Task.FromResult(arrayMultiplication);
         }
 
-        public double[,] Subtract(double[,] array1, double[,] array2, string matrixesName)
+        public Task<double[,]> Subtract(double[,] array1, double[,] array2, string matrixesName)
         {
             int rows1 = array1.GetLength(0);
             int columns1 = array1.GetLength(1);
@@ -312,10 +313,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 }
             }
 
-            return arraySubtraction;
+            return Task.FromResult(arraySubtraction);
         }
 
-        public double[] Subtract(double[] array1, double[] array2, string arraysName)
+        public Task<double[]> Subtract(double[] array1, double[] array2, string arraysName)
         {
             int size1 = array1.Length;
             int size2 = array2.Length;
@@ -332,10 +333,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 arraySubtraction[i] = array1[i] - array2[i];
             }
 
-            return arraySubtraction;
+            return Task.FromResult(arraySubtraction);
         }
 
-        public double[] Subtract(double[] arrayToSubtract, double[] array2, double[] array3, string arraysName)
+        public Task<double[]> Subtract(double[] arrayToSubtract, double[] array2, double[] array3, string arraysName)
         {
             int size1 = arrayToSubtract.Length;
             int size2 = array2.Length;
@@ -353,10 +354,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 arraySubtraction[i] = arrayToSubtract[i] - array2[i] - array3[i];
             }
 
-            return arraySubtraction;
+            return Task.FromResult(arraySubtraction);
         }
 
-        public double[,] Sum(double[,] matrix1, double[,] matrix2, string matrixesName)
+        public Task<double[,]> Sum(double[,] matrix1, double[,] matrix2, string matrixesName)
         {
             int rows1 = matrix1.GetLength(0);
             int columns1 = matrix1.GetLength(1);
@@ -378,10 +379,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 }
             }
 
-            return arraySum;
+            return Task.FromResult(arraySum);
         }
 
-        public double[] Sum(double[] array1, double[] array2, double[] array3, string matrixesName)
+        public Task<double[]> Sum(double[] array1, double[] array2, double[] array3, string matrixesName)
         {
             int size1 = array1.GetLength(0);
             int size2 = array2.GetLength(0);
@@ -399,10 +400,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 arraySum[i] = array1[i] + array2[i] + array3[i];
             }
 
-            return arraySum;
+            return Task.FromResult(arraySum);
         }
 
-        public double[] Sum(double[] array1, double[] array2, string arraysName)
+        public Task<double[]> Sum(double[] array1, double[] array2, string arraysName)
         {
             int size1 = array1.Length;
             int size2 = array2.Length;
@@ -419,10 +420,10 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 arraySum[i] = array1[i] + array2[i];
             }
 
-            return arraySum;
+            return Task.FromResult(arraySum);
         }
 
-        public double[,] TransposeMatrix(double[,] matrix)
+        public Task<double[,]> TransposeMatrix(double[,] matrix)
         {
             int row = matrix.GetLength(0);
             int column = matrix.GetLength(1);
@@ -436,7 +437,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 }
             }
 
-            return matrixTransposed;
+            return Task.FromResult(matrixTransposed);
         }
     }
 }

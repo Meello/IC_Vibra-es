@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using IcVibrations.DataContracts;
 
 
@@ -10,6 +11,6 @@ namespace IcVibrations.Core.Operations
         where TRequest : OperationRequestBase
         where TResponse : OperationResponseBase, new()
     {
-        TResponse Process(TRequest request);
+        Task<TResponse> Process(TRequest request);
     }
 }

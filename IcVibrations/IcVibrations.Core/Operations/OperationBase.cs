@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations
 {
@@ -10,19 +11,19 @@ namespace IcVibrations.Core.Operations
         where TResponse: OperationResponseBase, new() 
         //faz com que só permita usar uma classe que tenha um construtor padrão
     {
-        public TResponse Process(TRequest request)
+        public async Task<TResponse> Process(TRequest request)
         {
             TResponse response = new TResponse();
 
             try
             {
-                response = ValidateOperation(request);
+                response = await ValidateOperation(request);
                 if(!response.Success)
                 {
                     return response;
                 }
 
-                response = ProcessOperation(request);
+                response = await ProcessOperation(request);
             }
             catch (Exception ex)
             {
@@ -33,8 +34,8 @@ namespace IcVibrations.Core.Operations
             return response;
         }
 
-        protected abstract TResponse ProcessOperation(TRequest request);
+        protected abstract Task<TResponse> ProcessOperation(TRequest request);
 
-        protected abstract TResponse ValidateOperation(TRequest request);
+        protected abstract Task<TResponse> ValidateOperation(TRequest request);
     }
 }

@@ -3,6 +3,7 @@ using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.Models.Beam;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Methods.NewmarkMethod
 {
@@ -12,8 +13,8 @@ namespace IcVibrations.Methods.NewmarkMethod
 
         NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum);
 
-        NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, RectangularBeam beam, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum);
+        Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, RectangularBeam beam, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum);
 
-        NewmarkMethodOutput CreateOutput(NewmarkMethodInput input, OperationResponseBase response);
+        Task<NewmarkMethodOutput> CreateOutput(NewmarkMethodInput input, OperationResponseBase response);
     }
 }

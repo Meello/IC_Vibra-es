@@ -1,35 +1,37 @@
-﻿namespace IcVibrations.Core.Calculator.ArrayOperations
+﻿using System.Threading.Tasks;
+
+namespace IcVibrations.Core.Calculator.ArrayOperations
 {
     public interface IArrayOperation
     {
-        double[,] InverseMatrix(double[,] matrix, string matrixName);
+        Task<double[,]> InverseMatrix(double[,] matrix, string matrixName);
 
-        double[,] InverseMatrix(double[,] matrix, int size, string matrixName);
+        Task<double[,]> InverseMatrix(double[,] matrix, int size, string matrixName);
 
-        double[,] Multiply(double[,] matrix1, double[,] matrix2, string matrixesName);
+        Task<double[,]> Multiply(double[,] matrix1, double[,] matrix2, string matrixesName);
 
-        double[] Multiply(double[,] matrix, double[] array, string arraysName);
+        Task<double[]> Multiply(double[,] matrix, double[] array, string arraysName);
 
-        double[] Multiply(double[] array, double[,] matrix, string arraysName);
+        Task<double[]> Multiply(double[] array, double[,] matrix, string arraysName);
 
-        double[,] Subtract(double[,] matrix1, double[,] matrix2, string matrixesName);
-        
-        double[] Subtract(double[] array1, double[] array2, string arraysName);
+        Task<double[,]> Subtract(double[,] matrix1, double[,] matrix2, string matrixesName);
 
-        double[] Subtract(double[] array1, double[] array2, double[] array3, string arraysName);
+        Task<double[]> Subtract(double[] array1, double[] array2, string arraysName);
 
-        double[,] Sum(double[,] matrix1, double[,] matrix2, string matrixesName);
+        Task<double[]> Subtract(double[] array1, double[] array2, double[] array3, string arraysName);
 
-        double[] Sum(double[] array1, double[] array2, double[] array3, string matrixesName);
+        Task<double[,]> Sum(double[,] matrix1, double[,] matrix2, string matrixesName);
 
-        double[] Sum(double[] array1, double[] array2, string arraysName);
-        
-        double[] Create(double value, uint size);
+        Task<double[]> Sum(double[] array1, double[] array2, double[] array3, string matrixesName);
 
-        double[] Create(double value, uint size, uint[] positions, string arrayName);
+        Task<double[]> Sum(double[] array1, double[] array2, string arraysName);
 
-        double[,] TransposeMatrix(double[,] matrix);
+        Task<double[]> Create(double value, uint size);
 
-        double[,] AddValue(double[,] matrixToAdd, double[] values, uint[] valueNodePositions, string matrixName);
+        Task<double[]> Create(double value, uint size, uint[] positions, string arrayName);
+
+        Task<double[,]> TransposeMatrix(double[,] matrix);
+
+        Task<double[,]> AddValue(double[,] matrixToAdd, double[] values, uint[] valueNodePositions, string matrixName);
     }
 }

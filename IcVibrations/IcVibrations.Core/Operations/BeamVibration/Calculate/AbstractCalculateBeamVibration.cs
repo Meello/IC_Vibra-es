@@ -13,6 +13,7 @@ using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 {
@@ -40,7 +41,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             this._mappingResolver = mappingResolver;
         }
 
-        protected override CalculateBeamResponse ProcessOperation(CalculateBeamRequest<T> request)
+        protected override async Task<CalculateBeamResponse> ProcessOperation(CalculateBeamRequest<T> request)
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
@@ -48,14 +49,14 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
             NewmarkMethodInput input = this.CalculateParameters(request, degreesFreedomMaximum, response);
 
-            NewmarkMethodOutput output = this._newmarkMethod.CreateOutput(input, response);
+            NewmarkMethodOutput output = await this._newmarkMethod.CreateOutput(input, response);
 
             response.Data = this._mappingResolver.BuildFrom(output);
             
             return response;
         }
 
-        protected override CalculateBeamResponse ValidateOperation(CalculateBeamRequest<T> request)
+        protected override async Task<CalculateBeamResponse> ValidateOperation(CalculateBeamRequest<T> request)
         {
             CalculateBeamResponse response = new CalculateBeamResponse();
 
