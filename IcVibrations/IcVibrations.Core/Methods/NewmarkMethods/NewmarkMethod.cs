@@ -300,6 +300,28 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                         acel = await this._arrayOperation.Multiply(massInverse, subtractionResult, $"{nameof(massInverse)}, {nameof(subtractionResult)}");
 
+                        ICollection<Task<object>> taskCollection = new List<Task<object>>();
+
+                        for (i = 1; i <= 3; i++)
+                        {
+                            //Task<object> messageTask = Task.Run(async () =>
+                            //{
+                            //    try
+                            //    {
+                            //        return await this.PrepareMessageToFileGenerationAsync(request).ConfigureAwait(false);
+                            //    }
+                            //    finally
+                            //    {
+                            //        concurrencySemaphore.Release();
+                            //    }
+                            //});
+
+                            taskCollection.Add(messageTask);
+                        }
+
+                        await Task.WhenAll(taskCollection).ConfigureAwait(false);
+
+
                         Parallel.For(0, bcTrue, iteration =>
                         {
                             acelAnt[iteration] = acel[iteration];
