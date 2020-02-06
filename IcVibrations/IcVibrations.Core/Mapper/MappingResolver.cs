@@ -74,7 +74,7 @@ namespace IcVibrations.Core.Mapper
                 GeometricProperty = new GeometricProperty
                 {
                     Area = default,
-                    MomentInertia = default
+                    MomentOfInertia = default
                 },
                 LastFastening = FasteningFactory.Create(requestData.LastFastening),
                 Length = requestData.Length,
@@ -110,7 +110,7 @@ namespace IcVibrations.Core.Mapper
                 GeometricProperty = new GeometricProperty
                 {
                     Area = default,
-                    MomentInertia = default
+                    MomentOfInertia = default
                 }
             };
         }
@@ -143,7 +143,7 @@ namespace IcVibrations.Core.Mapper
                 GeometricProperty = new GeometricProperty
                 {
                     Area = default,
-                    MomentInertia = default
+                    MomentOfInertia = default
                 }
             };
         }
@@ -166,7 +166,7 @@ namespace IcVibrations.Core.Mapper
                 GeometricProperty = new GeometricProperty
                 {
                     Area = default,
-                    MomentInertia = default
+                    MomentOfInertia = default
                 },
                 Height = piezoelectricRequestData.Height,
                 Thickness = piezoelectricRequestData.Thickness,
@@ -186,7 +186,7 @@ namespace IcVibrations.Core.Mapper
             return new OperationResponseData
             {
                 AngularFrequency = output.AngularFrequency,
-                Time = output.Time,
+                Time = output.IterationsTime,
                 YResult = output.YResult,
                 //VelResult = output.VelResult,
                 //AcelResult = output.AcelResult,

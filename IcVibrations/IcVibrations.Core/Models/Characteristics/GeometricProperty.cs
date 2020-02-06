@@ -9,6 +9,6 @@ namespace IcVibrations.Models.Beam.Characteristics
 
         public double[] Area { get; set; }
 
-        public double[] MomentInertia { get; set; }
+        public double[] MomentOfInertia { get; set; }
     }
 }

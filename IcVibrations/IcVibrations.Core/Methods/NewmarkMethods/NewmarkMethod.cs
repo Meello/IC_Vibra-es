@@ -27,8 +27,6 @@ namespace IcVibrations.Methods.NewmarkMethod
         // Time
         private double dt, t0;
         private int pD, pC;
-        // Result index
-        private int resultIndex;
 
         private readonly IMainMatrix _mainMatrix;
         private readonly IAuxiliarOperation _auxiliarMethod;
@@ -60,25 +58,17 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             }
 
-            int resultSize = angularFrequencyLoopCount * pC * pD;
-
-            resultIndex = 0;
-
             NewmarkMethodOutput output = new NewmarkMethodOutput
             {
-                YResult = new double[resultSize, bcTrue],
-                VelResult = new double[resultSize, bcTrue],
-                AcelResult = new double[resultSize, bcTrue],
-                AngularFrequency = new double[resultSize],
-                Force = new double[resultSize, bcTrue],
-                Time = new double[resultSize]
+                IterationsResult = new List<IterationResult>()
             };
-
 
             // More iterations make the application slower
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
                 w = wi + (i * dw);
+
+                output.AngularFrequency = w;
 
                 if (w != 0)
                 {
@@ -96,7 +86,16 @@ namespace IcVibrations.Methods.NewmarkMethod
                 a4 = 1 / (2 * Constants.Beta);
                 a5 = dt * ((Constants.Gama / (2 * Constants.Beta)) - 1);
 
-                this.Solution(input, output, response);
+                try
+                {
+                    this.Solution(input, output, response);
+                }
+                catch (Exception ex)
+                {
+                    response.AddError("000", $"Error executing the solution. {ex.Message}");
+
+                    return null;
+                }
             }
 
             return output;
@@ -120,11 +119,11 @@ namespace IcVibrations.Methods.NewmarkMethod
             // Create geometric properties matrixes
             beam.GeometricProperty.Area = this._arrayOperation.Create(beamArea, beam.ElementCount);
 
-            beam.GeometricProperty.MomentInertia = this._arrayOperation.Create(beamMomentInertia, beam.ElementCount);
+            beam.GeometricProperty.MomentOfInertia = this._arrayOperation.Create(beamMomentInertia, beam.ElementCount);
 
-            piezoelectric.GeometricProperty.Area = this._arrayOperation.Create(piezoelectricArea, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric);
+            piezoelectric.GeometricProperty.Area = this._arrayOperation.Create(piezoelectricArea, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric, $"{nameof(piezoelectric)} {nameof(piezoelectric.GeometricProperty.Area)}");
 
-            piezoelectric.GeometricProperty.MomentInertia = this._arrayOperation.Create(piezoelectricMomentInertia, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric);
+            piezoelectric.GeometricProperty.MomentOfInertia = this._arrayOperation.Create(piezoelectricMomentInertia, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric, $"{nameof(piezoelectric)} {nameof(piezoelectric.GeometricProperty.MomentOfInertia)}");
 
             // Calculate basic matrix
             double[,] mass = this._mainMatrix.CalculateMass(beam, piezoelectric, degreesFreedomMaximum);
@@ -235,24 +234,23 @@ namespace IcVibrations.Methods.NewmarkMethod
             t0 = newmarkMethodParameter.InitialTime;
 
             pD = newmarkMethodParameter.PeriodDivion;
-            
+
             pC = newmarkMethodParameter.PeriodCount;
-            
+
             wi = newmarkMethodParameter.InitialAngularFrequency;
-            
+
             dw = newmarkMethodParameter.DeltaAngularFrequency.Value;
-            
+
             wf = newmarkMethodParameter.FinalAngularFrequency;
 
             return input;
         }
 
-        public void Solution(NewmarkMethodInput input, NewmarkMethodOutput output, OperationResponseBase response)
+        public List<IterationResult> Solution(NewmarkMethodInput input, NewmarkMethodOutput output, OperationResponseBase response)
         {
-            //StreamWriter streamWriter = new StreamWriter(@"C:\Users\bruno\OneDrive\Documentos\GitHub\IC_Vibra-es\IcVibrations\RectangularBeamSolution.csv");
+            List<IterationResult> results = new List<IterationResult>();
 
             int i, jn, jp;
-            
             double time = t0;
 
             double[] force = new double[bcTrue];
@@ -277,7 +275,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             for (jp = 0; jp < pC; jp++)
             {
-                for (jn = 0; jn < pD; jn++)            
+                for (jn = 0; jn < pD; jn++)
                 {
                     for (i = 0; i < bcTrue; i++)
                     {
@@ -287,58 +285,57 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                     if (time == 0)
                     {
-                        double[,] massInverse = this._arrayOperation.InverseMatrix(input.Mass, bcTrue);
+                        double[,] massInverse = this._arrayOperation.InverseMatrix(input.Mass, bcTrue, nameof(massInverse));
 
-                        double[] matrix_K_C_Y = this.CreateMatrix_K_C_Y(input, y, response);
+                        double[] matrix_K_Y = this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y));
 
-                        acel = this._arrayOperation.Multiply(massInverse, matrix_K_C_Y);
+                        double[] matrix_C_Vel = this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel));
+
+                        double[] subtractionResult = this._arrayOperation.Subtract(input.Force, matrix_K_Y, matrix_C_Vel, $"{nameof(input.Force)}, {nameof(matrix_K_Y)}, {nameof(matrix_C_Vel)}");
+
+                        acel = this._arrayOperation.Multiply(massInverse, subtractionResult, $"{nameof(massInverse)}, {nameof(subtractionResult)}");
 
                         for (i = 0; i < bcTrue; i++)
                         {
-                            acelAnt[i] = acel[i];                
+                            acelAnt[i] = acel[i];
                         }
                     }
 
                     if (jp >= 0)
                     {
-                        if(w == 15)
+                        IterationResult iterationResult = new IterationResult
                         {
-                            for(int k = 0; k < bcTrue; k++)
-                            {
-                                output.Force[resultIndex, k] = input.Force[k];
-                                output.YResult[resultIndex, k] = y[k];
-                                //output.VelResult[resultIndex, k] = vel[k];
-                                //output.AcelResult[resultIndex, k] = acel[k];
-                            }
+                            Time = time,
+                            Displacemens = y,
+                            Velocities = vel,
+                            Acelerations = acel,
+                            Forces = input.Force
+                        };
 
-                            output.AngularFrequency[resultIndex] = w;
-                            output.Time[resultIndex] = time;
-                            
-                            resultIndex += 1;
-                        }
-                        
+                        results.Add(iterationResult);
+
                         //try
                         //{
-                            //using (StreamWriter sw = streamWriter)
-                            //{
-                                //sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
-                        
-                                //sw.Close();
-                            //}
+                        //using (StreamWriter sw = streamWriter)
+                        //{
+                        //sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
+
+                        //sw.Close();
+                        //}
                         //}
                         //catch
                         //{
-                            //// Não quero que pare, só avise que deu erro.
-                            //throw new Exception("Couldn't open file.");
+                        //// Não quero que pare, só avise que deu erro.
+                        //throw new Exception("Couldn't open file.");
                         //}
                     }
 
                     double[,] equivalentHardness = this.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness);
                     double[] equivalentForce = this.CalculateEquivalentForce(input, forceAnt, vel, acel);
 
-                    double[,] equivalentHardnessInverse = this._arrayOperation.InverseMatrix(equivalentHardness);
+                    double[,] inversedEquivalentHardness = this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness));
 
-                    deltaY = this._arrayOperation.Multiply(equivalentForce,equivalentHardnessInverse);
+                    deltaY = this._arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
 
                     for (i = 0; i < bcTrue; i++)
                     {
@@ -372,6 +369,8 @@ namespace IcVibrations.Methods.NewmarkMethod
                     }
                 }
             }
+
+            return results;
         }
 
         public double[,] CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness)
@@ -382,7 +381,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             {
                 for (int j = 0; j < bcTrue; j++)
                 {
-                    equivalentHardness[i,j] = a0 * mass[i,j] + a1 * damping[i,j] + hardness[i,j];
+                    equivalentHardness[i, j] = a0 * mass[i, j] + a1 * damping[i, j] + hardness[i, j];
                 }
             }
 
@@ -397,7 +396,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             {
                 for (int j = 0; j < bcTrue; j++)
                 {
-                    p1[i,j] = a2 * mass[i,j] + a3 * damping[i,j];
+                    p1[i, j] = a2 * mass[i, j] + a3 * damping[i, j];
                 }
             }
 
@@ -419,54 +418,21 @@ namespace IcVibrations.Methods.NewmarkMethod
             return p2;
         }
 
-        // For pulsating force
         public double[] CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
         {
-            double[] deltaForce = this._arrayOperation.Subtract(input.Force, force_ant);
+            double[] deltaForce = this._arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
 
             double[,] p1 = this.CalculateMatrixP1(input.Mass, input.Damping);
 
             double[,] p2 = this.CalculateMatrixP2(input.Mass, input.Damping);
 
-            double[] vel_p1 = this._arrayOperation.Multiply(p1, vel);
+            double[] vel_p1 = this._arrayOperation.Multiply(p1, vel, $"{nameof(p1)}, {nameof(vel)}");
 
-            double[] acel_p2 = this._arrayOperation.Multiply(p2, acel);
+            double[] acel_p2 = this._arrayOperation.Multiply(p2, acel, $"{nameof(p2)}, {nameof(acel)}");
 
-            double[] equivalentForce = _arrayOperation.Sum(deltaForce, _arrayOperation.Sum(vel_p1, acel_p2));
+            double[] equivalentForce = _arrayOperation.Sum(deltaForce, vel_p1, acel_p2, $"{nameof(deltaForce)}, {nameof(vel_p1)}, {nameof(acel_p2)}");
 
             return equivalentForce;
-        }
-
-        public double[] CreateMatrix_K_C_Y(NewmarkMethodInput input, double[] displacement, OperationResponseBase response)
-        {
-            double[] matrix_K_Y = this._arrayOperation.Multiply(input.Hardness, displacement);
-
-            if(matrix_K_Y.Length != bcTrue)
-            {
-                response.AddError("101", $"Size of matrix HardnessXDisplacement is incorrect: {matrix_K_Y.Length}. Correct size: {bcTrue}.");
-
-                return null;
-            }
-
-            double[] matrix_C_Vel = this._arrayOperation.Multiply(input.Damping, displacement);
-
-            if (matrix_C_Vel.Length != bcTrue)
-            {
-                response.AddError("102", $"Size of matrix DampingXVelocity is incorrect: {matrix_C_Vel.Length}. Correct size: {bcTrue}.");
-
-                return null;
-            }
-
-            double[] result = this._arrayOperation.Subtract(input.Force, this._arrayOperation.Sum(matrix_K_Y, matrix_C_Vel));
-
-            if (result.Length != bcTrue)
-            {
-                response.AddError("103", $"Size of matrix K_C_Y is incorrect: {result.Length}. Correct size: {bcTrue}.");
-
-                return null;
-            }
-
-            return result;
         }
     }
 }

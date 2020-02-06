@@ -50,7 +50,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
             beam.GeometricProperty.Area = this._arrayOperation.Create(area, request.BeamData.ElementCount);
 
-            beam.GeometricProperty.MomentInertia = this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
+            beam.GeometricProperty.MomentOfInertia = this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
 
             NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.MethodParameterData, beam, degreesFreedomMaximum);
 

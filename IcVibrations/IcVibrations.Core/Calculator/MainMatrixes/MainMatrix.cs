@@ -233,7 +233,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             for (uint n = 0; n < elementCount; n++)
             {
 
-                double[,] elementHardness = this.CalculateBeamElementHardness(beam.GeometricProperty.MomentInertia[n], beam.Material.YoungModulus, length);
+                double[,] elementHardness = this.CalculateBeamElementHardness(beam.GeometricProperty.MomentOfInertia[n], beam.Material.YoungModulus, length);
 
                 p = nodeCoordinates[n, 0];
                 q = nodeCoordinates[n, 1];
@@ -275,12 +275,12 @@ namespace IcVibrations.Calculator.MainMatrixes
 
             for (uint n = 0; n < elementCount; n++)
             {
-                double[,] beamElementHardness = this.CalculateBeamElementHardness(beam.GeometricProperty.MomentInertia[n], beam.Material.YoungModulus, length);
+                double[,] beamElementHardness = this.CalculateBeamElementHardness(beam.GeometricProperty.MomentOfInertia[n], beam.Material.YoungModulus, length);
                 double[,] piezoelectricElementHardness = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
                 if (piezoelectric.ElementsWithPiezoelectric.Contains(n - 1))
                 {
-                    piezoelectricElementHardness = this.CalculatePiezoelectricElementHardness(piezoelectric.ElasticityConstant, piezoelectric.GeometricProperty.MomentInertia[n], length);
+                    piezoelectricElementHardness = this.CalculatePiezoelectricElementHardness(piezoelectric.ElasticityConstant, piezoelectric.GeometricProperty.MomentOfInertia[n], length);
                 }
 
                 p = nodeCoordinates[n, 0];
