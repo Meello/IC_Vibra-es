@@ -284,40 +284,37 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                     if (time == 0)
                     {
-                        double[,] massInverse;
-                        double[] matrix_K_Y;
-                        double[] matrix_C_Vel;
+                        //double[,] massInverse;
+                        //double[] matrix_K_Y;
+                        //double[] matrix_C_Vel;
 
-                        var massInverseTask = this._arrayOperation.InverseMatrix(input.Mass, bcTrue, nameof(massInverse));
-                        var matrix_K_YTask = this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y));
-                        var matrix_C_VelTask = this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel));
+                        //var massInverseTask = this._arrayOperation.InverseMatrix(input.Mass, bcTrue, nameof(massInverse));
+                        //var matrix_K_YTask = this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y));
+                        //var matrix_C_VelTask = this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel));
 
-                        massInverse = await massInverseTask;
-                        matrix_K_Y = await matrix_K_YTask;
-                        matrix_C_Vel = await matrix_C_VelTask;
+                        //massInverse = await massInverseTask;
+                        //matrix_K_Y = await matrix_K_YTask;
+                        //matrix_C_Vel = await matrix_C_VelTask;
 
-                        double[] subtractionResult = await this._arrayOperation.Subtract(input.Force, matrix_K_Y, matrix_C_Vel, $"{nameof(input.Force)}, {nameof(matrix_K_Y)}, {nameof(matrix_C_Vel)}");
+                        //double[] subtractionResult = await this._arrayOperation.Subtract(input.Force, matrix_K_Y, matrix_C_Vel, $"{nameof(input.Force)}, {nameof(matrix_K_Y)}, {nameof(matrix_C_Vel)}");
 
-                        acel = await this._arrayOperation.Multiply(massInverse, subtractionResult, $"{nameof(massInverse)}, {nameof(subtractionResult)}");
+                        //acel = await this._arrayOperation.Multiply(massInverse, subtractionResult, $"{nameof(massInverse)}, {nameof(subtractionResult)}");
 
                         ICollection<Task<object>> taskCollection = new List<Task<object>>();
 
-                        for (i = 1; i <= 3; i++)
+                        Task<object> messageTask = Task.Run(async () =>
                         {
-                            //Task<object> messageTask = Task.Run(async () =>
-                            //{
-                            //    try
-                            //    {
-                            //        return await this.PrepareMessageToFileGenerationAsync(request).ConfigureAwait(false);
-                            //    }
-                            //    finally
-                            //    {
-                            //        concurrencySemaphore.Release();
-                            //    }
-                            //});
+                            try
+                            {
+                                return await this.PrepareMessageToFileGenerationAsync(request).ConfigureAwait(false);
+                            }
+                            finally
+                            {
+                                concurrencySemaphore.Release();
+                            }
+                        });
 
                             taskCollection.Add(messageTask);
-                        }
 
                         await Task.WhenAll(taskCollection).ConfigureAwait(false);
 
