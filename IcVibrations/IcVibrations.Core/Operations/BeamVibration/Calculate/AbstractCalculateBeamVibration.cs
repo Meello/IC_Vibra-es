@@ -1,18 +1,12 @@
-﻿using IcVibrations.Core.Calculator;
-using IcVibrations.Core.DTO;
+﻿using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Models;
-using IcVibrations.Core.Operations;
 using IcVibrations.Core.Validators.Beam;
 using IcVibrations.Core.Validators.MethodParameters;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.Methods.NewmarkMethod;
-using IcVibrations.Models.Beam;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations.BeamVibration.Calculate
@@ -20,7 +14,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
     public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> 
         where T : BeamRequestData
     {
-        protected abstract NewmarkMethodInput CalculateParameters(CalculateBeamRequest<T> request, uint degressFreedomMaximum, OperationResponseBase response);
+        protected abstract Task<NewmarkMethodInput> CalculateParameters(CalculateBeamRequest<T> request, uint degressFreedomMaximum, OperationResponseBase response);
 
         //protected abstract string AnalysisExplanation();
 
@@ -47,7 +41,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
             uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
-            NewmarkMethodInput input = this.CalculateParameters(request, degreesFreedomMaximum, response);
+            NewmarkMethodInput input = await this.CalculateParameters(request, degreesFreedomMaximum, response);
 
             NewmarkMethodOutput output = await this._newmarkMethod.CreateOutput(input, response);
 

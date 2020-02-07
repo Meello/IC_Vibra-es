@@ -79,12 +79,24 @@ namespace IcVibrations.Core.DTO
         /// </summary>
         public double NumberOfPeriodDivisions { get; set; }
 
+        /// <summary>
+        /// Angular frequency used in the analysis.
+        /// </summary>
         public double AngularFrequency { get; set; }
 
+        /// <summary>
+        /// Initial angular frequency in the analysis.
+        /// </summary>
         public double InitialAngularFrequency { get; set; }
 
-        public double AngularFrequencyDivision { get; set; }
+        /// <summary>
+        /// Delta angular frequency.
+        /// </summary>
+        public double DeltaAngularFrequency { get; set; }
 
+        /// <summary>
+        /// Final angular frequency in the analysis.
+        /// </summary>
         public double FinalAngularFrequency { get; set; }
     }
 }

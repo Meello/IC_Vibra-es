@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Core.Operations.PiezoelectricVibration.Calculate;
 using IcVibrations.DataContracts.Piezoelectric.Calculate;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace IC_Vibrations.Controllers
 {
@@ -8,11 +9,11 @@ namespace IC_Vibrations.Controllers
     public class PiezoelectricController : ControllerBase
     {
         [HttpPost]
-        public ActionResult<CalculatePiezoelectricResponse> Calculate(
+        public async Task<ActionResult<CalculatePiezoelectricResponse>> Calculate(
             [FromServices] ICalculatePiezoelectricVibration calculatePiezoelectricVibration,
             [FromBody] CalculatePiezoelectricRequest request)
         {
-            CalculatePiezoelectricResponse response = calculatePiezoelectricVibration.Process(request);
+            CalculatePiezoelectricResponse response = await calculatePiezoelectricVibration.Process(request);
 
             if (!response.Success)
             {

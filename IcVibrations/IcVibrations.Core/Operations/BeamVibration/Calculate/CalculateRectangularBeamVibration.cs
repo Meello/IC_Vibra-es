@@ -17,6 +17,7 @@ using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 {
@@ -41,7 +42,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             this._mappingResolver = mappingResolver;
         }
 
-        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<RectangularBeamRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
+        protected override async Task<NewmarkMethodInput> CalculateParameters(CalculateBeamRequest<RectangularBeamRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             RectangularBeam beam = this._mappingResolver.BuildFrom(request.BeamData);
 
@@ -50,11 +51,11 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 
             double momentInertia = this._geometricProperty.MomentInertia(request.BeamData.Height, request.BeamData.Width, request.BeamData.Thickness);
 
-            beam.GeometricProperty.Area = this._arrayOperation.Create(area, request.BeamData.ElementCount);
+            beam.GeometricProperty.Area = await this._arrayOperation.Create(area, request.BeamData.ElementCount);
 
-            beam.GeometricProperty.MomentOfInertia = this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
+            beam.GeometricProperty.MomentOfInertia = await this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
 
-            NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.MethodParameterData, beam, degreesFreedomMaximum);
+            NewmarkMethodInput input = await this._newmarkMethod.CreateInput(request.MethodParameterData, beam, degreesFreedomMaximum);
 
             return input;
         }

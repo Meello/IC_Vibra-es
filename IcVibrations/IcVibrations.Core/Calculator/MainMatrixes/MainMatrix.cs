@@ -5,6 +5,7 @@ using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Calculator.MainMatrixes
 {
@@ -18,7 +19,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             this._arrayOperation = arrayOperation;
         }
 
-        public double[,] CalculateElementMass(double area, double specificMass, double length)
+        public Task<double[,]> CalculateElementMass(double area, double specificMass, double length)
         {
             double[,] elementMass = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
@@ -41,10 +42,10 @@ namespace IcVibrations.Calculator.MainMatrixes
             elementMass[3, 2] = -22 * length * constant;
             elementMass[3, 3] = 4 * length * length * constant;
 
-            return elementMass;
+            return Task.FromResult(elementMass);
         }
 
-        public double[,] CalculateBeamElementHardness(double momentInertia, double youngModulus, double length)
+        public Task<double[,]> CalculateBeamElementHardness(double momentInertia, double youngModulus, double length)
         {
             double[,] elementHardness = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
@@ -67,10 +68,10 @@ namespace IcVibrations.Calculator.MainMatrixes
             elementHardness[3, 2] = -(6 * length * constant);
             elementHardness[3, 3] = 4 * Math.Pow(length, 2) * constant;
 
-            return elementHardness;
+            return Task.FromResult(elementHardness);
         }
 
-        public double[,] CalculatePiezoelectricElementHardness(double elasticityConstant, double momentInertia, double length)
+        public Task<double[,]> CalculatePiezoelectricElementHardness(double elasticityConstant, double momentInertia, double length)
         {
             double[,] elementHardness = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
@@ -93,10 +94,10 @@ namespace IcVibrations.Calculator.MainMatrixes
             elementHardness[3, 2] = -(6 * length * constant);
             elementHardness[3, 3] = 4 * Math.Pow(length, 2) * constant;
 
-            return elementHardness;
+            return Task.FromResult(elementHardness);
         }
 
-        public double[,] CalculatePiezoelectricElementElectromechanicalCoupling(RectangularPiezoelectric piezoelectric, double beamHeight)
+        public Task<double[,]> CalculatePiezoelectricElementElectromechanicalCoupling(RectangularPiezoelectric piezoelectric, double beamHeight)
         {
             double[,] electromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricElementMatrixSize];
 
@@ -111,10 +112,10 @@ namespace IcVibrations.Calculator.MainMatrixes
             electromechanicalCoupling[3, 0] = piezoelectric.ElementLength * constant;
             electromechanicalCoupling[3, 1] = -piezoelectric.ElementLength * constant;
 
-            return electromechanicalCoupling;
+            return Task.FromResult(electromechanicalCoupling);
         }
 
-        public double[,] CalculatePiezoelectricElementCapacitance(double area, double length, double heigth, double dielectricConstant)
+        public Task<double[,]> CalculatePiezoelectricElementCapacitance(double area, double length, double heigth, double dielectricConstant)
         {
             double[,] piezoelectricCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
 
@@ -125,14 +126,14 @@ namespace IcVibrations.Calculator.MainMatrixes
             piezoelectricCapacitance[1, 0] = -constant;
             piezoelectricCapacitance[1, 1] = constant;
 
-            return piezoelectricCapacitance;
+            return Task.FromResult(piezoelectricCapacitance);
         }
 
-        public double[,] CalculateMass(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
+        public async Task<double[,]> CalculateMass(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
         {
             uint elementCount = beam.ElementCount;
 
-            uint[,] nodeCoordinates = this.NodeCoordinates(elementCount);
+            uint[,] nodeCoordinates = await this.NodeCoordinates(elementCount);
 
             uint p, q, r, s;
 
@@ -142,12 +143,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 
             for (uint n = 0; n < elementCount; n++)
             {
-                double[,] beamElementMass = this.CalculateElementMass(beam.GeometricProperty.Area[n], beam.Material.SpecificMass, length);
                 double[,] piezoelectricElementMass = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
+                
+                double[,] beamElementMass = await this.CalculateElementMass(beam.GeometricProperty.Area[n], beam.Material.SpecificMass, length);
 
                 if (piezoelectric.ElementsWithPiezoelectric.Contains(n - 1))
                 {
-                    piezoelectricElementMass = this.CalculateElementMass(piezoelectric.GeometricProperty.Area[n], piezoelectric.SpecificMass, length);
+                    piezoelectricElementMass = await this.CalculateElementMass(piezoelectric.GeometricProperty.Area[n], piezoelectric.SpecificMass, length);
                 }
 
                 p = nodeCoordinates[n, 0];
@@ -176,11 +178,11 @@ namespace IcVibrations.Calculator.MainMatrixes
             return mass;
         }
 
-        public double[,] CalculateMass(Beam beam, uint degreesFreedomMaximum)
+        public async Task<double[,]> CalculateMass(Beam beam, uint degreesFreedomMaximum)
         {
             uint elementCount = beam.ElementCount;
 
-            uint[,] nodeCoordinates = this.NodeCoordinates(elementCount);
+            uint[,] nodeCoordinates = await this.NodeCoordinates(elementCount);
 
             uint p, q, r, s;
 
@@ -190,7 +192,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
             for (uint n = 0; n < elementCount; n++)
             {
-                double[,] elementMass = this.CalculateElementMass(beam.GeometricProperty.Area[n], beam.Material.SpecificMass, length);
+                double[,] elementMass = await this.CalculateElementMass(beam.GeometricProperty.Area[n], beam.Material.SpecificMass, length);
 
                 p = nodeCoordinates[n, 0];
                 q = nodeCoordinates[n, 1];
@@ -218,11 +220,11 @@ namespace IcVibrations.Calculator.MainMatrixes
             return mass;
         }
 
-        public double[,] CalculateBeamHardness(Beam beam, uint degreesFreedomMaximum)
+        public async Task<double[,]> CalculateBeamHardness(Beam beam, uint degreesFreedomMaximum)
         {
             uint elementCount = beam.ElementCount;
 
-            uint[,] nodeCoordinates = this.NodeCoordinates(elementCount);
+            uint[,] nodeCoordinates = await this.NodeCoordinates(elementCount);
 
             uint p, q, r, s;
 
@@ -232,8 +234,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
             for (uint n = 0; n < elementCount; n++)
             {
-
-                double[,] elementHardness = this.CalculateBeamElementHardness(beam.GeometricProperty.MomentOfInertia[n], beam.Material.YoungModulus, length);
+                double[,] elementHardness = await this.CalculateBeamElementHardness(beam.GeometricProperty.MomentOfInertia[n], beam.Material.YoungModulus, length);
 
                 p = nodeCoordinates[n, 0];
                 q = nodeCoordinates[n, 1];
@@ -261,11 +262,11 @@ namespace IcVibrations.Calculator.MainMatrixes
             return hardness;
         }
 
-        public double[,] CalculateHardness(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
+        public async Task<double[,]> CalculateHardness(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
         {
             uint elementCount = beam.ElementCount;
 
-            uint[,] nodeCoordinates = this.NodeCoordinates(elementCount);
+            uint[,] nodeCoordinates = await this.NodeCoordinates(elementCount);
 
             uint p, q, r, s;
 
@@ -275,12 +276,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 
             for (uint n = 0; n < elementCount; n++)
             {
-                double[,] beamElementHardness = this.CalculateBeamElementHardness(beam.GeometricProperty.MomentOfInertia[n], beam.Material.YoungModulus, length);
                 double[,] piezoelectricElementHardness = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
 
+                double[,] beamElementHardness = await this.CalculateBeamElementHardness(beam.GeometricProperty.MomentOfInertia[n], beam.Material.YoungModulus, length);
+                
                 if (piezoelectric.ElementsWithPiezoelectric.Contains(n - 1))
                 {
-                    piezoelectricElementHardness = this.CalculatePiezoelectricElementHardness(piezoelectric.ElasticityConstant, piezoelectric.GeometricProperty.MomentOfInertia[n], length);
+                    piezoelectricElementHardness = await this.CalculatePiezoelectricElementHardness(piezoelectric.ElasticityConstant, piezoelectric.GeometricProperty.MomentOfInertia[n], length);
                 }
 
                 p = nodeCoordinates[n, 0];
@@ -309,7 +311,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             return hardness;
         }
 
-        public double[,] CalculatePiezoelectricElectromechanicalCoupling(double beamHeight, uint elementCount, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum)
+        public async Task<double[,]> CalculatePiezoelectricElectromechanicalCoupling(double beamHeight, uint elementCount, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum)
         {
             double[,] piezoelectricElectromechanicalCoupling = new double[degreesFreedomMaximum, elementCount + 1];
 
@@ -319,7 +321,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
                 if (piezoelectric.ElementsWithPiezoelectric.Contains(n - 1))
                 {
-                    piezoelectricElementElectromechanicalCoupling = this.CalculatePiezoelectricElementElectromechanicalCoupling(piezoelectric, beamHeight);
+                    piezoelectricElementElectromechanicalCoupling = await this.CalculatePiezoelectricElementElectromechanicalCoupling(piezoelectric, beamHeight);
                 }
 
                 for (uint i = 2 * n; i < 2 * n + Constants.DegreesFreedomElement; i++)
@@ -334,7 +336,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             return piezoelectricElectromechanicalCoupling;
         }
 
-        public double[,] CalculatePiezoelectricCapacitance(RectangularPiezoelectric piezoelectric, uint elementCount)
+        public async Task<double[,]> CalculatePiezoelectricCapacitance(RectangularPiezoelectric piezoelectric, uint elementCount)
         {
             double[,] piezoelectricCapacitance = new double[elementCount + 1, elementCount + 1];
 
@@ -342,7 +344,10 @@ namespace IcVibrations.Calculator.MainMatrixes
             {
                 double[,] piezoelectricElementCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
 
-                this.CalculatePiezoelectricElementCapacitance(piezoelectric.GeometricProperty.Area[n], piezoelectric.ElementLength, piezoelectric.Height, piezoelectric.DielectricConstant);
+                if(piezoelectric.ElementsWithPiezoelectric.Contains(n - 1))
+                {
+                    piezoelectricElementCapacitance = await this.CalculatePiezoelectricElementCapacitance(piezoelectric.GeometricProperty.Area[n], piezoelectric.ElementLength, piezoelectric.Height, piezoelectric.DielectricConstant);
+                }
 
                 for (uint i = n; i < n + Constants.PiezoelectricElementMatrixSize; i++)
                 {
@@ -356,7 +361,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             return piezoelectricCapacitance;
         }
 
-        public double[,] CalculateDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum)
+        public Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum)
         {
             double[,] damping = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 
@@ -368,10 +373,10 @@ namespace IcVibrations.Calculator.MainMatrixes
                 }
             }
 
-            return damping;
+            return Task.FromResult(damping);
         }
 
-        public bool[] CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum)
+        public Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum)
         {
             bool[] bondaryCondition = new bool[degreesFreedomMaximum];
 
@@ -391,10 +396,10 @@ namespace IcVibrations.Calculator.MainMatrixes
                 }
             }
 
-            return bondaryCondition;
+            return Task.FromResult(bondaryCondition);
         }
 
-        public double[,] CalculateEquivalentMass(double[,] mass, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
+        public Task<double[,]> CalculateEquivalentMass(double[,] mass, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
         {
             uint matrixSize = degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum;
             double[,] equivalentMass = new double[matrixSize, matrixSize];
@@ -414,14 +419,14 @@ namespace IcVibrations.Calculator.MainMatrixes
                 }
             }
 
-            return equivalentMass;
+            return Task.FromResult(equivalentMass);
         }
 
-        public double[,] CalculateEquivalentHardness(double[,] hardness, double[,] piezoelectricElectromechanicalCoupling, double[,] piezoelectricCapacitance, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
+        public async Task<double[,]> CalculateEquivalentHardness(double[,] hardness, double[,] piezoelectricElectromechanicalCoupling, double[,] piezoelectricCapacitance, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
         {
             uint matrixSize = degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum;
 
-            double[,] piezoelectricElectromechanicalCouplingTransposed = this._arrayOperation.TransposeMatrix(piezoelectricElectromechanicalCoupling);
+            double[,] piezoelectricElectromechanicalCouplingTransposed = await this._arrayOperation.TransposeMatrix(piezoelectricElectromechanicalCoupling);
 
             double[,] equivalentHardness = new double[matrixSize, matrixSize];
 
@@ -451,7 +456,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             return equivalentHardness;
         }
 
-        private uint[,] NodeCoordinates(uint elementCount)
+        private Task<uint[,]> NodeCoordinates(uint elementCount)
         {
             uint[,] nodeCoordinates = new uint[elementCount + 1, Constants.DegreesFreedomElement];
 
@@ -463,14 +468,14 @@ namespace IcVibrations.Calculator.MainMatrixes
                 }
             }
 
-            return nodeCoordinates;
+            return Task.FromResult(nodeCoordinates);
         }
 
-        public double[,] CalculateMassWithDva(double[,] beamMass, double[] dvaMasses, uint[] dvaNodePositions)
+        public async Task<double[,]> CalculateMassWithDva(double[,] beamMass, double[] dvaMasses, uint[] dvaNodePositions)
         {
             double[,] massWithDva = new double[beamMass.GetLength(0) + dvaMasses.Length, beamMass.GetLength(1) + dvaMasses.Length];
 
-            beamMass = this._arrayOperation.AddValue(beamMass, dvaMasses, dvaNodePositions);
+            beamMass = await this._arrayOperation.AddValue(beamMass, dvaMasses, dvaNodePositions, "Beam Mass");
 
             for (int i = 0; i < beamMass.GetLength(0); i++)
             {
@@ -488,11 +493,11 @@ namespace IcVibrations.Calculator.MainMatrixes
             return massWithDva;
         }
 
-        public double[,] CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions)
+        public async Task<double[,]> CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions)
         {
             double[,] hardnessWithDva = new double[beamHardness.GetLength(0) + dvaHardness.Length, beamHardness.GetLength(1) + dvaHardness.Length];
 
-            beamHardness = this._arrayOperation.AddValue(beamHardness, dvaHardness, dvaNodePositions);
+            beamHardness =  await this._arrayOperation.AddValue(beamHardness, dvaHardness, dvaNodePositions, "Beam Hardness");
 
             for (int i = 0; i < beamHardness.GetLength(0); i++)
             {

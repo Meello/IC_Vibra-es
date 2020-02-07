@@ -10,6 +10,9 @@ using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Methods.NewmarkMethod
@@ -43,12 +46,12 @@ namespace IcVibrations.Methods.NewmarkMethod
             this._geometricProperty = geometricProperty;
         }
 
-        public async Task<NewmarkMethodOutput> CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
+        public async Task<OperationResponseData> CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
-            if (dw != 0)
+            if (input.DeltaAngularFrequency != 0)
             {
-                angularFrequencyLoopCount = (int)((wf - wi) / dw) + 1;
+                angularFrequencyLoopCount = (int)((input.FinalAngularFrequency - input.InitialAngularFrequency) / input.DeltaAngularFrequency) + 1;
             }
             else
             {
@@ -56,14 +59,14 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             }
 
-            NewmarkMethodOutput output = new NewmarkMethodOutput
+            OperationResponseData output = new OperationResponseData
             {
-                IterationsResult = new List<IterationResult>()
+                AnalysisResults = new List<AnalysisResults>()
             };
 
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
-                w = wi + (i * dw);
+                input.AngularFrequency = input.InitialAngularFrequency + (i * input.DeltaAngularFrequency);
 
                 output.AngularFrequency = w;
 
@@ -125,44 +128,44 @@ namespace IcVibrations.Methods.NewmarkMethod
             piezoelectric.GeometricProperty.MomentOfInertia = await piezoelectricMomentOfInertiaTask;
 
             // Calculate basic matrix
-            double[,] mass = this._mainMatrix.CalculateMass(beam, piezoelectric, degreesFreedomMaximum);
+            double[,] mass = await this._mainMatrix.CalculateMass(beam, piezoelectric, degreesFreedomMaximum);
 
-            double[,] hardness = this._mainMatrix.CalculateHardness(beam, piezoelectric, degreesFreedomMaximum);
+            double[,] hardness = await this._mainMatrix.CalculateHardness(beam, piezoelectric, degreesFreedomMaximum);
 
-            double[,] piezoelectricElectromechanicalCoupling = this._mainMatrix.CalculatePiezoelectricElectromechanicalCoupling(beam.Height, beam.ElementCount, piezoelectric, degreesFreedomMaximum);
+            double[,] piezoelectricElectromechanicalCoupling = await this._mainMatrix.CalculatePiezoelectricElectromechanicalCoupling(beam.Height, beam.ElementCount, piezoelectric, degreesFreedomMaximum);
 
-            double[,] piezoelectricCapacitance = this._mainMatrix.CalculatePiezoelectricCapacitance(piezoelectric, beam.ElementCount);
+            double[,] piezoelectricCapacitance = await this._mainMatrix.CalculatePiezoelectricCapacitance(piezoelectric, beam.ElementCount);
 
             // Calculate input
-            input.Mass = this._mainMatrix.CalculateEquivalentMass(mass, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
+            input.Mass = await this._mainMatrix.CalculateEquivalentMass(mass, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
 
-            input.Hardness = this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
+            input.Hardness = await this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
 
-            input.Damping = this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
+            input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
 
             input.Force = beam.Forces;
 
             return input;
         }
 
-        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, BeamWithDva beam, uint degreesFreedomMaximum)
+        public async Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, BeamWithDva beam, uint degreesFreedomMaximum)
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
             // Calculate values
-            double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+            double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            double[,] hardness = this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
+            double[,] hardness = await this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
 
-            double[,] massWithDva = this._mainMatrix.CalculateMassWithDva(mass, beam.DvaMasses, beam.DvaNodePositions);
+            double[,] massWithDva = await this._mainMatrix.CalculateMassWithDva(mass, beam.DvaMasses, beam.DvaNodePositions);
 
-            double[,] hardnessWithDva = this._mainMatrix.CalculateBeamHardnessWithDva(hardness, beam.DvaHardnesses, beam.DvaNodePositions);
+            double[,] hardnessWithDva = await this._mainMatrix.CalculateBeamHardnessWithDva(hardness, beam.DvaHardnesses, beam.DvaNodePositions);
 
-            double[,] dampingWithDva = this._mainMatrix.CalculateDamping(massWithDva, hardnessWithDva, degreesFreedomMaximum);
+            double[,] dampingWithDva = await this._mainMatrix.CalculateDamping(massWithDva, hardnessWithDva, degreesFreedomMaximum);
 
             double[] forces = beam.Forces;
 
-            bool[] bondaryCondition = this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            bool[] bondaryCondition = await this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
 
             bcTrue = 0;
             for (int i = 0; i < degreesFreedomMaximum; i++)
@@ -197,20 +200,20 @@ namespace IcVibrations.Methods.NewmarkMethod
             return input;
         }
 
-        public NewmarkMethodInput CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum)
+        public async Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum)
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
             // Calculate values
-            double[,] mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+            double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            double[,] hardness = this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
+            double[,] hardness = await this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
 
-            double[,] damping = this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
+            double[,] damping = await this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
 
             double[] forces = beam.Forces;
 
-            bool[] bondaryCondition = this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            bool[] bondaryCondition = await this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
 
             bcTrue = 0;
             for (int i = 0; i < degreesFreedomMaximum; i++)
@@ -284,9 +287,9 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                     if (time == 0)
                     {
-                        //double[,] massInverse;
-                        //double[] matrix_K_Y;
-                        //double[] matrix_C_Vel;
+                        double[,] massInverse;
+                        double[] matrix_K_Y;
+                        double[] matrix_C_Vel;
 
                         //var massInverseTask = this._arrayOperation.InverseMatrix(input.Mass, bcTrue, nameof(massInverse));
                         //var matrix_K_YTask = this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y));
@@ -300,25 +303,27 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                         //acel = await this._arrayOperation.Multiply(massInverse, subtractionResult, $"{nameof(massInverse)}, {nameof(subtractionResult)}");
 
-                        ICollection<Task<object>> taskCollection = new List<Task<object>>();
-
-                        Task<object> messageTask = Task.Run(async () =>
+                        var massInverseTask = Task.Run(async () =>
                         {
-                            try
-                            {
-                                return await this.PrepareMessageToFileGenerationAsync(request).ConfigureAwait(false);
-                            }
-                            finally
-                            {
-                                concurrencySemaphore.Release();
-                            }
+                            return await this._arrayOperation.InverseMatrix(input.Mass, bcTrue, nameof(massInverse)).ConfigureAwait(false);
                         });
 
-                            taskCollection.Add(messageTask);
+                        var matrix_K_YTask = Task.Run(async () =>
+                        {
+                            return await this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y)).ConfigureAwait(false);
+                        });
 
-                        await Task.WhenAll(taskCollection).ConfigureAwait(false);
+                        var matrix_C_VelTask = Task.Run(async () =>
+                        {
+                            return await this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel)).ConfigureAwait(false);
+                        });
 
+                        await Task.WhenAll(massInverseTask, matrix_K_YTask, matrix_C_VelTask).ConfigureAwait(false);
 
+                        massInverse = massInverseTask.Result;
+                        matrix_K_Y = matrix_K_YTask.Result;
+                        matrix_C_Vel = matrix_C_VelTask.Result;
+                        
                         Parallel.For(0, bcTrue, iteration =>
                         {
                             acelAnt[iteration] = acel[iteration];

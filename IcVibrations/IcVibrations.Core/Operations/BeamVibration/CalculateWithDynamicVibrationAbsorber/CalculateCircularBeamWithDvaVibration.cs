@@ -10,6 +10,7 @@ using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using IcVibrations.Methods.NewmarkMethod;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations.BeamVibration.CalculateWithDynamicVibrationAbsorber
 {
@@ -34,7 +35,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.CalculateWithDynamicVibrati
             this._newmarkMethod = newmarkMethod;
         }
 
-        protected override NewmarkMethodInput CalculateParameters(CalculateBeamRequest<CircularBeamWithDvaRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
+        protected override async Task<NewmarkMethodInput> CalculateParameters(CalculateBeamRequest<CircularBeamWithDvaRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             CircularBeamWithDva beam = this._mappingResolver.BuildFrom(request.BeamData);
 
@@ -43,11 +44,11 @@ namespace IcVibrations.Core.Operations.BeamVibration.CalculateWithDynamicVibrati
 
             double momentInertia = this._geometricProperty.MomentInertia(request.BeamData.Diameter, request.BeamData.Thickness);
 
-            beam.GeometricProperty.Area = this._arrayOperation.Create(area, request.BeamData.ElementCount);
+            beam.GeometricProperty.Area = await this._arrayOperation.Create(area, request.BeamData.ElementCount);
 
-            beam.GeometricProperty.MomentOfInertia = this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
+            beam.GeometricProperty.MomentOfInertia = await this._arrayOperation.Create(momentInertia, request.BeamData.ElementCount);
 
-            NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.MethodParameterData, beam, degreesFreedomMaximum);
+            NewmarkMethodInput input = await this._newmarkMethod.CreateInput(request.MethodParameterData, beam, degreesFreedomMaximum);
 
             return input;
         }

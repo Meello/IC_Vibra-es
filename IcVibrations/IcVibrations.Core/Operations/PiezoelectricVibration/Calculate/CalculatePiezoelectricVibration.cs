@@ -13,6 +13,7 @@ using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
 {
@@ -35,7 +36,7 @@ namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
             this._mappingResolver = mappingResolver;
         }
 
-        protected override CalculatePiezoelectricResponse ProcessOperation(CalculatePiezoelectricRequest request)
+        protected override async Task<CalculatePiezoelectricResponse> ProcessOperation(CalculatePiezoelectricRequest request)
         {
             CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
 
@@ -45,16 +46,16 @@ namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
 
             uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
-            NewmarkMethodInput input = this._newmarkMethod.CreateInput(request.MethodParameterData, beam, piezoelectric, degreesFreedomMaximum);
+            NewmarkMethodInput input = await this._newmarkMethod.CreateInput(request.MethodParameterData, beam, piezoelectric, degreesFreedomMaximum);
 
-            NewmarkMethodOutput output = this._newmarkMethod.CreateOutput(input, response);
+            NewmarkMethodOutput output = await this._newmarkMethod.CreateOutput(input, response);
 
             response.Data = this._mappingResolver.BuildFrom(output);
 
             return response;
         }
 
-        protected override CalculatePiezoelectricResponse ValidateOperation(CalculatePiezoelectricRequest request)
+        protected override async Task<CalculatePiezoelectricResponse> ValidateOperation(CalculatePiezoelectricRequest request)
         {
             CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
 

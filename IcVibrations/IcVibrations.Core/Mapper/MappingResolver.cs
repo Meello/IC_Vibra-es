@@ -183,15 +183,7 @@ namespace IcVibrations.Core.Mapper
                 return null;
             }
 
-            return new OperationResponseData
-            {
-                AngularFrequency = output.AngularFrequency,
-                Time = output.IterationsTime,
-                YResult = output.YResult,
-                //VelResult = output.VelResult,
-                //AcelResult = output.AcelResult,
-                Force = output.Force
-            };
+            return new OperationResponseData();
         }
     }
 }
