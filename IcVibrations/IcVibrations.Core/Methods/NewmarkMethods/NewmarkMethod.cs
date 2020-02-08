@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Calculator.GeometricProperties;
 using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Classes;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
@@ -19,16 +20,6 @@ namespace IcVibrations.Methods.NewmarkMethod
 {
     public class NewmarkMethod : INewmarkMethod
     {
-        // Parameters to Newmark Method
-        private double a0, a1, a2, a3, a4, a5;
-        // Boundary condition true
-        private int bcTrue;
-        // Angular frequency 
-        private double wf, wi, dw, w;
-        // Time
-        private double dt, t0;
-        private int pD, pC;
-
         private readonly IMainMatrix _mainMatrix;
         private readonly IAuxiliarOperation _auxiliarMethod;
         private readonly IArrayOperation _arrayOperation;
@@ -46,7 +37,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             this._geometricProperty = geometricProperty;
         }
 
-        public async Task<OperationResponseData> CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
+        public async Task<NewmarkMethodOutput> CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
             if (input.DeltaAngularFrequency != 0)
@@ -59,36 +50,40 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             }
 
-            OperationResponseData output = new OperationResponseData
+            NewmarkMethodOutput output = new NewmarkMethodOutput
             {
-                AnalysisResults = new List<AnalysisResults>()
+                Analyses = new List<Analysis>()
             };
 
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
                 input.AngularFrequency = input.InitialAngularFrequency + (i * input.DeltaAngularFrequency);
 
-                output.AngularFrequency = w;
-
-                if (w != 0)
+                var analysisResult = new Analysis()
                 {
-                    dt = (Math.PI * 2 / w) / pD;
+                    AngularFrequency = input.AngularFrequency,
+                    Results = new List<Result>()
+                };
+
+                if (input.AngularFrequency != 0)
+                {
+                    input.DeltaTime = (Math.PI * 2 / input.AngularFrequency) / input.NumberOfPeriodDivisions;
                 }
                 else
                 {
-                    dt = (Math.PI * 2) / pD;
+                    input.DeltaTime = (Math.PI * 2) / input.NumberOfPeriodDivisions;
                 }
 
-                a0 = 1 / (Constants.Beta * Math.Pow(dt, 2));
-                a1 = Constants.Gama / (Constants.Beta * dt);
-                a2 = 1.0 / (Constants.Beta * dt);
+                input.input.A0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
+                input.A1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
+                a2 = 1.0 / (Constants.Beta * input.DeltaTime);
                 a3 = Constants.Gama / (Constants.Beta);
                 a4 = 1 / (2 * Constants.Beta);
-                a5 = dt * ((Constants.Gama / (2 * Constants.Beta)) - 1);
+                a5 = input.DeltaTime * ((Constants.Gama / (2 * Constants.Beta)) - 1);
 
                 try
                 {
-                    output.IterationsResult = await this.Solution(input);
+                    analysisResult.Results = await this.Solution(input);
                 }
                 catch (Exception ex)
                 {
@@ -167,29 +162,28 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             bool[] bondaryCondition = await this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
 
-            bcTrue = 0;
             for (int i = 0; i < degreesFreedomMaximum; i++)
             {
                 if (bondaryCondition[i] == true)
                 {
-                    bcTrue += 1;
+                    input.NumberOfTrueBoundaryConditions += 1;
                 }
             }
 
             // Output values
-            input.Mass = this._auxiliarMethod.AplyBondaryConditions(massWithDva, bondaryCondition, bcTrue);
+            input.Mass = this._auxiliarMethod.AplyBondaryConditions(massWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardnessWithDva, bondaryCondition, bcTrue);
+            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardnessWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Damping = this._auxiliarMethod.AplyBondaryConditions(dampingWithDva, bondaryCondition, bcTrue);
+            input.Damping = this._auxiliarMethod.AplyBondaryConditions(dampingWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, bcTrue);
+            input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            t0 = newmarkMethodParameter.InitialTime;
+            input.InitialTime = newmarkMethodParameter.InitialTime;
 
-            pD = newmarkMethodParameter.PeriodDivion;
+            input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivion;
 
-            pC = newmarkMethodParameter.PeriodCount;
+            input.Period = newmarkMethodParameter.PeriodCount;
 
             wi = newmarkMethodParameter.InitialAngularFrequency;
 
@@ -215,27 +209,27 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             bool[] bondaryCondition = await this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
 
-            bcTrue = 0;
+            input.NumberOfTrueBoundaryConditions = 0;
             for (int i = 0; i < degreesFreedomMaximum; i++)
             {
                 if (bondaryCondition[i] == true)
                 {
-                    bcTrue += 1;
+                    input.NumberOfTrueBoundaryConditions += 1;
                 }
             }
 
             // Output values
-            input.Mass = this._auxiliarMethod.AplyBondaryConditions(mass, bondaryCondition, bcTrue);
+            input.Mass = this._auxiliarMethod.AplyBondaryConditions(mass, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardness, bondaryCondition, bcTrue);
+            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardness, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Damping = this._auxiliarMethod.AplyBondaryConditions(damping, bondaryCondition, bcTrue);
+            input.Damping = this._auxiliarMethod.AplyBondaryConditions(damping, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, bcTrue);
+            input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            t0 = newmarkMethodParameter.InitialTime;
+            input.InitialTime = newmarkMethodParameter.InitialTime;
 
-            pD = newmarkMethodParameter.PeriodDivion;
+            input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivion;
 
             pC = newmarkMethodParameter.PeriodCount;
 
@@ -248,41 +242,41 @@ namespace IcVibrations.Methods.NewmarkMethod
             return input;
         }
 
-        public async Task<List<IterationResult>> Solution(NewmarkMethodInput input)
+        public async Task<List<Result>> Solution(NewmarkMethodInput input)
         {
-            List<IterationResult> results = new List<IterationResult>();
+            List<Result> results = new List<Result>();
 
             int i, jn, jp;
-            double time = t0;
+            double time = input.InitialTime;
 
-            double[] force = new double[bcTrue];
-            for (i = 0; i < bcTrue; i++)
+            double[] force = new double[input.NumberOfTrueBoundaryConditions];
+            for (i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
             {
                 force[i] = input.Force[i];
             }
 
-            double[] y = new double[bcTrue];
-            double[] yAnt = new double[bcTrue];
-            double[] deltaY = new double[bcTrue];
+            double[] y = new double[input.NumberOfTrueBoundaryConditions];
+            double[] yAnt = new double[input.NumberOfTrueBoundaryConditions];
+            double[] deltaY = new double[input.NumberOfTrueBoundaryConditions];
 
-            double[] vel = new double[bcTrue];
-            double[] velAnt = new double[bcTrue];
-            double[] deltaVel = new double[bcTrue];
+            double[] vel = new double[input.NumberOfTrueBoundaryConditions];
+            double[] velAnt = new double[input.NumberOfTrueBoundaryConditions];
+            double[] deltaVel = new double[input.NumberOfTrueBoundaryConditions];
 
-            double[] acel = new double[bcTrue];
-            double[] acelAnt = new double[bcTrue];
-            double[] deltaAcel = new double[bcTrue];
+            double[] acel = new double[input.NumberOfTrueBoundaryConditions];
+            double[] acelAnt = new double[input.NumberOfTrueBoundaryConditions];
+            double[] deltaAcel = new double[input.NumberOfTrueBoundaryConditions];
 
-            double[] forceAnt = new double[bcTrue];
+            double[] forceAnt = new double[input.NumberOfTrueBoundaryConditions];
 
             for (jp = 0; jp < pC; jp++)
             {
-                for (jn = 0; jn < pD; jn++)
+                for (jn = 0; jn < input.NumberOfPeriodDivisions; jn++)
                 {
-                    Parallel.For(0, bcTrue, iteration =>
+                    Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                     {
                         // Force can't initiate in 0?
-                        input.Force[iteration] = force[iteration] * Math.Cos(w * time);
+                        input.Force[iteration] = force[iteration] * Math.Cos(input.AngularFrequency * time);
                     });
 
                     if (time == 0)
@@ -291,7 +285,7 @@ namespace IcVibrations.Methods.NewmarkMethod
                         double[] matrix_K_Y;
                         double[] matrix_C_Vel;
 
-                        //var massInverseTask = this._arrayOperation.InverseMatrix(input.Mass, bcTrue, nameof(massInverse));
+                        //var massInverseTask = this._arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse));
                         //var matrix_K_YTask = this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y));
                         //var matrix_C_VelTask = this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel));
 
@@ -305,7 +299,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                         var massInverseTask = Task.Run(async () =>
                         {
-                            return await this._arrayOperation.InverseMatrix(input.Mass, bcTrue, nameof(massInverse)).ConfigureAwait(false);
+                            return await this._arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse)).ConfigureAwait(false);
                         });
 
                         var matrix_K_YTask = Task.Run(async () =>
@@ -324,7 +318,7 @@ namespace IcVibrations.Methods.NewmarkMethod
                         matrix_K_Y = matrix_K_YTask.Result;
                         matrix_C_Vel = matrix_C_VelTask.Result;
                         
-                        Parallel.For(0, bcTrue, iteration =>
+                        Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                         {
                             acelAnt[iteration] = acel[iteration];
                         });
@@ -341,10 +335,10 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                         deltaY = await this._arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
 
-                        Parallel.For(0, bcTrue, iteration =>
+                        Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                         {
-                            deltaVel[iteration] = a1 * deltaY[iteration] - a3 * velAnt[iteration] - a5 * acelAnt[iteration];
-                            deltaAcel[iteration] = a0 * deltaY[iteration] - a2 * velAnt[iteration] - a4 * acelAnt[iteration];
+                            deltaVel[iteration] = input.A1 * deltaY[iteration] - input.A3 * velAnt[iteration] - input.A2 * acelAnt[iteration];
+                            deltaAcel[iteration] = input.A0 * deltaY[iteration] - input.A2 * velAnt[iteration] - input.A4 * acelAnt[iteration];
 
                             y[iteration] = yAnt[iteration] + deltaY[iteration];
                             vel[iteration] = velAnt[iteration] + deltaVel[iteration];
@@ -354,7 +348,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                     if (jp >= 0)
                     {
-                        IterationResult iterationResult = new IterationResult
+                        Result iterationResult = new Result
                         {
                             Time = time,
                             Displacemens = y,
@@ -368,9 +362,9 @@ namespace IcVibrations.Methods.NewmarkMethod
                         // Escrever no arquivo.
                     }
 
-                    time += dt;
+                    time += input.DeltaTime;
 
-                    Parallel.For(0, bcTrue, iteration =>
+                    Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                     {
                         yAnt[iteration] = y[iteration];
                         velAnt[iteration] = vel[iteration];
@@ -385,13 +379,13 @@ namespace IcVibrations.Methods.NewmarkMethod
 
         private Task<double[,]> CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness)
         {
-            double[,] equivalentHardness = new double[bcTrue, bcTrue];
+            double[,] equivalentHardness = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
 
-            for (int i = 0; i < bcTrue; i++)
+            for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
             {
-                for (int j = 0; j < bcTrue; j++)
+                for (int j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
                 {
-                    equivalentHardness[i, j] = a0 * mass[i, j] + a1 * damping[i, j] + hardness[i, j];
+                    equivalentHardness[i, j] = input.A0 * mass[i, j] + input.A1 * damping[i, j] + hardness[i, j];
                 }
             }
 
@@ -400,11 +394,11 @@ namespace IcVibrations.Methods.NewmarkMethod
 
         private Task<double[,]> CalculateMatrixP1(double[,] mass, double[,] damping)
         {
-            double[,] p1 = new double[bcTrue, bcTrue];
+            double[,] p1 = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
 
-            for (int i = 0; i < bcTrue; i++)
+            for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
             {
-                for (int j = 0; j < bcTrue; j++)
+                for (int j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
                 {
                     p1[i, j] = a2 * mass[i, j] + a3 * damping[i, j];
                 }
@@ -415,11 +409,11 @@ namespace IcVibrations.Methods.NewmarkMethod
 
         private Task<double[,]> CalculateMatrixP2(double[,] mass, double[,] damping)
         {
-            double[,] p2 = new double[bcTrue, bcTrue];
+            double[,] p2 = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
 
-            for (int i = 0; i < bcTrue; i++)
+            for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
             {
-                for (int j = 0; j < bcTrue; j++)
+                for (int j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
                 {
                     p2[i, j] = a4 * mass[j, i] + a5 * damping[i, j];
                 }
