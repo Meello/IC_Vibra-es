@@ -1,0 +1,38 @@
+﻿namespace IcVibrations.Common.Classes
+{
+    /// <summary>
+    /// It represents the content of newmark method parameter.
+    /// </summary>
+    public class NewmarkMethodParameter
+    {
+        /// <summary>
+        /// Initial time of analysis.
+        /// </summary>
+        public double InitialTime { get; set; }
+
+        /// <summary>
+        /// Divisions on period.
+        /// </summary>
+        public uint PeriodDivion { get; set; }
+
+        /// <summary>
+        /// Number of periods.
+        /// </summary>
+        public uint NumberOfPeriods { get; set; }
+
+        /// <summary>
+        /// Initial angular frequency.
+        /// </summary>
+        public double InitialAngularFrequency { get; set; }
+
+        /// <summary>
+        /// Delta angular frequency.
+        /// </summary>
+        public double? DeltaAngularFrequency { get; set; }
+
+        /// <summary>
+        /// Final angular frequency.
+        /// </summary>
+        public double? FinalAngularFrequency { get; set; }
+    }
+}

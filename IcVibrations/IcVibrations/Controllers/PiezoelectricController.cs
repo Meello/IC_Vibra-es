@@ -1,5 +1,5 @@
 ﻿using IcVibrations.Core.Operations.PiezoelectricVibration.Calculate;
-using IcVibrations.DataContracts.Piezoelectric.Calculate;
+using IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibration;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

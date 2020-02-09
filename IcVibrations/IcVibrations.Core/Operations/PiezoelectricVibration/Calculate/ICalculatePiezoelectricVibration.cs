@@ -1,4 +1,4 @@
-﻿using IcVibrations.DataContracts.Piezoelectric.Calculate;
+﻿using IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibration;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -6,7 +6,6 @@ using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
-using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;

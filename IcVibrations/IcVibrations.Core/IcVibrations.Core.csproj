@@ -16,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Operations\BeamWithDva\" />
+    <Folder Include="Operations\BeamWithPiezoelectric\" />
+    <Folder Include="Operations\Profile\" />
     <Folder Include="Validators\Piezoelectric\Abstract\" />
   </ItemGroup>
 

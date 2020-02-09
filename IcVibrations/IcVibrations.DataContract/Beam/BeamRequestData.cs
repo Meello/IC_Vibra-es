@@ -1,37 +1,44 @@
-﻿using System;
+﻿using IcVibrations.Common;
+using IcVibrations.Common.Profiles;
 using System.Collections.Generic;
-using System.Text;
 
 namespace IcVibrations.DataContracts.Beam
 {
-    public class BeamRequestData
+    /// <summary>
+    /// It represents the 'data' content of beam request operation.
+    /// </summary>
+    /// <typeparam name="TProfile"></typeparam>
+    public class BeamRequestData<TProfile> 
+        where TProfile : Profile
     {
-        public uint ElementCount { get; set; }
+        /// <summary>
+        /// Number of elements in the beam.
+        /// </summary>
+        public uint NumberOfElements { get; set; }
 
+        /// <summary>
+        /// Beam material.
+        /// </summary>
         public string Material { get; set; }
 
-        public double Thickness { get; set; }
+        /// <summary>
+        /// beam fastenings.
+        /// </summary>
+        public List<string> Fastenings { get; set; }
 
-        public string FirstFastening { get; set; }
-
-        public string LastFastening { get; set; }
-
+        /// <summary>
+        /// Beam length.
+        /// </summary>
         public double Length { get; set; }
 
-        public double[] Forces { get; set; }
+        /// <summary>
+        /// Applied forces in the beam.
+        /// </summary>
+        public List<Force> Forces { get; set; }
 
-        public int[] ForceNodePositions { get; set; }
-    }
-
-    public class CircularBeamRequestData : BeamRequestData
-    {
-        public double Diameter { get; set; }
-    }
-
-    public class RectangularBeamRequestData : BeamRequestData
-    {
-        public double Height { get; set; }
-
-        public double Width { get; set; }
+        /// <summary>
+        /// Beam profile.
+        /// </summary>
+        public TProfile Profile { get; set; }
     }
 }

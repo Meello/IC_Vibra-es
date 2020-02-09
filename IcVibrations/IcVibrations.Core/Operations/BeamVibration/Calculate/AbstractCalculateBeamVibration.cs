@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations.BeamVibration.Calculate
 {
-    public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamRequest<T>, CalculateBeamResponse> 
+    public abstract class AbstractCalculateBeamVibration<T> : OperationBase<CalculateBeamVibrationRequest<T>, CalculateBeamVibrationResponse> 
         where T : BeamRequestData
     {
-        protected abstract Task<NewmarkMethodInput> CalculateParameters(CalculateBeamRequest<T> request, uint degressFreedomMaximum, OperationResponseBase response);
+        protected abstract Task<NewmarkMethodInput> CalculateParameters(CalculateBeamVibrationRequest<T> request, uint degressFreedomMaximum, OperationResponseBase response);
 
         //protected abstract string AnalysisExplanation();
 
@@ -35,9 +35,9 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             this._mappingResolver = mappingResolver;
         }
 
-        protected override async Task<CalculateBeamResponse> ProcessOperation(CalculateBeamRequest<T> request)
+        protected override async Task<CalculateBeamVibrationResponse> ProcessOperation(CalculateBeamVibrationRequest<T> request)
         {
-            CalculateBeamResponse response = new CalculateBeamResponse();
+            CalculateBeamVibrationResponse response = new CalculateBeamVibrationResponse();
 
             uint degreesFreedomMaximum = this.DegreesFreedomMaximum(request.BeamData.ElementCount);
 
@@ -50,9 +50,9 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
             return response;
         }
 
-        protected override async Task<CalculateBeamResponse> ValidateOperation(CalculateBeamRequest<T> request)
+        protected override async Task<CalculateBeamVibrationResponse> ValidateOperation(CalculateBeamVibrationRequest<T> request)
         {
-            CalculateBeamResponse response = new CalculateBeamResponse();
+            CalculateBeamVibrationResponse response = new CalculateBeamVibrationResponse();
 
             if(!this._methodParameterValidator.Execute(request.MethodParameterData, response))
             {

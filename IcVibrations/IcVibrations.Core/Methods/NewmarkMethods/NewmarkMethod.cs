@@ -183,7 +183,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivion;
 
-            input.Period = newmarkMethodParameter.PeriodCount;
+            input.Period = newmarkMethodParameter.NumberOfPeriods;
 
             wi = newmarkMethodParameter.InitialAngularFrequency;
 
@@ -231,7 +231,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivion;
 
-            pC = newmarkMethodParameter.PeriodCount;
+            pC = newmarkMethodParameter.NumberOfPeriods;
 
             wi = newmarkMethodParameter.InitialAngularFrequency;
 

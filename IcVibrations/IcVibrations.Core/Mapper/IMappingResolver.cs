@@ -4,7 +4,6 @@ using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
-using IcVibrations.DataContracts.Piezoelectric;
 using IcVibrations.Models.Beam;
 
 namespace IcVibrations.Core.Mapper

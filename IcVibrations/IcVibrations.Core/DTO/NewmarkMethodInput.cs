@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IcVibrations.Common.Classes;
 
 namespace IcVibrations.Core.DTO
 {
@@ -65,38 +63,18 @@ namespace IcVibrations.Core.DTO
         public int NumberOfTrueBoundaryConditions { get; set; }
         
         /// <summary>
-        /// Initial time.
-        /// </summary>
-        public double InitialTime { get; set; }
-
-        /// <summary>
         /// Delta time.
         /// </summary>
         public double DeltaTime { get; set; }
 
         /// <summary>
-        /// Number of division in the period.
-        /// </summary>
-        public double NumberOfPeriodDivisions { get; set; }
-
-        /// <summary>
         /// Angular frequency used in the analysis.
         /// </summary>
         public double AngularFrequency { get; set; }
-
+        
         /// <summary>
-        /// Initial angular frequency in the analysis.
+        /// Newmark method parameters.
         /// </summary>
-        public double InitialAngularFrequency { get; set; }
-
-        /// <summary>
-        /// Delta angular frequency.
-        /// </summary>
-        public double DeltaAngularFrequency { get; set; }
-
-        /// <summary>
-        /// Final angular frequency in the analysis.
-        /// </summary>
-        public double FinalAngularFrequency { get; set; }
+        public NewmarkMethodParameter NewmarkMethodParameter { get; set; }
     }
 }

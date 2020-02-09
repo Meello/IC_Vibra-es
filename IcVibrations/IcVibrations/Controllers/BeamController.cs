@@ -12,11 +12,11 @@ namespace IC_Vibrations.Controllers
     public class BeamController : ControllerBase
     {
         [HttpPost("rectangular")]
-        public async Task<ActionResult<CalculateBeamResponse>> Calculate(
+        public async Task<ActionResult<CalculateBeamVibrationResponse>> Calculate(
             [FromServices] AbstractCalculateBeamVibration<RectangularBeamRequestData> calculateRectangularBeamVibration, 
-            [FromBody] CalculateBeamRequest<RectangularBeamRequestData> request)
+            [FromBody] CalculateBeamVibrationRequest<RectangularBeamRequestData> request)
         {
-            CalculateBeamResponse response = await calculateRectangularBeamVibration.Process(request);
+            CalculateBeamVibrationResponse response = await calculateRectangularBeamVibration.Process(request);
 
             if (!response.Success)
             {
@@ -27,11 +27,11 @@ namespace IC_Vibrations.Controllers
         }
 
         [HttpPost("circular")]
-        public async Task<ActionResult<CalculateBeamResponse>> Calculate(
+        public async Task<ActionResult<CalculateBeamVibrationResponse>> Calculate(
             [FromServices] AbstractCalculateBeamVibration<CircularBeamRequestData> calculateCircularBeamVibration,
-            [FromBody] CalculateBeamRequest<CircularBeamRequestData> request)
+            [FromBody] CalculateBeamVibrationRequest<CircularBeamRequestData> request)
         {
-            CalculateBeamResponse response = await calculateCircularBeamVibration.Process(request);
+            CalculateBeamVibrationResponse response = await calculateCircularBeamVibration.Process(request);
 
             if (!response.Success)
             {
@@ -42,11 +42,11 @@ namespace IC_Vibrations.Controllers
         }
 
         [HttpPost("circular/dynamic-vibration-absorber")]
-        public async Task<ActionResult<CalculateBeamResponse>> Calculate(
+        public async Task<ActionResult<CalculateBeamVibrationResponse>> Calculate(
             [FromServices] AbstractCalculateBeamVibration<CircularBeamWithDvaRequestData> calculateCircularBeamWithDvaVibration,
-            [FromBody] CalculateBeamWithDvaRequest<CircularBeamWithDvaRequestData> request)
+            [FromBody] CalculateBeamWithDvaVibrationRequest<CircularBeamWithDvaRequestData> request)
         {
-            CalculateBeamResponse response = await calculateCircularBeamWithDvaVibration.Process(request);
+            CalculateBeamVibrationResponse response = await calculateCircularBeamWithDvaVibration.Process(request);
 
             if(!response.Success)
             {

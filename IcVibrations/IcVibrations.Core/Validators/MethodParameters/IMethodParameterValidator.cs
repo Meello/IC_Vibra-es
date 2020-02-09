@@ -1,4 +1,5 @@
-﻿using IcVibrations.DataContracts;
+﻿using IcVibrations.Common.Classes;
+using IcVibrations.DataContracts;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -22,12 +22,6 @@ namespace IcVibrations.Models.Beam
         public double[] Forces { get; set; }
 
         public double Thickness { get; set; }
-
-        //public double[,] Mass { get; set; }
-
-        //public double[,] Hardness { get; set; }
-
-        //public double[,] Damping { get; set; }
     }
 
     public class CircularBeam : Beam

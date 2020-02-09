@@ -35,7 +35,7 @@ namespace IcVibrations.Core.Operations.BeamVibration.CalculateWithDynamicVibrati
             this._newmarkMethod = newmarkMethod;
         }
 
-        protected override async Task<NewmarkMethodInput> CalculateParameters(CalculateBeamRequest<CircularBeamWithDvaRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
+        protected override async Task<NewmarkMethodInput> CalculateParameters(CalculateBeamVibrationRequest<CircularBeamWithDvaRequestData> request, uint degreesFreedomMaximum, OperationResponseBase response)
         {
             CircularBeamWithDva beam = this._mappingResolver.BuildFrom(request.BeamData);
 

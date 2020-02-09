@@ -1,4 +1,5 @@
-﻿using IcVibrations.Core.DTO;
+﻿using IcVibrations.Common.Classes;
+using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;

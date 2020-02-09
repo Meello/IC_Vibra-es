@@ -1,4 +1,5 @@
-﻿using IcVibrations.DataContracts;
+﻿using IcVibrations.Common.Classes;
+using IcVibrations.DataContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace IcVibrations.Core.Validators.MethodParameters
 
             this.ValidatePeriodDivision(methodParameters.PeriodDivion, response);
 
-            this.ValidatePeriodCount(methodParameters.PeriodCount, response);
+            this.ValidatePeriodCount(methodParameters.NumberOfPeriods, response);
 
             this.ValidateAngularFrequency(methodParameters.InitialAngularFrequency, methodParameters.DeltaAngularFrequency.Value, methodParameters.FinalAngularFrequency, response);
 
