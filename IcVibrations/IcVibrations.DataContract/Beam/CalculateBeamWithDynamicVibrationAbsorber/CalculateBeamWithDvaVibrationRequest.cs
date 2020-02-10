@@ -8,7 +8,7 @@ namespace IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsor
     /// It represents the request content of CalculateBeamWithDva operation.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class CalculateBeamWithDvaVibrationRequest<TProfile> : CalculateBeamVibrationRequest<TProfile>
+    public class CalculateBeamWithDvaVibrationRequest<TProfile> : CalculateBeamVibrationRequest<TProfile, BeamWithDvaRequestData<TProfile>>
         where TProfile : Profile
     {
         /// <summary>

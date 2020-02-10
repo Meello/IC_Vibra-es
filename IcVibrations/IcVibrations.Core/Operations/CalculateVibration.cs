@@ -5,6 +5,7 @@ using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts;
+using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
@@ -18,9 +19,10 @@ namespace IcVibrations.Core.Operations
     /// It's responsible to calculate the beam vibration at all contexts.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateVibration<TRequest, TProfile, TBeam> : OperationBase<TRequest, CalculateBeamVibrationResponse>, ICalculateVibration<TRequest, TProfile, TBeam>
+    public abstract class CalculateVibration<TRequest, TRequestData, TProfile, TBeam> : OperationBase<TRequest, CalculateBeamVibrationResponse>, ICalculateVibration<TRequest, TRequestData, TProfile, TBeam>
         where TProfile : Profile, new()
-        where TRequest : OperationRequestBase, ICalculateBeamVibrationRequest<TProfile>
+        where TRequestData : IBeamRequestData<TProfile>, new()
+        where TRequest : OperationRequestBase, ICalculateBeamVibrationRequest<TProfile, TRequestData>
         where TBeam : IBeam<TProfile>, new()
     {
         private readonly INewmarkMethod<TBeam, TProfile> _newmarkMethod;

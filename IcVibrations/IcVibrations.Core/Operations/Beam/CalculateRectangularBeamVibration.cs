@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
+using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
@@ -18,7 +19,7 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="profileBuilder"></param>
         /// <param name="auxiliarOperation"></param>
         public CalculateRectangularBeamVibration(
-            INewmarkMethod<Models.Beam.Beam<RectangularProfile>, RectangularProfile> newmarkMethod, 
+            INewmarkMethod<Beam<RectangularProfile>, RectangularProfile> newmarkMethod, 
             IMappingResolver mappingResolver, 
             IProfileValidator<RectangularProfile> profileValidator, 
             IProfileMapper<RectangularProfile> profileBuilder, 

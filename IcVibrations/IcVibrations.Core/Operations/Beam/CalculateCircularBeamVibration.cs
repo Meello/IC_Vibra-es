@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
+using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
@@ -18,7 +19,7 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="profileBuilder"></param>
         /// <param name="auxiliarOperation"></param>
         public CalculateCircularBeamVibration(
-            INewmarkMethod<Models.Beam.Beam<CircularProfile>, CircularProfile> newmarkMethod, 
+            INewmarkMethod<Beam<CircularProfile>, CircularProfile> newmarkMethod, 
             IMappingResolver mappingResolver, 
             IProfileValidator<CircularProfile> profileValidator, 
             IProfileMapper<CircularProfile> profileBuilder, 

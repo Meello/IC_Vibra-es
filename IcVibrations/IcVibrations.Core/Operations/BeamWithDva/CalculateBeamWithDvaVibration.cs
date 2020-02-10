@@ -1,10 +1,8 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
-using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Validators.Profiles;
-using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
@@ -21,6 +19,14 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         where TProfile : Profile, new()
     {
         private readonly IProfileMapper<TProfile> _profileMapper;
+
+        public CalculateBeamWithDvaVibration(
+            INewmarkMethod<BeamWithDva<TProfile>, TProfile> newmarkMethod, 
+            IMappingResolver mappingResolver, 
+            IProfileValidator<TProfile> profileValidator, 
+            IAuxiliarOperation auxiliarOperation) : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
+        {
+        }
 
         /// <summary>
         /// Class construtor.
@@ -57,7 +63,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
                 Material = MaterialFactory.Create(request.BeamData.Material),
                 NumberOfElements = request.BeamData.NumberOfElements,
                 Profile = request.BeamData.Profile,
-                
+                DvaHardnesses = request.BeamData.Dvas
             };
         }
     }

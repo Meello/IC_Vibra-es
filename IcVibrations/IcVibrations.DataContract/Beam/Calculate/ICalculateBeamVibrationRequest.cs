@@ -7,10 +7,11 @@ namespace IcVibrations.DataContracts.Beam.Calculate
     /// It represents the request content of CalculateBeam operations.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public interface ICalculateBeamVibrationRequest<TProfile>
+    public interface ICalculateBeamVibrationRequest<TProfile, TRequestData>
         where TProfile : Profile
+        where TRequestData : IBeamRequestData<TProfile>
     {
-        BeamRequestData<TProfile> BeamData { get; set; }
+        TRequestData BeamData { get; set; }
 
         NewmarkMethodParameter MethodParameterData { get; set; }
     }
