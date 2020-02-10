@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IcVibrations.Common.Profiles
+﻿namespace IcVibrations.Common.Profiles
 {
     /// <summary>
     /// It represents the rectangular profile content of all operations with circular beam.

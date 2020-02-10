@@ -1,7 +1,7 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.DataContracts.Beam.Calculate;
 
-namespace IcVibrations.Core.Operations.Beam
+namespace IcVibrations.Core.Operations.BeamVibration
 {
     /// <summary>
     /// It's responsible to calculate the beam vibration at all contexts.

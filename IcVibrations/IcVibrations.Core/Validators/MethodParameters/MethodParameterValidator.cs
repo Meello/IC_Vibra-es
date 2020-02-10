@@ -13,7 +13,7 @@ namespace IcVibrations.Core.Validators.MethodParameters
         {
             this.ValidateInitialTime(methodParameters.InitialTime, response);
 
-            this.ValidatePeriodDivision(methodParameters.PeriodDivion, response);
+            this.ValidatePeriodDivision(methodParameters.PeriodDivision, response);
 
             this.ValidatePeriodCount(methodParameters.NumberOfPeriods, response);
 

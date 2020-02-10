@@ -3,7 +3,7 @@
     /// <summary>
     /// It represents the circular profile content of all operations with circular beam.
     /// </summary>
-    public class CircularProfile
+    public class CircularProfile : Profile
     {
         /// <summary>
         /// Profile diameter.

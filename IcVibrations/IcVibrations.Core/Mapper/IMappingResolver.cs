@@ -1,8 +1,10 @@
-﻿using IcVibrations.Core.DTO;
+﻿using IcVibrations.Common.Profiles;
+using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
+using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using IcVibrations.Models.Beam;
 
@@ -18,6 +20,6 @@ namespace IcVibrations.Core.Mapper
 
         RectangularPiezoelectric BuildFrom(PiezoelectricRequestData piezoelectricRequestData);
 
-        OperationResponseData BuildFrom(NewmarkMethodOutput output);
+        OperationResponseData BuildFrom(NewmarkMethodOutput output, string author, string analysisExplanation);
     }
 }

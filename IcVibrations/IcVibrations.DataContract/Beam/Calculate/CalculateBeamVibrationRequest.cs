@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
+using System;
 
 namespace IcVibrations.DataContracts.Beam.Calculate
 {
@@ -16,8 +17,8 @@ namespace IcVibrations.DataContracts.Beam.Calculate
             MethodParameterData = methodParameterData;
         }
 
-        public BeamRequestData<TProfile> BeamData { get; }
+        public BeamRequestData<TProfile> BeamData { get; set; }
 
-        public NewmarkMethodParameter MethodParameterData { get; }
+        public NewmarkMethodParameter MethodParameterData { get; set; }
     }
 }

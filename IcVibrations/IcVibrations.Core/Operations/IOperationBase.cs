@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IcVibrations.DataContracts;
 using System.Threading.Tasks;
-using IcVibrations.DataContracts;
 
 
 namespace IcVibrations.Core.Operations

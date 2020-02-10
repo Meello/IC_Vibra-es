@@ -40,9 +40,9 @@ namespace IcVibrations.Methods.NewmarkMethod
         public async Task<NewmarkMethodOutput> CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
-            if (input.DeltaAngularFrequency != 0)
+            if (input.Parameter.DeltaAngularFrequency != 0)
             {
-                angularFrequencyLoopCount = (int)((input.FinalAngularFrequency - input.InitialAngularFrequency) / input.DeltaAngularFrequency) + 1;
+                angularFrequencyLoopCount = (int)((input.Parameter.FinalAngularFrequency - input.Parameter.InitialAngularFrequency) / input.Parameter.DeltaAngularFrequency) + 1;
             }
             else
             {
@@ -57,7 +57,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
-                input.AngularFrequency = input.InitialAngularFrequency + (i * input.DeltaAngularFrequency);
+                input.AngularFrequency = input.Parameter.InitialAngularFrequency + (i * input.Parameter.DeltaAngularFrequency.Value);
 
                 var analysisResult = new Analysis()
                 {
@@ -67,19 +67,19 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                 if (input.AngularFrequency != 0)
                 {
-                    input.DeltaTime = (Math.PI * 2 / input.AngularFrequency) / input.NumberOfPeriodDivisions;
+                    input.DeltaTime = (Math.PI * 2 / input.AngularFrequency) / input.Parameter.PeriodDivision;
                 }
                 else
                 {
-                    input.DeltaTime = (Math.PI * 2) / input.NumberOfPeriodDivisions;
+                    input.DeltaTime = (Math.PI * 2) / input.Parameter.PeriodDivision;
                 }
 
-                input.input.A0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
+                input.A0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
                 input.A1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
-                a2 = 1.0 / (Constants.Beta * input.DeltaTime);
-                a3 = Constants.Gama / (Constants.Beta);
-                a4 = 1 / (2 * Constants.Beta);
-                a5 = input.DeltaTime * ((Constants.Gama / (2 * Constants.Beta)) - 1);
+                input.A2 = 1.0 / (Constants.Beta * input.DeltaTime);
+                input.A3 = Constants.Gama / (Constants.Beta);
+                input.A4 = 1 / (2 * Constants.Beta);
+                input.A5 = input.DeltaTime * ((Constants.Gama / (2 * Constants.Beta)) - 1);
 
                 try
                 {
@@ -181,7 +181,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             input.InitialTime = newmarkMethodParameter.InitialTime;
 
-            input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivion;
+            input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivision;
 
             input.Period = newmarkMethodParameter.NumberOfPeriods;
 
@@ -229,7 +229,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             input.InitialTime = newmarkMethodParameter.InitialTime;
 
-            input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivion;
+            input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivision;
 
             pC = newmarkMethodParameter.NumberOfPeriods;
 
@@ -247,7 +247,7 @@ namespace IcVibrations.Methods.NewmarkMethod
             List<Result> results = new List<Result>();
 
             int i, jn, jp;
-            double time = input.InitialTime;
+            double time = input.Parameter.InitialTime;
 
             double[] force = new double[input.NumberOfTrueBoundaryConditions];
             for (i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
@@ -269,9 +269,9 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             double[] forceAnt = new double[input.NumberOfTrueBoundaryConditions];
 
-            for (jp = 0; jp < pC; jp++)
+            for (jp = 0; jp < input.Parameter.NumberOfPeriods; jp++)
             {
-                for (jn = 0; jn < input.NumberOfPeriodDivisions; jn++)
+                for (jn = 0; jn < input.Parameter.PeriodDivision; jn++)
                 {
                     Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                     {

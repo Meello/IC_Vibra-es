@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
 {
-    public class CalculatePiezoelectricVibration : OperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>, ICalculatePiezoelectricVibration
+    public class CalculatePiezoelectricVibration : OperationBase<CalculateBeamWithPiezoelectricRequest, CalculateBeamWithPiezoelectricVibrationResponse>, ICalculatePiezoelectricVibration
     {
         private readonly IMethodParameterValidator _methodParameterValidator;
         private readonly IBeamRequestValidator<RectangularBeamRequestData> _beamRequestValidator;
@@ -36,9 +36,9 @@ namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
             this._mappingResolver = mappingResolver;
         }
 
-        protected override async Task<CalculatePiezoelectricResponse> ProcessOperation(CalculatePiezoelectricRequest request)
+        protected override async Task<CalculateBeamWithPiezoelectricVibrationResponse> ProcessOperation(CalculateBeamWithPiezoelectricRequest request)
         {
-            CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
+            CalculateBeamWithPiezoelectricVibrationResponse response = new CalculateBeamWithPiezoelectricVibrationResponse();
 
             RectangularBeam beam = this._mappingResolver.BuildFrom(request.BeamData);
 
@@ -55,9 +55,9 @@ namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
             return response;
         }
 
-        protected override async Task<CalculatePiezoelectricResponse> ValidateOperation(CalculatePiezoelectricRequest request)
+        protected override async Task<CalculateBeamWithPiezoelectricVibrationResponse> ValidateOperation(CalculateBeamWithPiezoelectricRequest request)
         {
-            CalculatePiezoelectricResponse response = new CalculatePiezoelectricResponse();
+            CalculateBeamWithPiezoelectricVibrationResponse response = new CalculateBeamWithPiezoelectricVibrationResponse();
 
             if (!this._methodParameterValidator.Execute(request.MethodParameterData, response))
             {

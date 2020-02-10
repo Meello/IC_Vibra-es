@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.DataContracts.Beam.Calculate;
 
 namespace IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibration
 {
@@ -7,7 +8,7 @@ namespace IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibratio
     /// It represents the request content of CalculatePiezoelectric operations.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class CalculatePiezoelectricRequest<TProfile> : OperationRequestBase
+    public class CalculateBeamWithPiezoelectricRequest<TProfile> : CalculateBeamVibrationRequest<TProfile>
         where TProfile : Profile
     {
         /// <summary>
@@ -15,14 +16,8 @@ namespace IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibratio
         /// </summary>
         /// <param name="beamWithPiezoelectricData"></param>
         /// <param name="methodParameterData"></param>
-        public CalculatePiezoelectricRequest(PiezoelectricRequestData<TProfile> beamWithPiezoelectricData, NewmarkMethodParameter methodParameterData)
+        public CalculateBeamWithPiezoelectricRequest(PiezoelectricRequestData<TProfile> beamWithPiezoelectricData, NewmarkMethodParameter methodParameterData) : base(beamWithPiezoelectricData, methodParameterData)
         {
-            BeamWithPiezoelectricData = beamWithPiezoelectricData;
-            MethodParameterData = methodParameterData;
         }
-
-        public PiezoelectricRequestData<TProfile> BeamWithPiezoelectricData { get; }
-
-        public NewmarkMethodParameter MethodParameterData { get; }
     }
 }

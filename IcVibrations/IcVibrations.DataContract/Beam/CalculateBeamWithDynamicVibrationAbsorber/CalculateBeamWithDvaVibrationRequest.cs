@@ -8,7 +8,7 @@ namespace IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsor
     /// It represents the request content of CalculateBeamWithDva operation.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class CalculateBeamWithDvaVibrationRequest<TProfile> : OperationRequestBase
+    public class CalculateBeamWithDvaVibrationRequest<TProfile> : CalculateBeamVibrationRequest<TProfile>
         where TProfile : Profile
     {
         /// <summary>
@@ -16,14 +16,8 @@ namespace IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsor
         /// </summary>
         /// <param name="beamData"></param>
         /// <param name="methodParameterData"></param>
-        public CalculateBeamWithDvaVibrationRequest(BeamWithDvaRequestData<TProfile> beamWithDvaData, NewmarkMethodParameter methodParameterData)
+        public CalculateBeamWithDvaVibrationRequest(BeamWithDvaRequestData<TProfile> beamWithDvaData, NewmarkMethodParameter methodParameterData) : base(beamWithDvaData, methodParameterData)
         {
-            BeamWithDvaData = beamWithDvaData;
-            NewmarkMethodParameter = methodParameterData;
         }
-
-        public BeamWithDvaRequestData<TProfile> BeamWithDvaData { get; set; }
-
-        public NewmarkMethodParameter NewmarkMethodParameter { get; set; }
     }
 }

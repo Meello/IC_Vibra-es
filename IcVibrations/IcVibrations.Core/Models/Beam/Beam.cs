@@ -1,13 +1,11 @@
-﻿using IcVibrations.Models.Beam.Characteristics;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IcVibrations.Common.Profiles;
+using IcVibrations.Models.Beam.Characteristics;
 
 namespace IcVibrations.Models.Beam
 {
-    public abstract class Beam
+    public class Beam
     {
-        public uint ElementCount { get; set; }
+        public uint NumberOfElements { get; set; }
 
         public Material Material { get; set; }
 
@@ -20,19 +18,5 @@ namespace IcVibrations.Models.Beam
         public double Length { get; set; }
 
         public double[] Forces { get; set; }
-
-        public double Thickness { get; set; }
-    }
-
-    public class CircularBeam : Beam
-    {
-        public double Diameter { get; set; }
-    }
-
-    public class RectangularBeam : Beam
-    {
-        public double Height { get; set; }
-
-        public double Width { get; set; }
     }
 }

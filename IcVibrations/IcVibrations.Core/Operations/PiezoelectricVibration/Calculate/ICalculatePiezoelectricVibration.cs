@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IcVibrations.Core.Operations.PiezoelectricVibration.Calculate
 {
-    public interface ICalculatePiezoelectricVibration: IOperationBase<CalculatePiezoelectricRequest, CalculatePiezoelectricResponse>
+    public interface ICalculatePiezoelectricVibration: IOperationBase<CalculateBeamWithPiezoelectricRequest, CalculateBeamWithPiezoelectricVibrationResponse>
     {
     }
 }

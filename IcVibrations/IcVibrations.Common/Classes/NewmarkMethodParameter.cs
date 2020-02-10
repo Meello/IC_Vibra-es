@@ -13,7 +13,7 @@
         /// <summary>
         /// Divisions on period.
         /// </summary>
-        public uint PeriodDivion { get; set; }
+        public uint PeriodDivision { get; set; }
 
         /// <summary>
         /// Number of periods.

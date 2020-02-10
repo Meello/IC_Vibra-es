@@ -1,10 +1,12 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Profiles;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.Beam;
+using IcVibrations.DataContracts.Beam.Calculate;
 using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Models.Beam;
@@ -175,14 +177,19 @@ namespace IcVibrations.Core.Mapper
             };
         }
 
-        public OperationResponseData BuildFrom(NewmarkMethodOutput output)
+        public OperationResponseData BuildFrom(NewmarkMethodOutput output, string author, string analysisExplanation)
         {
-            if(output == null)
+            if(output == null || string.IsNullOrEmpty(author) || string.IsNullOrEmpty(analysisExplanation))
             {
                 return null;
             }
 
-            return new OperationResponseData();
+            return new OperationResponseData()
+            {
+                Author = author,
+                AnalysisExplanation = analysisExplanation,
+                AnalysisResults = output.Analyses
+            };
         }
     }
 }

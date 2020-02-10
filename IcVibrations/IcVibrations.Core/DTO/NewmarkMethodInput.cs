@@ -75,6 +75,6 @@ namespace IcVibrations.Core.DTO
         /// <summary>
         /// Newmark method parameters.
         /// </summary>
-        public NewmarkMethodParameter NewmarkMethodParameter { get; set; }
+        public NewmarkMethodParameter Parameter { get; set; }
     }
 }
