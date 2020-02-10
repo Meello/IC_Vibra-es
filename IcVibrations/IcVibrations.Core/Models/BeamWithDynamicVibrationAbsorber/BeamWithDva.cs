@@ -1,28 +1,23 @@
-﻿using IcVibrations.Models.Beam;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber
+﻿namespace IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber
 {
-    public class BeamWithDva : Beam
+    /// <summary>
+    /// It represents a beam with DVA
+    /// </summary>
+    public class BeamWithDva : Models.Beam.Beam
     {
+        /// <summary>
+        /// Mass of each DVA.
+        /// </summary>
         public double[] DvaMasses { get; set; }
 
+        /// <summary>
+        /// Hardness of each DVA.
+        /// </summary>
         public double[] DvaHardnesses { get; set; }
 
+        /// <summary>
+        /// Node position of each DVA.
+        /// </summary>
         public uint[] DvaNodePositions { get; set; }
-    }
-
-    public class CircularBeamWithDva : BeamWithDva
-    {
-        public double Diameter { get; set; }
-    }
-
-    public class RectangularBeamWithDva : BeamWithDva
-    {
-        public double Height { get; set; }
-
-        public double Width { get; set; }
     }
 }

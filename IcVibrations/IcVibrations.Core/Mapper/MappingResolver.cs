@@ -26,7 +26,7 @@ namespace IcVibrations.Core.Mapper
             {
                 case Fastenings.Fixed : return new Fixed();
                 case Fastenings.Pinned : return new Pinned();
-                case Fastenings.Simple: return new Simple();
+                case Fastenings.Simple: return new None();
             }
 
             throw new Exception();

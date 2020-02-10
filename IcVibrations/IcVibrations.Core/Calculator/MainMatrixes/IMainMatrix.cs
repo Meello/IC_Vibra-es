@@ -1,5 +1,5 @@
-﻿using IcVibrations.Core.Models.Piezoelectric;
-using IcVibrations.Models.Beam;
+﻿using IcVibrations.Core.Models.Beam;
+using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         Task<double[,]> CalculateMass(Beam beam, uint degreesFreedomMaximum);
 
-        Task<double[,]> CalculateMass(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum);
+        Task<double[,]> CalculateMass(Beam beam, BeamWithPiezoelectric piezoelectric, uint degreesFreedomMaximum);
 
         Task<double[,]> CalculateMassWithDva(double[,] beamMass, double[] dvaMasses, uint[] dvaNodePositions);
 
@@ -30,7 +30,7 @@ namespace IcVibrations.Calculator.MainMatrixes
 
         Task<double[,]> CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions);
 
-        Task<double[,]> CalculateHardness(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum);
+        Task<double[,]> CalculateHardness(Beam beam, BeamWithPiezoelectric piezoelectric, uint degreesFreedomMaximum);
 
         Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum);
         

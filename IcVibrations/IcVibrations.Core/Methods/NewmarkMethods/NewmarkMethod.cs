@@ -4,38 +4,54 @@ using IcVibrations.Common.Classes;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
+using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
-using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Models.Beam;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Methods.NewmarkMethod
 {
-    public class NewmarkMethod : INewmarkMethod
+    /// <summary>
+    /// It's responsible to execute the Newmark numerical integration method to calculate the vibration.
+    /// </summary>
+    /// <typeparam name="TBeam"></typeparam>
+    public abstract class NewmarkMethod<TBeam> : INewmarkMethod<TBeam>
+        where TBeam : AbstractBeam, new()
     {
         private readonly IMainMatrix _mainMatrix;
         private readonly IAuxiliarOperation _auxiliarMethod;
         private readonly IArrayOperation _arrayOperation;
-        private readonly IGeometricProperty _geometricProperty;
+        private readonly ICalculateGeometricProperty _geometricProperty;
 
+        /// <summary>
+        /// Class construtor.
+        /// </summary>
+        /// <param name="mainMatrix"></param>
+        /// <param name="auxiliarMethod"></param>
+        /// <param name="arrayOperation"></param>
+        /// <param name="geometricProperty"></param>
         public NewmarkMethod(
             IMainMatrix mainMatrix,
             IAuxiliarOperation auxiliarMethod,
             IArrayOperation arrayOperation,
-            IGeometricProperty geometricProperty)
+            ICalculateGeometricProperty geometricProperty)
         {
             this._mainMatrix = mainMatrix;
             this._auxiliarMethod = auxiliarMethod;
             this._arrayOperation = arrayOperation;
             this._geometricProperty = geometricProperty;
         }
+
+        /// <summary>
+        /// It's responsible to calculate the main matrixes to the Newmark numerical integration method.
+        /// </summary>
+        /// <param name="newmarkMethodParameter"></param>
+        /// <param name="beam"></param>
+        /// <returns></returns>
+        public abstract Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, TBeam beam);
 
         public async Task<NewmarkMethodOutput> CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
         {
@@ -96,153 +112,153 @@ namespace IcVibrations.Methods.NewmarkMethod
             return output;
         }
 
-        public async Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, RectangularBeam beam, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum)
-        {
-            NewmarkMethodInput input = new NewmarkMethodInput();
+        //public async Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, RectangularBeam beam, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum)
+        //{
+        //    NewmarkMethodInput input = new NewmarkMethodInput();
 
-            uint piezoelectricDegreesFreedomMaximum = beam.ElementCount + 1;
+        //    uint piezoelectricDegreesFreedomMaximum = beam.ElementCount + 1;
 
-            // Calculate geometric properties
-            double beamArea = this._geometricProperty.Area(beam.Height, beam.Width, beam.Thickness);
+        //    // Calculate geometric properties
+        //    double beamArea = this._geometricProperty.Area(beam.Height, beam.Width, beam.Thickness);
 
-            double beamMomentInertia = this._geometricProperty.MomentInertia(beam.Height, beam.Width, beam.Thickness);
+        //    double beamMomentInertia = this._geometricProperty.MomentInertia(beam.Height, beam.Width, beam.Thickness);
 
-            double piezoelectricArea = this._geometricProperty.Area(piezoelectric.Height, piezoelectric.Width, piezoelectric.Thickness);
+        //    double piezoelectricArea = this._geometricProperty.Area(piezoelectric.Height, piezoelectric.Width, piezoelectric.Thickness);
 
-            double piezoelectricMomentInertia = this._geometricProperty.MomentInertia(piezoelectric.Height, piezoelectric.Width, piezoelectric.Thickness);
+        //    double piezoelectricMomentInertia = this._geometricProperty.MomentInertia(piezoelectric.Height, piezoelectric.Width, piezoelectric.Thickness);
 
-            // Create geometric properties matrixes
-            var beamAreaTask = this._arrayOperation.Create(beamArea, beam.ElementCount);
-            var beamMomentOfInertiaTask = this._arrayOperation.Create(beamMomentInertia, beam.ElementCount);
-            var piezoelectricAreaTask = this._arrayOperation.Create(piezoelectricArea, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric, $"{nameof(piezoelectric)} {nameof(piezoelectric.GeometricProperty.Area)}");
-            var piezoelectricMomentOfInertiaTask = this._arrayOperation.Create(piezoelectricMomentInertia, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric, $"{nameof(piezoelectric)} {nameof(piezoelectric.GeometricProperty.MomentOfInertia)}");
+        //    // Create geometric properties matrixes
+        //    var beamAreaTask = this._arrayOperation.Create(beamArea, beam.ElementCount);
+        //    var beamMomentOfInertiaTask = this._arrayOperation.Create(beamMomentInertia, beam.ElementCount);
+        //    var piezoelectricAreaTask = this._arrayOperation.Create(piezoelectricArea, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric, $"{nameof(piezoelectric)} {nameof(piezoelectric.GeometricProperty.Area)}");
+        //    var piezoelectricMomentOfInertiaTask = this._arrayOperation.Create(piezoelectricMomentInertia, beam.ElementCount, piezoelectric.ElementsWithPiezoelectric, $"{nameof(piezoelectric)} {nameof(piezoelectric.GeometricProperty.MomentOfInertia)}");
 
-            beam.GeometricProperty.Area = await beamAreaTask;
-            beam.GeometricProperty.MomentOfInertia = await beamMomentOfInertiaTask;
-            piezoelectric.GeometricProperty.Area = await piezoelectricAreaTask;
-            piezoelectric.GeometricProperty.MomentOfInertia = await piezoelectricMomentOfInertiaTask;
+        //    beam.GeometricProperty.Area = await beamAreaTask;
+        //    beam.GeometricProperty.MomentOfInertia = await beamMomentOfInertiaTask;
+        //    piezoelectric.GeometricProperty.Area = await piezoelectricAreaTask;
+        //    piezoelectric.GeometricProperty.MomentOfInertia = await piezoelectricMomentOfInertiaTask;
 
-            // Calculate basic matrix
-            double[,] mass = await this._mainMatrix.CalculateMass(beam, piezoelectric, degreesFreedomMaximum);
+        //    // Calculate basic matrix
+        //    double[,] mass = await this._mainMatrix.CalculateMass(beam, piezoelectric, degreesFreedomMaximum);
 
-            double[,] hardness = await this._mainMatrix.CalculateHardness(beam, piezoelectric, degreesFreedomMaximum);
+        //    double[,] hardness = await this._mainMatrix.CalculateHardness(beam, piezoelectric, degreesFreedomMaximum);
 
-            double[,] piezoelectricElectromechanicalCoupling = await this._mainMatrix.CalculatePiezoelectricElectromechanicalCoupling(beam.Height, beam.ElementCount, piezoelectric, degreesFreedomMaximum);
+        //    double[,] piezoelectricElectromechanicalCoupling = await this._mainMatrix.CalculatePiezoelectricElectromechanicalCoupling(beam.Height, beam.ElementCount, piezoelectric, degreesFreedomMaximum);
 
-            double[,] piezoelectricCapacitance = await this._mainMatrix.CalculatePiezoelectricCapacitance(piezoelectric, beam.ElementCount);
+        //    double[,] piezoelectricCapacitance = await this._mainMatrix.CalculatePiezoelectricCapacitance(piezoelectric, beam.ElementCount);
 
-            // Calculate input
-            input.Mass = await this._mainMatrix.CalculateEquivalentMass(mass, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
+        //    // Calculate input
+        //    input.Mass = await this._mainMatrix.CalculateEquivalentMass(mass, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
 
-            input.Hardness = await this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
+        //    input.Hardness = await this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
 
-            input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
+        //    input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
 
-            input.Force = beam.Forces;
+        //    input.Force = beam.Forces;
 
-            return input;
-        }
+        //    return input;
+        //}
 
-        public async Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, BeamWithDva beam, uint degreesFreedomMaximum)
-        {
-            NewmarkMethodInput input = new NewmarkMethodInput();
+        //public async Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, BeamWithDva beam, uint degreesFreedomMaximum)
+        //{
+        //    NewmarkMethodInput input = new NewmarkMethodInput();
 
-            // Calculate values
-            double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+        //    // Calculate values
+        //    double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            double[,] hardness = await this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
+        //    double[,] hardness = await this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
 
-            double[,] massWithDva = await this._mainMatrix.CalculateMassWithDva(mass, beam.DvaMasses, beam.DvaNodePositions);
+        //    double[,] massWithDva = await this._mainMatrix.CalculateMassWithDva(mass, beam.DvaMasses, beam.DvaNodePositions);
 
-            double[,] hardnessWithDva = await this._mainMatrix.CalculateBeamHardnessWithDva(hardness, beam.DvaHardnesses, beam.DvaNodePositions);
+        //    double[,] hardnessWithDva = await this._mainMatrix.CalculateBeamHardnessWithDva(hardness, beam.DvaHardnesses, beam.DvaNodePositions);
 
-            double[,] dampingWithDva = await this._mainMatrix.CalculateDamping(massWithDva, hardnessWithDva, degreesFreedomMaximum);
+        //    double[,] dampingWithDva = await this._mainMatrix.CalculateDamping(massWithDva, hardnessWithDva, degreesFreedomMaximum);
 
-            double[] forces = beam.Forces;
+        //    double[] forces = beam.Forces;
 
-            bool[] bondaryCondition = await this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+        //    bool[] bondaryCondition = await this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
 
-            for (int i = 0; i < degreesFreedomMaximum; i++)
-            {
-                if (bondaryCondition[i] == true)
-                {
-                    input.NumberOfTrueBoundaryConditions += 1;
-                }
-            }
+        //    for (int i = 0; i < degreesFreedomMaximum; i++)
+        //    {
+        //        if (bondaryCondition[i] == true)
+        //        {
+        //            input.NumberOfTrueBoundaryConditions += 1;
+        //        }
+        //    }
 
-            // Output values
-            input.Mass = this._auxiliarMethod.AplyBondaryConditions(massWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
+        //    // Output values
+        //    input.Mass = this._auxiliarMethod.AplyBondaryConditions(massWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardnessWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
+        //    input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardnessWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Damping = this._auxiliarMethod.AplyBondaryConditions(dampingWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
+        //    input.Damping = this._auxiliarMethod.AplyBondaryConditions(dampingWithDva, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, input.NumberOfTrueBoundaryConditions);
+        //    input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.InitialTime = newmarkMethodParameter.InitialTime;
+        //    input.InitialTime = newmarkMethodParameter.InitialTime;
 
-            input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivision;
+        //    input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivision;
 
-            input.Period = newmarkMethodParameter.NumberOfPeriods;
+        //    input.Period = newmarkMethodParameter.NumberOfPeriods;
 
-            wi = newmarkMethodParameter.InitialAngularFrequency;
+        //    wi = newmarkMethodParameter.InitialAngularFrequency;
 
-            dw = newmarkMethodParameter.DeltaAngularFrequency.Value;
+        //    dw = newmarkMethodParameter.DeltaAngularFrequency.Value;
 
-            wf = newmarkMethodParameter.FinalAngularFrequency;
+        //    wf = newmarkMethodParameter.FinalAngularFrequency;
 
-            return input;
-        }
+        //    return input;
+        //}
 
-        public async Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum)
-        {
-            NewmarkMethodInput input = new NewmarkMethodInput();
+        //public async Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum)
+        //{
+        //    NewmarkMethodInput input = new NewmarkMethodInput();
 
-            // Calculate values
-            double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+        //    // Calculate values
+        //    double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            double[,] hardness = await this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
+        //    double[,] hardness = await this._mainMatrix.CalculateBeamHardness(beam, degreesFreedomMaximum);
 
-            double[,] damping = await this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
+        //    double[,] damping = await this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
 
-            double[] forces = beam.Forces;
+        //    double[] forces = beam.Forces;
 
-            bool[] bondaryCondition = await this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+        //    bool[] bondaryCondition = await this._mainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
 
-            input.NumberOfTrueBoundaryConditions = 0;
-            for (int i = 0; i < degreesFreedomMaximum; i++)
-            {
-                if (bondaryCondition[i] == true)
-                {
-                    input.NumberOfTrueBoundaryConditions += 1;
-                }
-            }
+        //    input.NumberOfTrueBoundaryConditions = 0;
+        //    for (int i = 0; i < degreesFreedomMaximum; i++)
+        //    {
+        //        if (bondaryCondition[i] == true)
+        //        {
+        //            input.NumberOfTrueBoundaryConditions += 1;
+        //        }
+        //    }
 
-            // Output values
-            input.Mass = this._auxiliarMethod.AplyBondaryConditions(mass, bondaryCondition, input.NumberOfTrueBoundaryConditions);
+        //    // Output values
+        //    input.Mass = this._auxiliarMethod.AplyBondaryConditions(mass, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardness, bondaryCondition, input.NumberOfTrueBoundaryConditions);
+        //    input.Hardness = this._auxiliarMethod.AplyBondaryConditions(hardness, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Damping = this._auxiliarMethod.AplyBondaryConditions(damping, bondaryCondition, input.NumberOfTrueBoundaryConditions);
+        //    input.Damping = this._auxiliarMethod.AplyBondaryConditions(damping, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, input.NumberOfTrueBoundaryConditions);
+        //    input.Force = this._auxiliarMethod.AplyBondaryConditions(forces, bondaryCondition, input.NumberOfTrueBoundaryConditions);
 
-            input.InitialTime = newmarkMethodParameter.InitialTime;
+        //    input.InitialTime = newmarkMethodParameter.InitialTime;
 
-            input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivision;
+        //    input.NumberOfPeriodDivisions = newmarkMethodParameter.PeriodDivision;
 
-            pC = newmarkMethodParameter.NumberOfPeriods;
+        //    pC = newmarkMethodParameter.NumberOfPeriods;
 
-            wi = newmarkMethodParameter.InitialAngularFrequency;
+        //    wi = newmarkMethodParameter.InitialAngularFrequency;
 
-            dw = newmarkMethodParameter.DeltaAngularFrequency.Value;
+        //    dw = newmarkMethodParameter.DeltaAngularFrequency.Value;
 
-            wf = newmarkMethodParameter.FinalAngularFrequency;
+        //    wf = newmarkMethodParameter.FinalAngularFrequency;
 
-            return input;
-        }
+        //    return input;
+        //}
 
-        public async Task<List<Result>> Solution(NewmarkMethodInput input)
+        private async Task<List<Result>> Solution(NewmarkMethodInput input)
         {
             List<Result> results = new List<Result>();
 

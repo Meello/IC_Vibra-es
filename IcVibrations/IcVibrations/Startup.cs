@@ -40,7 +40,7 @@ namespace IcVibrations
         {
             // Calculator
             services.AddScoped<IArrayOperation, ArrayOperation>();
-            services.AddScoped<IGeometricProperty, GeometricProperty>();
+            services.AddScoped<ICalculateGeometricProperty, CalculateGeometricProperty>();
             services.AddScoped<IMainMatrix, MainMatrix>();
             
             // Mapper

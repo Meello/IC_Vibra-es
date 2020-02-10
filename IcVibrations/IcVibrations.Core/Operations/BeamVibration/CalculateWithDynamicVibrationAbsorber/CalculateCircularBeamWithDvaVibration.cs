@@ -17,13 +17,13 @@ namespace IcVibrations.Core.Operations.BeamVibration.CalculateWithDynamicVibrati
     public class CalculateCircularBeamWithDvaVibration : AbstractCalculateBeamVibration<CircularBeamWithDvaRequestData>
     {
         private readonly IArrayOperation _arrayOperation;
-        private readonly IGeometricProperty _geometricProperty;
+        private readonly ICalculateGeometricProperty _geometricProperty;
         private readonly IMappingResolver _mappingResolver;
         private readonly INewmarkMethod _newmarkMethod;
 
         public CalculateCircularBeamWithDvaVibration(
             IArrayOperation arrayOperation,
-            IGeometricProperty geometricProperty,
+            ICalculateGeometricProperty geometricProperty,
             IBeamRequestValidator<CircularBeamWithDvaRequestData> beamRequestValidator,
             IMethodParameterValidator methodParameterValidator,
             IMappingResolver mappingResolver,

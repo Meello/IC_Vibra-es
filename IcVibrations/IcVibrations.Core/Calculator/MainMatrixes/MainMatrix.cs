@@ -1,7 +1,7 @@
 ﻿using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Models;
+using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.Piezoelectric;
-using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Linq;
@@ -129,7 +129,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             return Task.FromResult(piezoelectricCapacitance);
         }
 
-        public async Task<double[,]> CalculateMass(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
+        public async Task<double[,]> CalculateMass(Beam beam, BeamWithPiezoelectric piezoelectric, uint degreesFreedomMaximum)
         {
             uint elementCount = beam.ElementCount;
 
@@ -262,7 +262,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             return hardness;
         }
 
-        public async Task<double[,]> CalculateHardness(Beam beam, Piezoelectric piezoelectric, uint degreesFreedomMaximum)
+        public async Task<double[,]> CalculateHardness(Beam beam, BeamWithPiezoelectric piezoelectric, uint degreesFreedomMaximum)
         {
             uint elementCount = beam.ElementCount;
 

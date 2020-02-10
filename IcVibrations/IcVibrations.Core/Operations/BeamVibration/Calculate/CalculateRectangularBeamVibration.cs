@@ -24,13 +24,13 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
     public class CalculateRectangularBeamVibration : AbstractCalculateBeamVibration<RectangularBeamRequestData>
     {
         private readonly IArrayOperation _arrayOperation;
-        private readonly IGeometricProperty _geometricProperty;
+        private readonly ICalculateGeometricProperty _geometricProperty;
         private readonly INewmarkMethod _newmarkMethod;
         private readonly IMappingResolver _mappingResolver;
 
         public CalculateRectangularBeamVibration(
             IArrayOperation arrayOperation,
-            IGeometricProperty geometricProperty,
+            ICalculateGeometricProperty geometricProperty,
             IBeamRequestValidator<RectangularBeamRequestData> beamRequestValidator,
             IMethodParameterValidator methodParameterValidator,
             INewmarkMethod newmarkMethod,

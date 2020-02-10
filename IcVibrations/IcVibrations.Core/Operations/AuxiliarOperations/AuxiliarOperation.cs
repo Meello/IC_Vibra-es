@@ -1,12 +1,4 @@
-﻿using IcVibrations.Core.DTO;
-using IcVibrations.DataContracts;
-using IcVibrations.DataContracts.Piezoelectric.Calculate;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-namespace IcVibrations.Methods.AuxiliarOperations
+﻿namespace IcVibrations.Methods.AuxiliarOperations
 {
     public class AuxiliarOperation : IAuxiliarOperation
     {

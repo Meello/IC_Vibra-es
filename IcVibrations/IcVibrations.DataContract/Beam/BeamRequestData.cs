@@ -22,9 +22,14 @@ namespace IcVibrations.DataContracts.Beam
         public string Material { get; set; }
 
         /// <summary>
-        /// beam fastenings.
+        /// Beam first fastening.
         /// </summary>
-        public List<string> Fastenings { get; set; }
+        public string FirstFastening { get; set; }
+
+        /// <summary>
+        /// Beam last fastening.
+        /// </summary>
+        public string LastFastening { get; set; }
 
         /// <summary>
         /// Beam length.

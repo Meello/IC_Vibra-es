@@ -1,13 +1,11 @@
 ﻿using IcVibrations.Common.Profiles;
-using IcVibrations.DataContracts.Beam.Calculate;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace IcVibrations.Core.Operations.BeamVibration
+namespace IcVibrations.Core.Operations.Beam
 {
-    /// <summary>
-    /// It's responsible to calculate the beam vibration at all contexts.
-    /// </summary>
-    /// <typeparam name="TProfile"></typeparam>
-    public interface ICalculateBeamVibration<TProfile> : IOperationBase<CalculateBeamVibrationRequest<TProfile>, CalculateBeamVibrationResponse>
+    public interface ICalculateBeamVibration<TProfile>
         where TProfile : Profile
     {
     }

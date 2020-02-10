@@ -1,20 +1,15 @@
 ﻿using IcVibrations.Common.Classes;
 using IcVibrations.Core.DTO;
-using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
-using IcVibrations.Core.Models.Piezoelectric;
+using IcVibrations.Core.Models.Beam;
 using IcVibrations.DataContracts;
-using IcVibrations.Models.Beam;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Methods.NewmarkMethod
 {
-    public interface INewmarkMethod
+    public interface INewmarkMethod<TBeam>
+        where TBeam : AbstractBeam, new()
     {
-        Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, BeamWithDva beam, uint degreesFreedomMaximum);
-
-        Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam beam, uint degreesFreedomMaximum);
-
-        Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, RectangularBeam beam, RectangularPiezoelectric piezoelectric, uint degreesFreedomMaximum);
+        Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, TBeam beam);
 
         Task<NewmarkMethodOutput> CreateOutput(NewmarkMethodInput input, OperationResponseBase response);
     }

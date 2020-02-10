@@ -22,13 +22,13 @@ namespace IcVibrations.Core.Operations.BeamVibration.Calculate
     public class CalculateCircularBeamVibration : AbstractCalculateBeamVibration<CircularBeamRequestData>
     {
         private readonly IArrayOperation _arrayOperation;
-        private readonly IGeometricProperty _geometricProperty;
+        private readonly ICalculateGeometricProperty _geometricProperty;
         private readonly IMappingResolver _mappingResolver;
         private readonly INewmarkMethod _newmarkMethod;
 
         public CalculateCircularBeamVibration(
             IArrayOperation arrayOperation,
-            IGeometricProperty geometricProperty,
+            ICalculateGeometricProperty geometricProperty,
             IBeamRequestValidator<CircularBeamRequestData> beamRequestValidator,
             IMethodParameterValidator methodParameterValidator,
             IMappingResolver mappingResolver,

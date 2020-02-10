@@ -14,5 +14,10 @@
         /// Profile width.
         /// </summary>
         public double Width { get; set; }
+
+        /// <summary>
+        /// Profile thickness.
+        /// </summary>
+        public double? Thickness { get; set; }
     }
 }

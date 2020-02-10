@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static IcVibrations.Common.Enum;
 
 namespace IcVibrations.Models.Beam.Characteristics
 {
@@ -41,5 +42,19 @@ namespace IcVibrations.Models.Beam.Characteristics
         //public override double YieldStrenght => 300e6;
 
         public override double SpecificMass => 2710;
+    }
+
+    public class MaterialFactory
+    {
+        public static Material Create(string material)
+        {
+            switch ((Materials)Enum.Parse(typeof(Materials), material, ignoreCase: true))
+            {
+                case Materials.Steel1020: return new Steel1020();
+                case Materials.Steel4130: return new Steel4130();
+            }
+
+            throw new Exception();
+        }
     }
 }
