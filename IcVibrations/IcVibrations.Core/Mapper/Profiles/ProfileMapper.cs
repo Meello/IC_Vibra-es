@@ -2,13 +2,13 @@
 using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Operations.Profiles
+namespace IcVibrations.Core.Mapper.Profiles
 {
     /// <summary>
     /// It's responsible to build the profile.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public interface IProfileBuilder<TProfile>
+    public abstract class ProfileMapper<TProfile> : IProfileMapper<TProfile>
         where TProfile : Profile
     {
         /// <summary>
@@ -17,6 +17,6 @@ namespace IcVibrations.Core.Operations.Profiles
         /// <param name="profile"></param>
         /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
-        Task<GeometricProperty> Execute(TProfile profile, uint degreesFreedomMaximum);
+        public abstract Task<GeometricProperty> Execute(TProfile profile, uint degreesFreedomMaximum);
     }
 }

@@ -6,47 +6,47 @@ namespace IcVibrations.Core.Models.Beam
     /// <summary>
     /// It represents the analyzed beam.
     /// </summary>
-    public class Beam<TProfile> : IBeam<TProfile>
+    public interface IBeam<TProfile>
         where TProfile : Profile, new()
     {
         /// <summary>
         /// Number of elements.
         /// </summary>
-        public uint NumberOfElements { get; set; }
+        uint NumberOfElements { get; set; }
 
         /// <summary>
         /// Material. Can be: Steel 1020, Steel 4130, Aluminium.
         /// </summary>
-        public Material Material { get; set; }
+        Material Material { get; set; }
 
         /// <summary>
         /// First fastening. Can be: fixed, pinned and simple.
         /// </summary>
-        public Fastening FirstFastening { get; set; }
+        Fastening FirstFastening { get; set; }
 
         /// <summary>
         /// Last fastening. Can be: fixed, pinned and simple.
         /// </summary>
-        public Fastening LastFastening { get; set; }
+        Fastening LastFastening { get; set; }
 
         /// <summary>
         /// Length.
         /// </summary>
-        public double Length { get; set; }
+        double Length { get; set; }
 
         /// <summary>
         /// Force matrix. Matrix size: degrees freedom maximum.
         /// </summary>
-        public double[] Forces { get; set; }
+        double[] Forces { get; set; }
 
         /// <summary>
         /// Geometric properties: Area and Moment of Inertia.
         /// </summary>
-        public GeometricProperty GeometricProperty { get; set; }
+        GeometricProperty GeometricProperty { get; set; }
 
         /// <summary>
         /// Beam profile.
         /// </summary>
-        public TProfile Profile { get; set; }
+        TProfile Profile { get; set; }
     }
 }

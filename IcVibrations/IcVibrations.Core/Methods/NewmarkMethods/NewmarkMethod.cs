@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Calculator.GeometricProperties;
 using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Classes;
+using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
@@ -18,8 +19,9 @@ namespace IcVibrations.Methods.NewmarkMethod
     /// It's responsible to execute the Newmark numerical integration method to calculate the vibration.
     /// </summary>
     /// <typeparam name="TBeam"></typeparam>
-    public abstract class NewmarkMethod<TBeam> : INewmarkMethod<TBeam>
-        where TBeam : AbstractBeam, new()
+    public abstract class NewmarkMethod<TBeam, TProfile> : INewmarkMethod<TBeam, TProfile>
+        where TProfile : Profile, new()
+        where TBeam : IBeam<TProfile>, new()
     {
         private readonly IMainMatrix _mainMatrix;
         private readonly IAuxiliarOperation _auxiliarMethod;

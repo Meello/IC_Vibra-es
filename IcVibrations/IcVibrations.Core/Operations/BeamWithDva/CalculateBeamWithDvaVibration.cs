@@ -2,20 +2,22 @@
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
+using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.Beam.Calculate;
+using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
 using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Operations.Beam
+namespace IcVibrations.Core.Operations.BeamWithDva
 {
     /// <summary>
-    /// It's responsible to calculate the vibration in a beam.
+    /// It's responsible to calculate the vibration in a beam with dynamic vibration absorber.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateBeamVibration<TProfile> : CalculateVibration<CalculateBeamVibrationRequest<TProfile>, TProfile, Beam<TProfile>>
+    public class CalculateBeamWithDvaVibration<TProfile> : CalculateVibration<CalculateBeamWithDvaVibrationRequest<TProfile>, TProfile, BeamWithDva<TProfile>>
         where TProfile : Profile, new()
     {
         private readonly IProfileMapper<TProfile> _profileMapper;
@@ -26,27 +28,26 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="newmarkMethod"></param>
         /// <param name="mappingResolver"></param>
         /// <param name="profileValidator"></param>
-        /// <param name="profileBuilder"></param>
         /// <param name="auxiliarOperation"></param>
-        public CalculateBeamVibration(
-            INewmarkMethod<Beam<TProfile>, TProfile> newmarkMethod,
-            IMappingResolver mappingResolver,
-            IProfileValidator<TProfile> profileValidator,
-            IProfileMapper<TProfile> profileMapper,
-            IAuxiliarOperation auxiliarOperation)
+        public CalculateBeamWithDvaVibration(
+            INewmarkMethod<BeamWithDva<TProfile>, TProfile> newmarkMethod, 
+            IMappingResolver mappingResolver, 
+            IProfileValidator<TProfile> profileValidator, 
+            IAuxiliarOperation auxiliarOperation,
+            IProfileMapper<TProfile> profileMapper) 
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._profileMapper = profileMapper;
         }
 
-        public async override Task<Beam<TProfile>> BuildBeam(CalculateBeamVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
+        public async override Task<BeamWithDva<TProfile>> BuildBeam(CalculateBeamWithDvaVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
         {
             if (request == null)
             {
                 return null;
             }
 
-            return new Beam<TProfile>()
+            return new BeamWithDva<TProfile>()
             {
                 FirstFastening = FasteningFactory.Create(request.BeamData.FirstFastening),
                 Forces = default,
@@ -54,7 +55,9 @@ namespace IcVibrations.Core.Operations.Beam
                 LastFastening = FasteningFactory.Create(request.BeamData.LastFastening),
                 Length = request.BeamData.Length,
                 Material = MaterialFactory.Create(request.BeamData.Material),
-                NumberOfElements = request.BeamData.NumberOfElements
+                NumberOfElements = request.BeamData.NumberOfElements,
+                Profile = request.BeamData.Profile,
+                
             };
         }
     }

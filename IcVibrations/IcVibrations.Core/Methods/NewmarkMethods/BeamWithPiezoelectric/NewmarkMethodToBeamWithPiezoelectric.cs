@@ -4,15 +4,15 @@ using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
-using IcVibrations.Core.Models.Beam;
+using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
 using System;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Methods.NewmarkMethods.Beam
+namespace IcVibrations.Core.Methods.NewmarkMethods.BeamWithPiezoelectric
 {
-    public abstract class NewmarkMethodToBeam<TProfile> : NewmarkMethod<Beam<TProfile>, TProfile>
+    public abstract class NewmarkMethodToBeamWithPiezoelectric<TProfile> : NewmarkMethod<BeamWithPiezoelectric<TProfile>, TProfile>
         where TProfile : Profile, new()
     {
         private readonly IMainMatrix _mainMatrix;
@@ -20,11 +20,11 @@ namespace IcVibrations.Core.Methods.NewmarkMethods.Beam
         private readonly IArrayOperation _arrayOperation;
         private readonly ICalculateGeometricProperty _geometricProperty;
 
-        public NewmarkMethodToBeam(
+        public NewmarkMethodToBeamWithPiezoelectric(
             IMainMatrix mainMatrix,
             IAuxiliarOperation auxiliarMethod,
-            IArrayOperation arrayOperation, 
-            ICalculateGeometricProperty geometricProperty) 
+            IArrayOperation arrayOperation,
+            ICalculateGeometricProperty geometricProperty)
             : base(mainMatrix, auxiliarMethod, arrayOperation, geometricProperty)
         {
             this._mainMatrix = mainMatrix;
@@ -33,9 +33,10 @@ namespace IcVibrations.Core.Methods.NewmarkMethods.Beam
             this._geometricProperty = geometricProperty;
         }
 
-        public override Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, Beam<TProfile> beam)
+        public override Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, BeamWithPiezoelectric<TProfile> beam)
         {
             throw new NotImplementedException();
         }
     }
 }
+

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IcVibrations.Core.Models
+﻿namespace IcVibrations.Core.Models
 {
     public class Constants
     {

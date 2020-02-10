@@ -1,4 +1,6 @@
-﻿namespace IcVibrations.Methods.AuxiliarOperations
+﻿using IcVibrations.Core.Models;
+
+namespace IcVibrations.Methods.AuxiliarOperations
 {
     public class AuxiliarOperation : IAuxiliarOperation
     {
@@ -69,6 +71,11 @@
             }
 
             return matrixCC;
+        }
+
+        public uint CalculateDegreesFreedomMaximum(uint numberOfElements)
+        {
+            return (numberOfElements + 1) * Constants.NodesPerElement;
         }
 
         //public void WriteInFile(string path, NewmarkMethodOutput output)

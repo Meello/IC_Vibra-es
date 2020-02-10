@@ -1,4 +1,5 @@
 ﻿using IcVibrations.Common.Classes;
+using IcVibrations.Common.Profiles;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.DataContracts;
@@ -6,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace IcVibrations.Methods.NewmarkMethod
 {
-    public interface INewmarkMethod<TBeam>
-        where TBeam : AbstractBeam, new()
+    public interface INewmarkMethod<TBeam, TProfile>
+        where TProfile : Profile, new()
+        where TBeam : IBeam<TProfile>, new()
     {
         Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, TBeam beam);
 
