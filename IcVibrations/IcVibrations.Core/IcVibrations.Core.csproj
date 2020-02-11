@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Operations\BeamWithPiezoelectric\" />
     <Folder Include="Validators\Piezoelectric\Abstract\" />
   </ItemGroup>
 

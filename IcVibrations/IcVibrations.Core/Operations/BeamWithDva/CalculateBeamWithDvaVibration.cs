@@ -1,4 +1,5 @@
-﻿using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Common;
+using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
@@ -15,18 +16,11 @@ namespace IcVibrations.Core.Operations.BeamWithDva
     /// It's responsible to calculate the vibration in a beam with dynamic vibration absorber.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class CalculateBeamWithDvaVibration<TProfile> : CalculateVibration<CalculateBeamWithDvaVibrationRequest<TProfile>, TProfile, BeamWithDva<TProfile>>
+    public abstract class CalculateBeamWithDvaVibration<TProfile> : CalculateVibration<CalculateBeamWithDvaVibrationRequest<TProfile>, BeamWithDvaRequestData<TProfile>, TProfile, BeamWithDva<TProfile>>
         where TProfile : Profile, new()
     {
+        private readonly IMappingResolver _mappingResolver;
         private readonly IProfileMapper<TProfile> _profileMapper;
-
-        public CalculateBeamWithDvaVibration(
-            INewmarkMethod<BeamWithDva<TProfile>, TProfile> newmarkMethod, 
-            IMappingResolver mappingResolver, 
-            IProfileValidator<TProfile> profileValidator, 
-            IAuxiliarOperation auxiliarOperation) : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
-        {
-        }
 
         /// <summary>
         /// Class construtor.
@@ -43,6 +37,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             IProfileMapper<TProfile> profileMapper) 
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
+            this._mappingResolver = mappingResolver;
             this._profileMapper = profileMapper;
         }
 
@@ -53,17 +48,33 @@ namespace IcVibrations.Core.Operations.BeamWithDva
                 return null;
             }
 
+            int i = 0;
+            
+            double[] dvaMasses = new double[request.BeamData.Dvas.Count];
+            double[] dvaHardnesses = new double[request.BeamData.Dvas.Count];
+            uint[] dvaNodePositions = new uint[request.BeamData.Dvas.Count];
+
+            foreach (DynamicVibrationAbsorber dva in request.BeamData.Dvas)
+            {
+                dvaMasses[i] = dva.DvaMass;
+                dvaHardnesses[i] = dva.DvaHardness;
+                dvaNodePositions[i] = dva.DvaNodePosition;
+                i += 1;
+            }
+
             return new BeamWithDva<TProfile>()
             {
                 FirstFastening = FasteningFactory.Create(request.BeamData.FirstFastening),
-                Forces = default,
+                Forces = await this._mappingResolver.BuildFrom(request.BeamData.Forces, degreesFreedomMaximum),
                 GeometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum),
                 LastFastening = FasteningFactory.Create(request.BeamData.LastFastening),
                 Length = request.BeamData.Length,
                 Material = MaterialFactory.Create(request.BeamData.Material),
                 NumberOfElements = request.BeamData.NumberOfElements,
                 Profile = request.BeamData.Profile,
-                DvaHardnesses = request.BeamData.Dvas
+                DvaHardnesses = dvaHardnesses,
+                DvaMasses = dvaMasses,
+                DvaNodePositions = dvaNodePositions
             };
         }
     }

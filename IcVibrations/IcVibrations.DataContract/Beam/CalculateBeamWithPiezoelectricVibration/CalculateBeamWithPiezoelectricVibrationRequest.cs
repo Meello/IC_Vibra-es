@@ -8,15 +8,15 @@ namespace IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibratio
     /// It represents the request content of CalculatePiezoelectric operations.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class CalculateBeamWithPiezoelectricRequest<TProfile> : CalculateBeamVibrationRequest<TProfile>
-        where TProfile : Profile
+    public class CalculateBeamWithPiezoelectricVibrationRequest<TProfile> : CalculateBeamVibrationRequest<TProfile, PiezoelectricRequestData<TProfile>>
+        where TProfile : Profile, new()
     {
         /// <summary>
         /// Class construtor.
         /// </summary>
         /// <param name="beamWithPiezoelectricData"></param>
         /// <param name="methodParameterData"></param>
-        public CalculateBeamWithPiezoelectricRequest(PiezoelectricRequestData<TProfile> beamWithPiezoelectricData, NewmarkMethodParameter methodParameterData) : base(beamWithPiezoelectricData, methodParameterData)
+        public CalculateBeamWithPiezoelectricVibrationRequest(PiezoelectricRequestData<TProfile> beamWithPiezoelectricData, NewmarkMethodParameter methodParameterData) : base(beamWithPiezoelectricData, methodParameterData)
         {
         }
     }

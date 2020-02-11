@@ -11,7 +11,7 @@ namespace IC_Vibrations.Controllers
         [HttpPost]
         public async Task<ActionResult<CalculateBeamWithPiezoelectricVibrationResponse>> Calculate(
             [FromServices] ICalculatePiezoelectricVibration calculatePiezoelectricVibration,
-            [FromBody] CalculateBeamWithPiezoelectricRequest request)
+            [FromBody] CalculateBeamWithPiezoelectricVibrationRequest request)
         {
             CalculateBeamWithPiezoelectricVibrationResponse response = await calculatePiezoelectricVibration.Process(request);
 

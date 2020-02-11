@@ -30,6 +30,8 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
         Task<double[]> Create(double value, uint size, uint[] positions, string arrayName);
 
+        Task<double[]> Create(double[] values, uint size, uint[] positions, string arrayName);
+
         Task<double[,]> TransposeMatrix(double[,] matrix);
 
         Task<double[,]> AddValue(double[,] matrixToAdd, double[] values, uint[] valueNodePositions, string matrixName);

@@ -53,6 +53,25 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return Task.FromResult(newArray);
         }
 
+        public Task<double[]> Create(double[] values, uint size, uint[] positions, string arrayName)
+        {
+            double[] newArray = new double[size];
+
+            for (int i = 0; i < positions.Length; i++)
+            {
+                try
+                {
+                    newArray[positions[i] - 1] = values[i];
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error creating {arrayName}. {ex.Message}.");
+                }
+            }
+
+            return Task.FromResult(newArray);
+        }
+
         public Task<double[,]> InverseMatrix(double[,] matrix, string matrixName)
         {
             if (matrix.GetLength(0) != matrix.GetLength(1))

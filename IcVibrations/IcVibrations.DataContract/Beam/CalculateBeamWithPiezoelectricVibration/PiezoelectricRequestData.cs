@@ -12,7 +12,7 @@ namespace IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibratio
         /// <summary>
         /// Piezoelectric Young Modulus.
         /// </summary>
-        public double YoungModulus { get; set; }
+        public double PiezoelectricYoungModulus { get; set; }
 
         /// <summary>
         /// Piezoelectric constant. Variable: d31.
@@ -37,7 +37,7 @@ namespace IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibratio
         /// <summary>
         /// Piezoelectric specific mass.
         /// </summary>
-        public double SpecificMass { get; set; }
+        public double PiezoelectricSpecificMass { get; set; }
 
         /// <summary>
         /// Elements with piezoelectric.

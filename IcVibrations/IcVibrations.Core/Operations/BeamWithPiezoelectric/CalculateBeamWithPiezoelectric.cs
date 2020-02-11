@@ -2,21 +2,25 @@
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
+using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.Beam;
-using IcVibrations.DataContracts.Beam.Calculate;
+using IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibration;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Methods.NewmarkMethod;
 using IcVibrations.Models.Beam.Characteristics;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Operations.Beam
+namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
 {
     /// <summary>
-    /// It's responsible to calculate the vibration in a beam.
+    /// It's responsible to calculate the vibration in a beam with piezoelectric.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateBeamVibration<TProfile> : CalculateVibration<CalculateBeamVibrationRequest<TProfile, BeamRequestData<TProfile>>, BeamRequestData<TProfile>, TProfile, Beam<TProfile>>
+    public abstract class CalculateBeamWithPiezoelectric<TProfile> : CalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<TProfile>, PiezoelectricRequestData<TProfile>, TProfile, BeamWithPiezoelectric<TProfile>>
         where TProfile : Profile, new()
     {
         private readonly IMappingResolver _mappingResolver;
@@ -29,27 +33,31 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="mappingResolver"></param>
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
-        public CalculateBeamVibration(
-            INewmarkMethod<Beam<TProfile>, TProfile> newmarkMethod,
-            IMappingResolver mappingResolver,
-            IProfileValidator<TProfile> profileValidator,
-            IProfileMapper<TProfile> profileMapper,
-            IAuxiliarOperation auxiliarOperation)
+        public CalculateBeamWithPiezoelectric(
+            INewmarkMethod<BeamWithPiezoelectric<TProfile>, TProfile> newmarkMethod, 
+            IMappingResolver mappingResolver, 
+            IProfileValidator<TProfile> profileValidator, 
+            IAuxiliarOperation auxiliarOperation,
+            IProfileMapper<TProfile> profileMapper) 
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
             this._profileMapper = profileMapper;
         }
 
-        public async override Task<Beam<TProfile>> BuildBeam(CalculateBeamVibrationRequest<TProfile, BeamRequestData<TProfile>> request, uint degreesFreedomMaximum)
+        public async override Task<BeamWithPiezoelectric<TProfile>> BuildBeam(CalculateBeamWithPiezoelectricVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
         {
-            if (request == null)
+            if(request == null)
             {
                 return null;
             }
 
-            return new Beam<TProfile>()
+            return new BeamWithPiezoelectric<TProfile>()
             {
+                DielectricConstant = request.BeamData.DielectricConstant,
+                DielectricPermissiveness = request.BeamData.DielectricPermissiveness,
+                ElasticityConstant = request.BeamData.ElasticityConstant,
+                ElementsWithPiezoelectric = request.BeamData.ElementsWithPiezoelectric,
                 FirstFastening = FasteningFactory.Create(request.BeamData.FirstFastening),
                 Forces = await this._mappingResolver.BuildFrom(request.BeamData.Forces, degreesFreedomMaximum),
                 GeometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum),
@@ -57,7 +65,11 @@ namespace IcVibrations.Core.Operations.Beam
                 Length = request.BeamData.Length,
                 Material = MaterialFactory.Create(request.BeamData.Material),
                 NumberOfElements = request.BeamData.NumberOfElements,
-                Profile = request.BeamData.Profile
+                PiezoelectricConstant = request.BeamData.PiezoelectricConstant,
+                PiezoelectricProfile = request.BeamData.PiezoelectricProfile,
+                Profile = request.BeamData.Profile,
+                SpecificMass = request.BeamData.PiezoelectricSpecificMass,
+                YoungModulus = request.BeamData.PiezoelectricYoungModulus
             };
         }
     }
