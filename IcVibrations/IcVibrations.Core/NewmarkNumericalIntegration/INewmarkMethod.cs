@@ -5,7 +5,7 @@ using IcVibrations.Core.Models.Beam;
 using IcVibrations.DataContracts;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Methods.NewmarkMethod
+namespace IcVibrations.Core.NewmarkNumericalIntegration
 {
     public interface INewmarkMethod<TBeam, TProfile>
         where TProfile : Profile, new()

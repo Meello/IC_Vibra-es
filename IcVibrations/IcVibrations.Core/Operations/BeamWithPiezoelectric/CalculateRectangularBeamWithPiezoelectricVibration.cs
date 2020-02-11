@@ -2,16 +2,16 @@
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Piezoelectric;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 
 namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
 {
     /// <summary>
-    /// It's responsible to calculate the vibration in a circular beam with piezoelectric.
+    /// It's responsible to calculate the vibration in a beam with piezoelectric.
     /// </summary>
-    public class CalculateCircularBeamWithPiezoelectric : CalculateBeamWithPiezoelectric<CircularProfile>
+    public class CalculateRectangularBeamWithPiezoelectricVibration : CalculateBeamWithPiezoelectricVibration<RectangularProfile>
     {
         /// <summary>
         /// Class construtor.
@@ -21,12 +21,12 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
         /// <param name="profileMapper"></param>
-        public CalculateCircularBeamWithPiezoelectric(
-            INewmarkMethod<BeamWithPiezoelectric<CircularProfile>, CircularProfile> newmarkMethod,
+        public CalculateRectangularBeamWithPiezoelectricVibration(
+            INewmarkMethod<BeamWithPiezoelectric<RectangularProfile>, RectangularProfile> newmarkMethod,
             IMappingResolver mappingResolver, 
-            IProfileValidator<CircularProfile> profileValidator, 
+            IProfileValidator<RectangularProfile> profileValidator, 
             IAuxiliarOperation auxiliarOperation, 
-            IProfileMapper<CircularProfile> profileMapper) 
+            IProfileMapper<RectangularProfile> profileMapper) 
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper)
         {
         }

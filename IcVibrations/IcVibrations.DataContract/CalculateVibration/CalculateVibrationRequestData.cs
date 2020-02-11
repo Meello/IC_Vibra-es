@@ -2,48 +2,48 @@
 using IcVibrations.Common.Profiles;
 using System.Collections.Generic;
 
-namespace IcVibrations.DataContracts.Beam
+namespace IcVibrations.DataContracts.CalculateVibration
 {
     /// <summary>
     /// It represents the 'data' content of beam request operation.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public interface IBeamRequestData<TProfile>
+    public abstract class CalculateVibrationRequestData<TProfile>
         where TProfile : Profile
     {
         /// <summary>
         /// Number of elements in the beam.
         /// </summary>
-        uint NumberOfElements { get; set; }
+        public uint NumberOfElements { get; set; }
 
         /// <summary>
         /// Beam material.
         /// </summary>
-        string Material { get; set; }
+        public string Material { get; set; }
 
         /// <summary>
         /// Beam first fastening.
         /// </summary>
-        string FirstFastening { get; set; }
+        public string FirstFastening { get; set; }
 
         /// <summary>
         /// Beam last fastening.
         /// </summary>
-        string LastFastening { get; set; }
+        public string LastFastening { get; set; }
 
         /// <summary>
         /// Beam length.
         /// </summary>
-        double Length { get; set; }
+        public double Length { get; set; }
 
         /// <summary>
         /// Applied forces in the beam.
         /// </summary>
-        List<Force> Forces { get; set; }
+        public List<Force> Forces { get; set; }
 
         /// <summary>
         /// Beam profile.
         /// </summary>
-        TProfile Profile { get; set; }
+        public TProfile Profile { get; set; }
     }
 }

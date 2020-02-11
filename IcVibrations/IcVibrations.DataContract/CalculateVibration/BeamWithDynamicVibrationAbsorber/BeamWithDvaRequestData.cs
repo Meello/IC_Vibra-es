@@ -1,8 +1,9 @@
 ﻿using IcVibrations.Common;
 using IcVibrations.Common.Profiles;
+using IcVibrations.DataContracts.CalculateVibration.Beam;
 using System.Collections.Generic;
 
-namespace IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber
+namespace IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibrationAbsorber
 {
     /// <summary>
     /// It represents the 'data' content of BeamWithDva request.

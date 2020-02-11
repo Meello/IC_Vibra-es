@@ -3,11 +3,11 @@ using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.Piezoelectric;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.Beam;
-using IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibration;
+using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
     /// It's responsible to calculate the vibration in a beam with piezoelectric.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateBeamWithPiezoelectric<TProfile> : CalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<TProfile>, PiezoelectricRequestData<TProfile>, TProfile, BeamWithPiezoelectric<TProfile>>
+    public abstract class CalculateBeamWithPiezoelectricVibration<TProfile> : CalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<TProfile>, PiezoelectricRequestData<TProfile>, TProfile, BeamWithPiezoelectric<TProfile>>
         where TProfile : Profile, new()
     {
         private readonly IMappingResolver _mappingResolver;
@@ -33,7 +33,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         /// <param name="mappingResolver"></param>
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
-        public CalculateBeamWithPiezoelectric(
+        public CalculateBeamWithPiezoelectricVibration(
             INewmarkMethod<BeamWithPiezoelectric<TProfile>, TProfile> newmarkMethod, 
             IMappingResolver mappingResolver, 
             IProfileValidator<TProfile> profileValidator, 

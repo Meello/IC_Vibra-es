@@ -6,14 +6,13 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
 using IcVibrations.Core.Models.Beam;
-using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.DataContracts;
 using IcVibrations.Methods.AuxiliarOperations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Methods.NewmarkMethod
+namespace IcVibrations.Core.NewmarkNumericalIntegration
 {
     /// <summary>
     /// It's responsible to execute the Newmark numerical integration method to calculate the vibration.
@@ -41,10 +40,10 @@ namespace IcVibrations.Methods.NewmarkMethod
             IArrayOperation arrayOperation,
             ICalculateGeometricProperty geometricProperty)
         {
-            this._mainMatrix = mainMatrix;
-            this._auxiliarMethod = auxiliarMethod;
-            this._arrayOperation = arrayOperation;
-            this._geometricProperty = geometricProperty;
+            _mainMatrix = mainMatrix;
+            _auxiliarMethod = auxiliarMethod;
+            _arrayOperation = arrayOperation;
+            _geometricProperty = geometricProperty;
         }
 
         /// <summary>
@@ -75,7 +74,7 @@ namespace IcVibrations.Methods.NewmarkMethod
 
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
-                input.AngularFrequency = input.Parameter.InitialAngularFrequency + (i * input.Parameter.DeltaAngularFrequency.Value);
+                input.AngularFrequency = input.Parameter.InitialAngularFrequency + i * input.Parameter.DeltaAngularFrequency.Value;
 
                 var analysisResult = new Analysis()
                 {
@@ -85,23 +84,23 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                 if (input.AngularFrequency != 0)
                 {
-                    input.DeltaTime = (Math.PI * 2 / input.AngularFrequency) / input.Parameter.PeriodDivision;
+                    input.DeltaTime = Math.PI * 2 / input.AngularFrequency / input.Parameter.PeriodDivision;
                 }
                 else
                 {
-                    input.DeltaTime = (Math.PI * 2) / input.Parameter.PeriodDivision;
+                    input.DeltaTime = Math.PI * 2 / input.Parameter.PeriodDivision;
                 }
 
                 input.A0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
                 input.A1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
                 input.A2 = 1.0 / (Constants.Beta * input.DeltaTime);
-                input.A3 = Constants.Gama / (Constants.Beta);
+                input.A3 = Constants.Gama / Constants.Beta;
                 input.A4 = 1 / (2 * Constants.Beta);
-                input.A5 = input.DeltaTime * ((Constants.Gama / (2 * Constants.Beta)) - 1);
+                input.A5 = input.DeltaTime * (Constants.Gama / (2 * Constants.Beta) - 1);
 
                 try
                 {
-                    analysisResult.Results = await this.Solution(input);
+                    analysisResult.Results = await Solution(input);
                 }
                 catch (Exception ex)
                 {
@@ -317,17 +316,17 @@ namespace IcVibrations.Methods.NewmarkMethod
 
                         var massInverseTask = Task.Run(async () =>
                         {
-                            return await this._arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse)).ConfigureAwait(false);
+                            return await _arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse)).ConfigureAwait(false);
                         });
 
                         var matrix_K_YTask = Task.Run(async () =>
                         {
-                            return await this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y)).ConfigureAwait(false);
+                            return await _arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y)).ConfigureAwait(false);
                         });
 
                         var matrix_C_VelTask = Task.Run(async () =>
                         {
-                            return await this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel)).ConfigureAwait(false);
+                            return await _arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel)).ConfigureAwait(false);
                         });
 
                         await Task.WhenAll(massInverseTask, matrix_K_YTask, matrix_C_VelTask).ConfigureAwait(false);
@@ -335,7 +334,7 @@ namespace IcVibrations.Methods.NewmarkMethod
                         massInverse = massInverseTask.Result;
                         matrix_K_Y = matrix_K_YTask.Result;
                         matrix_C_Vel = matrix_C_VelTask.Result;
-                        
+
                         Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                         {
                             acelAnt[iteration] = acel[iteration];
@@ -343,15 +342,15 @@ namespace IcVibrations.Methods.NewmarkMethod
                     }
                     else
                     {
-                        double[,] equivalentHardness = await this.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness);
+                        double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness);
 
-                        var inversedEquivalentHardnessTask = this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness));
-                        var equivalentForceTask = this.CalculateEquivalentForce(input, forceAnt, vel, acel);
+                        var inversedEquivalentHardnessTask = _arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness));
+                        var equivalentForceTask = CalculateEquivalentForce(input, forceAnt, vel, acel);
 
                         double[] equivalentForce = await equivalentForceTask;
                         double[,] inversedEquivalentHardness = await inversedEquivalentHardnessTask;
 
-                        deltaY = await this._arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
+                        deltaY = await _arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
 
                         Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                         {
@@ -442,21 +441,21 @@ namespace IcVibrations.Methods.NewmarkMethod
 
         private async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
         {
-            var deltaForceTask = this._arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
-            var p1Task = this.CalculateMatrixP1(input.Mass, input.Damping);
-            var p2Task = this.CalculateMatrixP2(input.Mass, input.Damping);
-            
+            var deltaForceTask = _arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
+            var p1Task = CalculateMatrixP1(input.Mass, input.Damping);
+            var p2Task = CalculateMatrixP2(input.Mass, input.Damping);
+
             double[,] p1 = await p1Task;
             double[,] p2 = await p2Task;
-            
-            var vel_p1Task = this._arrayOperation.Multiply(p1, vel, $"{nameof(p1)}, {nameof(vel)}");
-            var acel_p2Task = this._arrayOperation.Multiply(p2, acel, $"{nameof(p2)}, {nameof(acel)}");
+
+            var vel_p1Task = _arrayOperation.Multiply(p1, vel, $"{nameof(p1)}, {nameof(vel)}");
+            var acel_p2Task = _arrayOperation.Multiply(p2, acel, $"{nameof(p2)}, {nameof(acel)}");
 
             double[] vel_p1 = await vel_p1Task;
             double[] acel_p2 = await acel_p2Task;
             double[] deltaForce = await deltaForceTask;
 
-            double[] equivalentForce = await this._arrayOperation.Sum(deltaForce, vel_p1, acel_p2, $"{nameof(deltaForce)}, {nameof(vel_p1)}, {nameof(acel_p2)}");
+            double[] equivalentForce = await _arrayOperation.Sum(deltaForce, vel_p1, acel_p2, $"{nameof(deltaForce)}, {nameof(vel_p1)}, {nameof(acel_p2)}");
 
             return equivalentForce;
         }

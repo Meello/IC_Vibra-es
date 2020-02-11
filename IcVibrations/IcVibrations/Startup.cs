@@ -1,22 +1,27 @@
 ﻿using IcVibrations.Calculator.GeometricProperties;
 using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Mapper;
+using IcVibrations.Core.Models.Beam;
+using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
+using IcVibrations.Core.Models.Piezoelectric;
+using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NewmarkNumericalIntegration.Beam;
+using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva;
+using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithPiezoelectric;
 using IcVibrations.Core.Operations;
-using IcVibrations.Core.Operations.BeamVibration.Calculate;
-using IcVibrations.Core.Operations.BeamVibration.CalculateWithDynamicVibrationAbsorber;
-using IcVibrations.Core.Operations.PiezoelectricVibration.Calculate;
+using IcVibrations.Core.Operations.Beam;
+using IcVibrations.Core.Operations.BeamWithDva;
+using IcVibrations.Core.Operations.BeamWithPiezoelectric;
 using IcVibrations.Core.Validators.Beam;
 using IcVibrations.Core.Validators.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Validators.DynamicVibrationAbsorber;
 using IcVibrations.Core.Validators.MethodParameters;
-using IcVibrations.DataContracts.Beam;
-using IcVibrations.DataContracts.Beam.Calculate;
-using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
-using IcVibrations.DataContracts.Piezoelectric;
-using IcVibrations.DataContracts.Piezoelectric.Calculate;
+using IcVibrations.DataContracts.CalculateVibration.Beam;
+using IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibrationAbsorber;
+using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -47,28 +52,31 @@ namespace IcVibrations
             services.AddScoped<IMappingResolver, MappingResolver>();
             
             // Methods
-            services.AddScoped<INewmarkMethod, NewmarkMethod>();
+            services.AddScoped<INewmarkMethod<Beam<RectangularProfile>, RectangularProfile>, NewmarkMethodToBeam<RectangularProfile>>();
+            services.AddScoped<INewmarkMethod<Beam<CircularProfile>, CircularProfile>, NewmarkMethodToBeam<CircularProfile>>();
+            services.AddScoped<INewmarkMethod<BeamWithDva<RectangularProfile>, RectangularProfile>, NewmarkMethodToBeamWithDva<RectangularProfile>>();
+            services.AddScoped<INewmarkMethod<BeamWithDva<CircularProfile>, CircularProfile>, NewmarkMethodToBeamWithDva<CircularProfile>>();
+            services.AddScoped<INewmarkMethod<BeamWithPiezoelectric<RectangularProfile>, RectangularProfile>, NewmarkMethodToBeamWithPiezoelectric<RectangularProfile>>();
+            services.AddScoped<INewmarkMethod<BeamWithPiezoelectric<CircularProfile>, CircularProfile>, NewmarkMethodToBeamWithPiezoelectric<CircularProfile>>();
 
             // Auxiliar Operations
             services.AddScoped<IAuxiliarOperation, AuxiliarOperation>();
 
             // Beam Operations
-            services.AddScoped<AbstractCalculateBeamVibration<CircularBeamRequestData>, CalculateCircularBeamVibration>();
-            services.AddScoped<AbstractCalculateBeamVibration<RectangularBeamRequestData>, CalculateRectangularBeamVibration>();
-
+            services.AddScoped<ICalculateVibration<CalculateBeamVibrationRequest<CircularProfile>, BeamRequestData<CircularProfile>, CircularProfile, Beam<CircularProfile>>, CalculateCircularBeamVibration>();
+            services.AddScoped<ICalculateVibration<CalculateBeamVibrationRequest<RectangularProfile>, BeamRequestData<RectangularProfile>, RectangularProfile, Beam<RectangularProfile>>, CalculateRectangularBeamVibration>();
+            
             // BeamWithDva Operations
-            services.AddScoped<AbstractCalculateBeamVibration<CircularBeamWithDvaRequestData>, CalculateCircularBeamWithDvaVibration>();
-
+            services.AddScoped<ICalculateVibration<CalculateBeamWithDvaVibrationRequest<CircularProfile>, BeamWithDvaRequestData<CircularProfile>, CircularProfile, BeamWithDva<CircularProfile>>, CalculateCircularBeamWithDvaVibration>();
+            services.AddScoped<ICalculateVibration<CalculateBeamWithDvaVibrationRequest<RectangularProfile>, BeamWithDvaRequestData<RectangularProfile>, RectangularProfile, BeamWithDva<RectangularProfile>>, CalculateRectangularBeamWithDvaVibration>();
+            
             // Piezoelectric Operations
-            services.AddScoped<ICalculatePiezoelectricVibration, CalculatePiezoelectricVibration>();
+            services.AddScoped<ICalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<CircularProfile>,PiezoelectricRequestData<CircularProfile>, CircularProfile, BeamWithPiezoelectric<CircularProfile>>, CalculateCircularBeamWithPiezoelectricVibration>();
+            services.AddScoped<ICalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<RectangularProfile>, PiezoelectricRequestData<RectangularProfile>, RectangularProfile, BeamWithPiezoelectric<RectangularProfile>>, CalculateRectangularBeamWithPiezoelectricVibration>();
 
             // Validators
-            services.AddScoped<IBeamRequestValidator<RectangularBeamRequestData>, RectangularBeamRequestValidator>();
-            services.AddScoped<IBeamRequestValidator<CircularBeamRequestData>, CircularBeamRequestValidator>();
-            services.AddScoped<IBeamRequestValidator<CircularBeamWithDvaRequestData>, CircularBeamWithDvaValidator>();
-            services.AddScoped<IMethodParameterValidator, MethodParameterValidator>();
-            services.AddScoped<IDvaValidator, DvaValidator>();
-            
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSwaggerGen(c =>

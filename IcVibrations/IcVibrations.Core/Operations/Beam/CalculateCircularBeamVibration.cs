@@ -2,9 +2,9 @@
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 
 namespace IcVibrations.Core.Operations.Beam
 {

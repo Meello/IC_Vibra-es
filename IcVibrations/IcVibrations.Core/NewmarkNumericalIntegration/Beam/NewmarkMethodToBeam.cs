@@ -6,11 +6,10 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 using System;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Methods.NewmarkMethods.Beam
+namespace IcVibrations.Core.NewmarkNumericalIntegration.Beam
 {
     public abstract class NewmarkMethodToBeam<TProfile> : NewmarkMethod<Beam<TProfile>, TProfile>
         where TProfile : Profile, new()
@@ -23,8 +22,8 @@ namespace IcVibrations.Core.Methods.NewmarkMethods.Beam
         public NewmarkMethodToBeam(
             IMainMatrix mainMatrix,
             IAuxiliarOperation auxiliarMethod,
-            IArrayOperation arrayOperation, 
-            ICalculateGeometricProperty geometricProperty) 
+            IArrayOperation arrayOperation,
+            ICalculateGeometricProperty geometricProperty)
             : base(mainMatrix, auxiliarMethod, arrayOperation, geometricProperty)
         {
             this._mainMatrix = mainMatrix;

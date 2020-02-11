@@ -6,11 +6,10 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 using System;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Methods.NewmarkMethods.BeamWithDva
+namespace IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva
 {
     public abstract class NewmarkMethodToBeamWithDva<TProfile> : NewmarkMethod<BeamWithDva<TProfile>, TProfile>
         where TProfile : Profile, new()
@@ -21,10 +20,10 @@ namespace IcVibrations.Core.Methods.NewmarkMethods.BeamWithDva
         private readonly ICalculateGeometricProperty _geometricProperty;
 
         public NewmarkMethodToBeamWithDva(
-            IMainMatrix mainMatrix, 
-            IAuxiliarOperation auxiliarMethod, 
-            IArrayOperation arrayOperation, 
-            ICalculateGeometricProperty geometricProperty) 
+            IMainMatrix mainMatrix,
+            IAuxiliarOperation auxiliarMethod,
+            IArrayOperation arrayOperation,
+            ICalculateGeometricProperty geometricProperty)
             : base(mainMatrix, auxiliarMethod, arrayOperation, geometricProperty)
         {
             this._mainMatrix = mainMatrix;

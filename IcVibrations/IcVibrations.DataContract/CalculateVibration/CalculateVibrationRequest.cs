@@ -1,23 +1,23 @@
 ﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
-using System;
+using IcVibrations.DataContracts.Beam.Calculate;
 
-namespace IcVibrations.DataContracts.Beam.Calculate
+namespace IcVibrations.DataContracts.CalculateVibration
 {
     /// <summary>
     /// It represents the request content of CalculateBeam operations.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class CalculateBeamVibrationRequest<TProfile, TRequestData> : OperationRequestBase, ICalculateBeamVibrationRequest<TProfile, TRequestData>
+    public abstract class CalculateVibrationRequest<TProfile, TRequestData> : OperationRequestBase
         where TProfile : Profile
-        where TRequestData : IBeamRequestData<TProfile>
+        where TRequestData : CalculateVibrationRequestData<TProfile>
     {
         /// <summary>
         /// Class construtor.
         /// </summary>
         /// <param name="beamData"></param>
         /// <param name="methodParameterData"></param>
-        public CalculateBeamVibrationRequest(TRequestData beamData, NewmarkMethodParameter methodParameterData)
+        public CalculateVibrationRequest(TRequestData beamData, NewmarkMethodParameter methodParameterData)
         {
             BeamData = beamData;
             MethodParameterData = methodParameterData;

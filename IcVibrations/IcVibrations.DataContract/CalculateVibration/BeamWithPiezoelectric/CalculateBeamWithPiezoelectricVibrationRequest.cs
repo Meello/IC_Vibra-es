@@ -1,14 +1,13 @@
 ﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
-using IcVibrations.DataContracts.Beam.Calculate;
 
-namespace IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibration
+namespace IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric
 {
     /// <summary>
     /// It represents the request content of CalculatePiezoelectric operations.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class CalculateBeamWithPiezoelectricVibrationRequest<TProfile> : CalculateBeamVibrationRequest<TProfile, PiezoelectricRequestData<TProfile>>
+    public class CalculateBeamWithPiezoelectricVibrationRequest<TProfile> : CalculateVibrationRequest<TProfile, PiezoelectricRequestData<TProfile>>
         where TProfile : Profile, new()
     {
         /// <summary>

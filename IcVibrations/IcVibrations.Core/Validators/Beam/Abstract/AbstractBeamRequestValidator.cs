@@ -1,6 +1,5 @@
 ﻿using IcVibrations.Core.Models;
 using IcVibrations.DataContracts;
-using IcVibrations.DataContracts.Beam;
 using IcVibrations.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
 using System;

@@ -6,11 +6,10 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 using System;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Methods.NewmarkMethods.BeamWithPiezoelectric
+namespace IcVibrations.Core.NewmarkNumericalIntegration.BeamWithPiezoelectric
 {
     public abstract class NewmarkMethodToBeamWithPiezoelectric<TProfile> : NewmarkMethod<BeamWithPiezoelectric<TProfile>, TProfile>
         where TProfile : Profile, new()

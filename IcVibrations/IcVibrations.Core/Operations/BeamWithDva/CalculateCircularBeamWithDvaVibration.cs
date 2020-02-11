@@ -2,12 +2,9 @@
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IcVibrations.Core.Operations.BeamWithDva
 {

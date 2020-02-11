@@ -3,12 +3,12 @@ using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts;
-using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.Beam.Calculate;
+using IcVibrations.DataContracts.CalculateVibration;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Threading.Tasks;
@@ -19,10 +19,10 @@ namespace IcVibrations.Core.Operations
     /// It's responsible to calculate the beam vibration at all contexts.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateVibration<TRequest, TRequestData, TProfile, TBeam> : OperationBase<TRequest, CalculateBeamVibrationResponse>, ICalculateVibration<TRequest, TRequestData, TProfile, TBeam>
+    public abstract class CalculateVibration<TRequest, TRequestData, TProfile, TBeam> : OperationBase<TRequest, CalculateVibrationResponse>, ICalculateVibration<TRequest, TRequestData, TProfile, TBeam>
         where TProfile : Profile, new()
-        where TRequestData : IBeamRequestData<TProfile>, new()
-        where TRequest : OperationRequestBase, ICalculateBeamVibrationRequest<TProfile, TRequestData>
+        where TRequestData : CalculateVibrationRequestData<TProfile>, new()
+        where TRequest : CalculateVibrationRequest<TProfile, TRequestData>
         where TBeam : IBeam<TProfile>, new()
     {
         private readonly INewmarkMethod<TBeam, TProfile> _newmarkMethod;
@@ -49,9 +49,9 @@ namespace IcVibrations.Core.Operations
         /// <returns></returns>
         public abstract Task<TBeam> BuildBeam(TRequest request, uint degreesFreedomMaximum);
 
-        protected override async Task<CalculateBeamVibrationResponse> ProcessOperation(TRequest request)
+        protected override async Task<CalculateVibrationResponse> ProcessOperation(TRequest request)
         {
-            CalculateBeamVibrationResponse response = new CalculateBeamVibrationResponse();
+            CalculateVibrationResponse response = new CalculateVibrationResponse();
 
             uint degreesFreedomMaximum = this._auxiliarOperation.CalculateDegreesFreedomMaximum(request.BeamData.NumberOfElements);
 
@@ -71,7 +71,7 @@ namespace IcVibrations.Core.Operations
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateBeamVibrationResponse> ValidateOperation(TRequest request)
+        protected override Task<CalculateVibrationResponse> ValidateOperation(TRequest request)
         {
             throw new NotImplementedException();
         }

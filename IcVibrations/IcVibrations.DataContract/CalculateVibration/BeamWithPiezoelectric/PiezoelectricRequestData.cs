@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Common.Profiles;
+using IcVibrations.DataContracts.CalculateVibration.Beam;
 
-namespace IcVibrations.DataContracts.Beam.CalculateBeamWithPiezoelectricVibration
+namespace IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric
 {
     /// <summary>
     /// It represents the 'data' content of piezoelectric request.

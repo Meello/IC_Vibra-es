@@ -1,5 +1,4 @@
 ﻿using IcVibrations.DataContracts;
-using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
 using System.Linq;
 
 namespace IcVibrations.Core.Validators.DynamicVibrationAbsorber

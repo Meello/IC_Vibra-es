@@ -3,10 +3,10 @@ using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
-using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
+using IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Methods.NewmarkMethod;
 using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
