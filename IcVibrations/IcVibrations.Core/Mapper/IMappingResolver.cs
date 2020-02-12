@@ -10,6 +10,8 @@ namespace IcVibrations.Core.Mapper
     {
         OperationResponseData BuildFrom(NewmarkMethodResponse output, string author, string analysisExplanation);
 
-        Task<double[]> BuildFrom(List<Force> forces, uint degreesFreedomMaximum); 
+        Task<double[]> BuildFrom(List<Force> forces, uint degreesFreedomMaximum);
+
+        Task<double[]> BuildFrom(List<ElectricalCharge> electricalCharges, uint degreesFreedomMaximum);
     }
 }

@@ -23,7 +23,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
         /// <param name="dvaHardness"></param>
         /// <param name="dvaNodePositions"></param>
         /// <returns></returns>
-        Task<double[,]> CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions);
+        Task<double[,]> CalculateHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions);
 
         /// <summary>
         /// It's responsible to calculate the beam damping matrix.

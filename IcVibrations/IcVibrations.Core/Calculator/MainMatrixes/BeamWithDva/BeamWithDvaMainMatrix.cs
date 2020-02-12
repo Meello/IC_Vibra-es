@@ -61,7 +61,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
         /// <param name="dvaHardness"></param>
         /// <param name="dvaNodePositions"></param>
         /// <returns></returns>
-        public async Task<double[,]> CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions)
+        public async Task<double[,]> CalculateHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions)
         {
             double[,] hardnessWithDva = new double[beamHardness.GetLength(0) + dvaHardness.Length, beamHardness.GetLength(1) + dvaHardness.Length];
 

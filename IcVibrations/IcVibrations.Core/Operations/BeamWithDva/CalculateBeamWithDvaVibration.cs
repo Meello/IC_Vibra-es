@@ -1,5 +1,9 @@
-﻿using IcVibrations.Common.Classes;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.MainMatrixes.Beam;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
+using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
@@ -20,25 +24,40 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         where TProfile : Profile, new()
     {
         private readonly IMappingResolver _mappingResolver;
+        private readonly IAuxiliarOperation _auxiliarOperation;
         private readonly IProfileMapper<TProfile> _profileMapper;
+        private readonly IBeamWithDvaMainMatrix _mainMatrix;
+        private readonly IBeamMainMatrix<TProfile> _beamMainMatrix;
+        private readonly ICommonMainMatrix _commonMainMatrix;
 
         /// <summary>
-        /// Class construtor.
+        /// Class contructor.
         /// </summary>
         /// <param name="newmarkMethod"></param>
         /// <param name="mappingResolver"></param>
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
+        /// <param name="profileMapper"></param>
+        /// <param name="mainMatrix"></param>
+        /// <param name="beamMainMatrix"></param>
+        /// <param name="commonMainMatrix"></param>
         public CalculateBeamWithDvaVibration(
             INewmarkMethod newmarkMethod, 
             IMappingResolver mappingResolver, 
             IProfileValidator<TProfile> profileValidator, 
             IAuxiliarOperation auxiliarOperation,
-            IProfileMapper<TProfile> profileMapper) 
+            IProfileMapper<TProfile> profileMapper,
+            IBeamWithDvaMainMatrix mainMatrix,
+            IBeamMainMatrix<TProfile> beamMainMatrix,
+            ICommonMainMatrix commonMainMatrix) 
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
+            this._auxiliarOperation = auxiliarOperation;
             this._profileMapper = profileMapper;
+            this._mainMatrix = mainMatrix;
+            this._beamMainMatrix = beamMainMatrix;
+            this._commonMainMatrix = commonMainMatrix;
         }
 
         public async override Task<BeamWithDva<TProfile>> BuildBeam(CalculateBeamWithDvaVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
@@ -76,6 +95,48 @@ namespace IcVibrations.Core.Operations.BeamWithDva
                 DvaMasses = dvaMasses,
                 DvaNodePositions = dvaNodePositions
             };
+        }
+
+        public async override Task<NewmarkMethodInput> CreateInput(BeamWithDva<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
+        {
+            NewmarkMethodInput input = new NewmarkMethodInput();
+
+            double[,] mass = await this._beamMainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+
+            double[,] hardness = await this._beamMainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
+
+            double[,] massWithDva = await this._mainMatrix.CalculateMassWithDva(mass, beam.DvaMasses, beam.DvaNodePositions);
+
+            double[,] hardnessWithDva = await this._mainMatrix.CalculateHardnessWithDva(hardness, beam.DvaHardnesses, beam.DvaNodePositions);
+
+            double[,] dampingWithDva = await this._mainMatrix.CalculateDamping(massWithDva, hardnessWithDva, degreesFreedomMaximum);
+
+            double[] forces = beam.Forces;
+
+            bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            uint numberOfTrueBoundaryConditions = 0;
+
+            for (int i = 0; i < degreesFreedomMaximum; i++)
+            {
+                if (bondaryCondition[i] == true)
+                {
+                    numberOfTrueBoundaryConditions += 1;
+                }
+            }
+
+            input.Mass = this._auxiliarOperation.AplyBondaryConditions(massWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
+
+            input.Hardness = this._auxiliarOperation.AplyBondaryConditions(hardnessWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
+
+            input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, numberOfTrueBoundaryConditions);
+
+            input.Force = this._auxiliarOperation.AplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions);
+
+            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
+
+            input.Parameter = newmarkMethodParameter;
+
+            return input;
         }
     }
 }

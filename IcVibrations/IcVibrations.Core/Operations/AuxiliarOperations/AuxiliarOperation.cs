@@ -4,13 +4,13 @@ namespace IcVibrations.Methods.AuxiliarOperations
 {
     public class AuxiliarOperation : IAuxiliarOperation
     {
-        public double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, int trueBondaryContionCount)
+        public double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, uint numberOfBondaryConditionsTrue)
         {
             int i, j, k, count1, count2;
 
             int n = matrix.GetLength(0);
 
-            double[,] matrixCC = new double[trueBondaryContionCount, trueBondaryContionCount];
+            double[,] matrixCC = new double[numberOfBondaryConditionsTrue, numberOfBondaryConditionsTrue];
 
             for (i = 0; i < n; i++)
             {
@@ -53,13 +53,13 @@ namespace IcVibrations.Methods.AuxiliarOperations
             return matrixCC;
         }
 
-        public double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions, int trueBondaryContionCount)
+        public double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions, uint numberOfBondaryConditionsTrue)
         {
             int i, count1 = 0;
 
             int n = matrix.GetLength(0);
 
-            double[] matrixCC = new double[trueBondaryContionCount];
+            double[] matrixCC = new double[numberOfBondaryConditionsTrue];
 
             for (i = 0; i < n; i++)
             {

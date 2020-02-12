@@ -1,7 +1,8 @@
-﻿using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
-using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -14,20 +15,24 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
     public class CalculateRectangularBeamWithPiezoelectricVibration : CalculateBeamWithPiezoelectricVibration<RectangularProfile>
     {
         /// <summary>
-        /// Class construtor.
+        /// Class contructor.
         /// </summary>
         /// <param name="newmarkMethod"></param>
         /// <param name="mappingResolver"></param>
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
         /// <param name="profileMapper"></param>
+        /// <param name="mainMatrix"></param>
+        /// <param name="commonMainMatrix"></param>
         public CalculateRectangularBeamWithPiezoelectricVibration(
-            INewmarkMethod<BeamWithPiezoelectric<RectangularProfile>, RectangularProfile> newmarkMethod,
-            IMappingResolver mappingResolver, 
-            IProfileValidator<RectangularProfile> profileValidator, 
+            INewmarkMethod newmarkMethod,
+            IMappingResolver mappingResolver,
+            IProfileValidator<RectangularProfile> profileValidator,
             IAuxiliarOperation auxiliarOperation, 
-            IProfileMapper<RectangularProfile> profileMapper) 
-            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper)
+            IProfileMapper<RectangularProfile> profileMapper, 
+            IBeamWithPiezoelectricMainMatrix<RectangularProfile> mainMatrix,
+            ICommonMainMatrix commonMainMatrix) 
+            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, commonMainMatrix)
         {
         }
     }

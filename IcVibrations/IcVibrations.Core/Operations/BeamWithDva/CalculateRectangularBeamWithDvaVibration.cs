@@ -1,7 +1,9 @@
-﻿using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.MainMatrixes.Beam;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
-using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -21,13 +23,19 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
         /// <param name="profileMapper"></param>
+        /// <param name="mainMatrix"></param>
+        /// <param name="beamMainMatrix"></param>
+        /// <param name="commonMainMatrix"></param>
         public CalculateRectangularBeamWithDvaVibration(
-            INewmarkMethod<BeamWithDva<RectangularProfile>, RectangularProfile> newmarkMethod,
+            INewmarkMethod newmarkMethod, 
             IMappingResolver mappingResolver, 
-            IProfileValidator<RectangularProfile> profileValidator, 
-            IAuxiliarOperation auxiliarOperation, 
-            IProfileMapper<RectangularProfile> profileMapper) 
-            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper)
+            IProfileValidator<RectangularProfile> profileValidator,
+            IAuxiliarOperation auxiliarOperation,
+            IProfileMapper<RectangularProfile> profileMapper, 
+            IBeamWithDvaMainMatrix mainMatrix, 
+            IBeamMainMatrix<RectangularProfile> beamMainMatrix, 
+            ICommonMainMatrix commonMainMatrix) 
+            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, beamMainMatrix, commonMainMatrix)
         {
         }
     }

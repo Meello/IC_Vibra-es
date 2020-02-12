@@ -46,5 +46,28 @@ namespace IcVibrations.Core.Mapper
 
             return Task.FromResult(force);
         }
+
+        public Task<double[]> BuildFrom(List<ElectricalCharge> electricalCharges, uint degreesFreedomMaximum)
+        {
+            if (electricalCharges == null)
+            {
+                return null;
+            }
+
+            double[] electricalCharge = new double[degreesFreedomMaximum];
+            foreach (ElectricalCharge eC in electricalCharges)
+            {
+                try
+                {
+                    electricalCharge[eC.NodePosition - 1] = eC.Value;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error creating electrical charge matrix. {ex.Message}.");
+                }
+            }
+
+            return Task.FromResult(electricalCharge);
+        }
     }
 }

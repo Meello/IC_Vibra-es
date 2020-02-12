@@ -1,4 +1,5 @@
-﻿using IcVibrations.Common.Classes;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.DTO;
@@ -23,27 +24,35 @@ namespace IcVibrations.Core.Operations.Beam
     {
         private readonly IMappingResolver _mappingResolver;
         private readonly IProfileMapper<TProfile> _profileMapper;
+        private readonly IAuxiliarOperation _auxiliarOperation;
         private readonly IBeamMainMatrix<TProfile> _mainMatrix;
+        private readonly ICommonMainMatrix _commonMainMatrix;
 
         /// <summary>
-        /// Class construtor.
+        /// Class constructor.
         /// </summary>
         /// <param name="newmarkMethod"></param>
         /// <param name="mappingResolver"></param>
         /// <param name="profileValidator"></param>
+        /// <param name="profileMapper"></param>
         /// <param name="auxiliarOperation"></param>
+        /// <param name="mainMatrix"></param>
+        /// <param name="commonMainMatrix"></param>
         public CalculateBeamVibration(
             INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IProfileValidator<TProfile> profileValidator,
             IProfileMapper<TProfile> profileMapper,
             IAuxiliarOperation auxiliarOperation,
-            IBeamMainMatrix<TProfile> mainMatrix)
+            IBeamMainMatrix<TProfile> mainMatrix,
+            ICommonMainMatrix commonMainMatrix)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
             this._profileMapper = profileMapper;
+            this._auxiliarOperation = auxiliarOperation;
             this._mainMatrix = mainMatrix;
+            this._commonMainMatrix = commonMainMatrix;
         }
 
         public async override Task<Beam<TProfile>> BuildBeam(CalculateBeamVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
@@ -70,17 +79,34 @@ namespace IcVibrations.Core.Operations.Beam
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
-            input.Mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+            double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            input.Hardness = await this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
+            double[,] hardness = await this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
 
-            input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
+            double[] forces = beam.Forces;
 
-            input.Force = beam.Forces;
+            bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            uint numberOfTrueBoundaryConditions = 0;
+
+            for (int i = 0; i < degreesFreedomMaximum; i++)
+            {
+                if (bondaryCondition[i] == true)
+                {
+                    numberOfTrueBoundaryConditions += 1;
+                }
+            }
+
+            input.Mass = this._auxiliarOperation.AplyBondaryConditions(mass, bondaryCondition, numberOfTrueBoundaryConditions);
+
+            input.Hardness = this._auxiliarOperation.AplyBondaryConditions(hardness, bondaryCondition, numberOfTrueBoundaryConditions);
+
+            input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, numberOfTrueBoundaryConditions);
+
+            input.Force = this._auxiliarOperation.AplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions);
+
+            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
 
             input.Parameter = newmarkMethodParameter;
-
-            //input.NumberOfTrueBoundaryConditions = 
 
             return input;
         }

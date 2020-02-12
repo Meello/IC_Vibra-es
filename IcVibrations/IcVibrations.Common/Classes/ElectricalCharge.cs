@@ -13,6 +13,6 @@
         /// <summary>
         /// Electrical charge node position.
         /// </summary>
-        public double NodePosition { get; set; }
+        public uint NodePosition { get; set; }
     }
 }

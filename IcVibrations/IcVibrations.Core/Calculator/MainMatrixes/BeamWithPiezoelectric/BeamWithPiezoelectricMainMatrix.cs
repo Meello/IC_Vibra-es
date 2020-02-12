@@ -189,10 +189,10 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <param name="beamWithPiezoelectric"></param>
         /// <param name="numberOfElements"></param>
         /// <returns></returns>
-        public async Task<double[,]> CalculatePiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint numberOfElements)
+        public async Task<double[,]> CalculatePiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric)
         {
+            uint numberOfElements = beamWithPiezoelectric.NumberOfElements;
             double[,] piezoelectricCapacitance = new double[numberOfElements + 1, numberOfElements + 1];
-            double elementLenght = beamWithPiezoelectric.Length / beamWithPiezoelectric.NumberOfElements;
 
             for (uint n = 0; n < numberOfElements; n++)
             {

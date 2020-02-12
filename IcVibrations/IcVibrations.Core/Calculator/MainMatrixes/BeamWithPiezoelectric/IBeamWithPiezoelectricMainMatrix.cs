@@ -57,7 +57,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <param name="beamWithPiezoelectric"></param>
         /// <param name="numberOfElements"></param>
         /// <returns></returns>
-        Task<double[,]> CalculatePiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint numberOfElements);
+        Task<double[,]> CalculatePiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric);
 
         /// <summary>
         /// It's responsible to calculate element piezoelectric capacitance matrix.
