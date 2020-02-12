@@ -22,7 +22,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         /// <param name="auxiliarOperation"></param>
         /// <param name="profileMapper"></param>
         public CalculateCircularBeamWithDvaVibration(
-            INewmarkMethod<BeamWithDva<CircularProfile>, CircularProfile> newmarkMethod,
+            INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver, 
             IProfileValidator<CircularProfile> profileValidator, 
             IAuxiliarOperation auxiliarOperation, 

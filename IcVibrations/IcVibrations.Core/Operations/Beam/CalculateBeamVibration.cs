@@ -1,6 +1,6 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Common.Classes;
+﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
@@ -23,7 +23,7 @@ namespace IcVibrations.Core.Operations.Beam
     {
         private readonly IMappingResolver _mappingResolver;
         private readonly IProfileMapper<TProfile> _profileMapper;
-        private readonly ICommonMainMatrix _mainMatrix;
+        private readonly IBeamMainMatrix<TProfile> _mainMatrix;
 
         /// <summary>
         /// Class construtor.
@@ -38,7 +38,7 @@ namespace IcVibrations.Core.Operations.Beam
             IProfileValidator<TProfile> profileValidator,
             IProfileMapper<TProfile> profileMapper,
             IAuxiliarOperation auxiliarOperation,
-            ICommonMainMatrix mainMatrix)
+            IBeamMainMatrix<TProfile> mainMatrix)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
@@ -70,7 +70,17 @@ namespace IcVibrations.Core.Operations.Beam
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
-            input.Mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+            input.Mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+
+            input.Hardness = await this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
+
+            input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, degreesFreedomMaximum);
+
+            input.Force = beam.Forces;
+
+            input.Parameter = newmarkMethodParameter;
+
+            //input.NumberOfTrueBoundaryConditions = 
 
             return input;
         }

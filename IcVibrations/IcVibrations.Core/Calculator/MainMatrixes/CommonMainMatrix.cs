@@ -12,14 +12,13 @@ namespace IcVibrations.Calculator.MainMatrixes
 {
     public class CommonMainMatrix : ICommonMainMatrix
     {
-        private readonly IArrayOperation _arrayOperation;
-
-        public CommonMainMatrix(
-            IArrayOperation arrayOperation)
-        {
-            this._arrayOperation = arrayOperation;
-        }
-
+        /// <summary>
+        /// It's responsible to calculate the element mass matrix.
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="specificMass"></param>
+        /// <param name="elementLength"></param>
+        /// <returns></returns>
         public Task<double[,]> CalculateElementMass(double area, double specificMass, double length)
         {
             double[,] elementMass = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
@@ -46,55 +45,20 @@ namespace IcVibrations.Calculator.MainMatrixes
             return Task.FromResult(elementMass);
         }
 
-        public async Task<double[,]> CalculateMass(Beam<Profile> beam, uint degreesFreedomMaximum)
+        /// <summary>
+        /// It's responsible to calculate the damping matrix.
+        /// </summary>
+        /// <param name="mass"></param>
+        /// <param name="hardness"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint size)
         {
-            uint numberOfElements = beam.NumberOfElements;
+            double[,] damping = new double[size, size];
 
-            uint[,] nodeCoordinates = await this.NodeCoordinates(numberOfElements);
-
-            uint p, q, r, s;
-
-            double[,] mass = new double[degreesFreedomMaximum, degreesFreedomMaximum];
-
-            double length = beam.Length / numberOfElements;
-
-            for (uint n = 0; n < numberOfElements; n++)
+            for (uint i = 0; i < size; i++)
             {
-                double[,] elementMass = await this.CalculateElementMass(beam.GeometricProperty.Area[n], beam.Material.SpecificMass, length);
-
-                p = nodeCoordinates[n, 0];
-                q = nodeCoordinates[n, 1];
-                r = nodeCoordinates[n, 2];
-                s = nodeCoordinates[n, 3];
-
-                mass[p, p] += elementMass[0, 0];
-                mass[p, q] += elementMass[0, 1];
-                mass[p, r] += elementMass[0, 2];
-                mass[p, s] += elementMass[0, 3];
-                mass[q, p] += elementMass[1, 0];
-                mass[q, q] += elementMass[1, 1];
-                mass[q, r] += elementMass[1, 2];
-                mass[q, s] += elementMass[1, 3];
-                mass[r, p] += elementMass[2, 0];
-                mass[r, q] += elementMass[2, 1];
-                mass[r, r] += elementMass[2, 2];
-                mass[r, s] += elementMass[2, 3];
-                mass[s, p] += elementMass[3, 0];
-                mass[s, q] += elementMass[3, 1];
-                mass[s, r] += elementMass[3, 2];
-                mass[s, s] += elementMass[3, 3];
-            }
-
-            return mass;
-        }
-
-        public Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum)
-        {
-            double[,] damping = new double[degreesFreedomMaximum, degreesFreedomMaximum];
-
-            for (uint i = 0; i < degreesFreedomMaximum; i++)
-            {
-                for (uint j = 0; j < degreesFreedomMaximum; j++)
+                for (uint j = 0; j < size; j++)
                 {
                     damping[i, j] = Constants.Alpha * mass[i, j] + Constants.Mi * hardness[i, j];
                 }
@@ -103,6 +67,13 @@ namespace IcVibrations.Calculator.MainMatrixes
             return Task.FromResult(damping);
         }
 
+        /// <summary>
+        /// It's rewsponsible to build the bondary condition matrix.
+        /// </summary>
+        /// <param name="firstFastening"></param>
+        /// <param name="lastFastening"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum)
         {
             bool[] bondaryCondition = new bool[degreesFreedomMaximum];

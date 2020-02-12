@@ -40,9 +40,8 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// It's responsible to calculate piezoelectric mass matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
         public async Task<double[,]> CalculateMass(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum)
         {
@@ -78,9 +77,8 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// It's responsible to calculate piezoelectric hardness matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
         public async Task<double[,]> CalculateHardness(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum)
         {
@@ -116,8 +114,8 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// It's responsible to calculate piezoelectric element hardness matrix.
         /// </summary>
+        /// <param name="elasticityConstant"></param>
         /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
         /// <param name="length"></param>
         /// <returns></returns>
         public Task<double[,]> CalculatePiezoelectricElementHardness(double elasticityConstant, double momentInertia, double length)
@@ -149,9 +147,8 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// It's responsible to calculate piezoelectric electromechanical coupling matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
         public async Task<double[,]> CalculatePiezoelectricElectromechanicalCoupling(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum)
         {
@@ -178,22 +175,19 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
 
             return piezoelectricElectromechanicalCoupling;
         }
-        
+
         /// <summary>
         /// It's responsible to calculate piezoelectric element electromechanical coupling matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
         /// <returns></returns>
         public abstract Task<double[,]> CalculatePiezoelectricElementElectromechanicalCoupling(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric);
 
         /// <summary>
         /// It's responsible to calculate piezoelectric capacitance matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="numberOfElements"></param>
         /// <returns></returns>
         public async Task<double[,]> CalculatePiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint numberOfElements)
         {
@@ -224,18 +218,16 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// It's responsible to calculate element piezoelectric capacitance matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
         /// <returns></returns>
         public abstract Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric);
 
         /// <summary>
         /// It's responsible to calculate equivalent mass matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="mass"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="piezoelectricDegreesFreedomMaximum"></param>
         /// <returns></returns>
         public Task<double[,]> CalculateEquivalentMass(double[,] mass, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
         {
@@ -263,9 +255,11 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// It's responsible to calculate equivalent hardness matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="hardness"></param>
+        /// <param name="piezoelectricElectromechanicalCoupling"></param>
+        /// <param name="piezoelectricCapacitance"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="piezoelectricDegreesFreedomMaximum"></param>
         /// <returns></returns>
         public async Task<double[,]> CalculateEquivalentHardness(double[,] hardness, double[,] piezoelectricElectromechanicalCoupling, double[,] piezoelectricCapacitance, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
         {
@@ -299,6 +293,18 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
             }
 
             return equivalentHardness;
+        }
+    
+        /// <summary>
+        /// It's responsible to build the damping matrix.
+        /// </summary>
+        /// <param name="mass"></param>
+        /// <param name="hardness"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public async Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint size)
+        {
+            return await this._commonMainMatrix.CalculateDamping(mass, hardness, size);
         }
     }
 }

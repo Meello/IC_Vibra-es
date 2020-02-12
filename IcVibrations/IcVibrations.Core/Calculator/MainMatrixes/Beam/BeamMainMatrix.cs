@@ -91,8 +91,9 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
         /// <summary>
         /// Responsible to calculate the hardness matrix of the beam element.
         /// </summary>
-        /// <param name="beam"></param>
-        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="momentOfInertia"></param>
+        /// <param name="youngModulus"></param>
+        /// <param name="length"></param>
         /// <returns></returns>
         public Task<double[,]> CalculateElementHardness(double momentOfInertia, double youngModulus, double length)
         {
@@ -125,11 +126,11 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
         /// </summary>
         /// <param name="mass"></param>
         /// <param name="hardness"></param>
-        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="size"></param>
         /// <returns></returns>
-        public async Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum)
+        public async Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint size)
         {
-            return await this._commonMainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
+            return await this._commonMainMatrix.CalculateDamping(mass, hardness, size);
         }
     }
 }

@@ -3,6 +3,7 @@ using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Mapper;
+using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
@@ -43,6 +44,8 @@ namespace IcVibrations
             
             // Mapper
             services.AddScoped<IMappingResolver, MappingResolver>();
+            services.AddScoped<IProfileMapper<CircularProfile>, CircularProfileMapper>();
+            services.AddScoped<IProfileMapper<RectangularProfile>, RectangularProfileMapper>();
 
             // NewmarkNumericalIntegration
             services.AddScoped<INewmarkMethod, NewmarkMethod>();

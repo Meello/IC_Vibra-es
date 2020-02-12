@@ -28,8 +28,9 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
         /// <summary>
         /// Responsible to calculate the mass matrix of the beam.
         /// </summary>
-        /// <param name="beam"></param>
-        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="beamMass"></param>
+        /// <param name="dvaMasses"></param>
+        /// <param name="dvaNodePositions"></param>
         /// <returns></returns>
         public async Task<double[,]> CalculateMassWithDva(double[,] beamMass, double[] dvaMasses, uint[] dvaNodePositions)
         {
@@ -56,8 +57,9 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
         /// <summary>
         /// Responsible to calculate the hardness matrix of the beam.
         /// </summary>
-        /// <param name="beam"></param>
-        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="beamHardness"></param>
+        /// <param name="dvaHardness"></param>
+        /// <param name="dvaNodePositions"></param>
         /// <returns></returns>
         public async Task<double[,]> CalculateBeamHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions)
         {

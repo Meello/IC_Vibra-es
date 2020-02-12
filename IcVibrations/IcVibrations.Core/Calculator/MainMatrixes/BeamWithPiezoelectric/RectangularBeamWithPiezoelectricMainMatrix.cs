@@ -1,15 +1,33 @@
-﻿using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.ArrayOperations;
+using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.Models;
 using IcVibrations.Core.Models.Piezoelectric;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
 {
+    /// <summary>
+    /// It's responsible to calculate the beam with piezoelectric main matrixes.
+    /// </summary>
     public class RectangularBeamWithPiezoelectricMainMatrix : BeamWithPiezoelectricMainMatrix<RectangularProfile>
     {
+        /// <summary>
+        /// Class construtor.
+        /// </summary>
+        /// <param name="commonMainMatrix"></param>
+        /// <param name="beamMainMatrix"></param>
+        /// <param name="arrayOperation"></param>
+        public RectangularBeamWithPiezoelectricMainMatrix(
+            ICommonMainMatrix commonMainMatrix, 
+            IBeamMainMatrix<RectangularProfile> beamMainMatrix, 
+            IArrayOperation arrayOperation) 
+            : base(commonMainMatrix, beamMainMatrix, arrayOperation)
+        {
+        }
+
         public override Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<RectangularProfile> beamWithPiezoelectric)
         {
             double[,] piezoelectricCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];

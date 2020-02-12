@@ -14,18 +14,16 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// It's responsible to calculate piezoelectric mass matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
-        Task<double[,]> CalculateMass(BeamWithPiezoelectric<TProfile> piezoelectric, uint degreesFreedomMaximum);
+        Task<double[,]> CalculateMass(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum);
 
         /// <summary>
         /// It's responsible to calculate piezoelectric hardness matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
         Task<double[,]> CalculateHardness(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum);
         
@@ -33,63 +31,68 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// It's responsible to calculate piezoelectric element hardness matrix.
         /// </summary>
         /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
+        /// <param name="elasticityConstant"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        Task<double[,]> CalculatePiezoelectricElementHardness(double momentInertia, double elasticityToConstantElectricField, double length);
+        Task<double[,]> CalculatePiezoelectricElementHardness(double momentInertia, double elasticityConstant, double length);
 
         /// <summary>
         /// It's responsible to calculate piezoelectric electromechanical coupling matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
         Task<double[,]> CalculatePiezoelectricElectromechanicalCoupling(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum);
 
         /// <summary>
         /// It's responsible to calculate piezoelectric element electromechanical coupling matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
         /// <returns></returns>
-        Task<double[,]> CalculatePiezoelectricElementElectromechanicalCoupling(BeamWithPiezoelectric<TProfile> piezoelectric);
+        Task<double[,]> CalculatePiezoelectricElementElectromechanicalCoupling(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric);
 
         /// <summary>
         /// It's responsible to calculate piezoelectric capacitance matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="numberOfElements"></param>
         /// <returns></returns>
-        Task<double[,]> CalculatePiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint elementCount);
+        Task<double[,]> CalculatePiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint numberOfElements);
 
         /// <summary>
         /// It's responsible to calculate element piezoelectric capacitance matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="beamWithPiezoelectric"></param>
         /// <returns></returns>
-        Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> piezoelectric);
+        Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric);
 
         /// <summary>
         /// It's responsible to calculate equivalent mass matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="mass"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="piezoelectricDegreesFreedomMaximum"></param>
         /// <returns></returns>
         Task<double[,]> CalculateEquivalentMass(double[,] mass, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum);
 
         /// <summary>
         /// It's responsible to calculate equivalent hardness matrix.
         /// </summary>
-        /// <param name="momentInertia"></param>
-        /// <param name="elasticityToConstantElectricField"></param>
-        /// <param name="length"></param>
+        /// <param name="hardness"></param>
+        /// <param name="piezoelectricElectromechanicalCoupling"></param>
+        /// <param name="piezoelectricCapacitance"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="piezoelectricDegreesFreedomMaximum"></param>
         /// <returns></returns>
         Task<double[,]> CalculateEquivalentHardness(double[,] hardness, double[,] piezoelectricElectromechanicalCoupling, double[,] piezoelectricCapacitance, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum);
+
+        /// <summary>
+        /// It's responsible to build the damping matrix.
+        /// </summary>
+        /// <param name="mass"></param>
+        /// <param name="hardness"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint size);
     }
 }
