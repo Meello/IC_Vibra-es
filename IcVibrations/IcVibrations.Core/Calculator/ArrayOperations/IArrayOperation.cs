@@ -6,7 +6,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
     {
         Task<double[,]> InverseMatrix(double[,] matrix, string matrixName);
 
-        Task<double[,]> InverseMatrix(double[,] matrix, int size, string matrixName);
+        Task<double[,]> InverseMatrix(double[,] matrix, uint size, string matrixName);
 
         Task<double[,]> Multiply(double[,] matrix1, double[,] matrix2, string matrixesName);
 

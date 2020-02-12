@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace IcVibrations.Core.NewmarkNumericalIntegration
 {
-    public interface INewmarkMethod<TBeam, TProfile>
-        where TProfile : Profile, new()
-        where TBeam : IBeam<TProfile>, new()
+    public interface INewmarkMethod
     {
-        Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, TBeam beam);
-
-        Task<NewmarkMethodOutput> CreateOutput(NewmarkMethodInput input, OperationResponseBase response);
+        Task<NewmarkMethodResponse> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response);
     }
 }

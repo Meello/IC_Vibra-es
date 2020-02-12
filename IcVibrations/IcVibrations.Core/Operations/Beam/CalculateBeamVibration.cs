@@ -1,4 +1,7 @@
-﻿using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Classes;
+using IcVibrations.Common.Profiles;
+using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
@@ -20,6 +23,7 @@ namespace IcVibrations.Core.Operations.Beam
     {
         private readonly IMappingResolver _mappingResolver;
         private readonly IProfileMapper<TProfile> _profileMapper;
+        private readonly ICommonMainMatrix _mainMatrix;
 
         /// <summary>
         /// Class construtor.
@@ -29,15 +33,17 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
         public CalculateBeamVibration(
-            INewmarkMethod<Beam<TProfile>, TProfile> newmarkMethod,
+            INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IProfileValidator<TProfile> profileValidator,
             IProfileMapper<TProfile> profileMapper,
-            IAuxiliarOperation auxiliarOperation)
+            IAuxiliarOperation auxiliarOperation,
+            ICommonMainMatrix mainMatrix)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
             this._profileMapper = profileMapper;
+            this._mainMatrix = mainMatrix;
         }
 
         public async override Task<Beam<TProfile>> BuildBeam(CalculateBeamVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
@@ -58,6 +64,15 @@ namespace IcVibrations.Core.Operations.Beam
                 NumberOfElements = request.BeamData.NumberOfElements,
                 Profile = request.BeamData.Profile
             };
+        }
+
+        public async override Task<NewmarkMethodInput> CreateInput(Beam<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
+        {
+            NewmarkMethodInput input = new NewmarkMethodInput();
+
+            input.Mass = this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
+
+            return input;
         }
     }
 }

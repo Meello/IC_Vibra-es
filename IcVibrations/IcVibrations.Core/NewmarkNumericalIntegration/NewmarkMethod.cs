@@ -17,12 +17,14 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
     /// <summary>
     /// It's responsible to execute the Newmark numerical integration method to calculate the vibration.
     /// </summary>
-    /// <typeparam name="TBeam"></typeparam>
-    public abstract class NewmarkMethod<TBeam, TProfile> : INewmarkMethod<TBeam, TProfile>
-        where TProfile : Profile, new()
-        where TBeam : IBeam<TProfile>, new()
+    public abstract class NewmarkMethod : INewmarkMethod
     {
-        private readonly IMainMatrix _mainMatrix;
+        /// <summary>
+        /// Integration constants.
+        /// </summary>
+        private double a0, a1, a2, a3, a4, a5;
+        
+        private readonly ICommonMainMatrix _mainMatrix;
         private readonly IAuxiliarOperation _auxiliarMethod;
         private readonly IArrayOperation _arrayOperation;
         private readonly ICalculateGeometricProperty _geometricProperty;
@@ -35,7 +37,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// <param name="arrayOperation"></param>
         /// <param name="geometricProperty"></param>
         public NewmarkMethod(
-            IMainMatrix mainMatrix,
+            ICommonMainMatrix mainMatrix,
             IAuxiliarOperation auxiliarMethod,
             IArrayOperation arrayOperation,
             ICalculateGeometricProperty geometricProperty)
@@ -47,14 +49,12 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         }
 
         /// <summary>
-        /// It's responsible to calculate the main matrixes to the Newmark numerical integration method.
+        /// It's responsivel to generate the response content to Newmark integration method.
         /// </summary>
-        /// <param name="newmarkMethodParameter"></param>
-        /// <param name="beam"></param>
+        /// <param name="input"></param>
+        /// <param name="response"></param>
         /// <returns></returns>
-        public abstract Task<NewmarkMethodInput> CreateInput(NewmarkMethodParameter newmarkMethodParameter, TBeam beam);
-
-        public async Task<NewmarkMethodOutput> CreateOutput(NewmarkMethodInput input, OperationResponseBase response)
+        public async Task<NewmarkMethodResponse> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
             if (input.Parameter.DeltaAngularFrequency != 0)
@@ -67,7 +67,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             }
 
-            NewmarkMethodOutput output = new NewmarkMethodOutput
+            NewmarkMethodResponse output = new NewmarkMethodResponse
             {
                 Analyses = new List<Analysis>()
             };
@@ -91,12 +91,12 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                     input.DeltaTime = Math.PI * 2 / input.Parameter.PeriodDivision;
                 }
 
-                input.A0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
-                input.A1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
-                input.A2 = 1.0 / (Constants.Beta * input.DeltaTime);
-                input.A3 = Constants.Gama / Constants.Beta;
-                input.A4 = 1 / (2 * Constants.Beta);
-                input.A5 = input.DeltaTime * (Constants.Gama / (2 * Constants.Beta) - 1);
+                a0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
+                a1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
+                a2 = 1.0 / (Constants.Beta * input.DeltaTime);
+                a3 = Constants.Gama / Constants.Beta;
+                a4 = 1 / (2 * Constants.Beta);
+                a5 = input.DeltaTime * (Constants.Gama / (2 * Constants.Beta) - 1);
 
                 try
                 {
@@ -342,7 +342,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                     }
                     else
                     {
-                        double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness);
+                        double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions);
 
                         var inversedEquivalentHardnessTask = _arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness));
                         var equivalentForceTask = CalculateEquivalentForce(input, forceAnt, vel, acel);
@@ -354,8 +354,8 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                         Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                         {
-                            deltaVel[iteration] = input.A1 * deltaY[iteration] - input.A3 * velAnt[iteration] - input.A2 * acelAnt[iteration];
-                            deltaAcel[iteration] = input.A0 * deltaY[iteration] - input.A2 * velAnt[iteration] - input.A4 * acelAnt[iteration];
+                            deltaVel[iteration] = a1 * deltaY[iteration] - a3 * velAnt[iteration] - a2 * acelAnt[iteration];
+                            deltaAcel[iteration] = a0 * deltaY[iteration] - a2 * velAnt[iteration] - a4 * acelAnt[iteration];
 
                             y[iteration] = yAnt[iteration] + deltaY[iteration];
                             vel[iteration] = velAnt[iteration] + deltaVel[iteration];
@@ -394,28 +394,28 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return results;
         }
 
-        private Task<double[,]> CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness)
+        private Task<double[,]> CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness, uint numberOfTrueBoundaryConditions)
         {
-            double[,] equivalentHardness = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
+            double[,] equivalentHardness = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
 
-            for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+            for (int i = 0; i < numberOfTrueBoundaryConditions; i++)
             {
-                for (int j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
+                for (int j = 0; j < numberOfTrueBoundaryConditions; j++)
                 {
-                    equivalentHardness[i, j] = input.A0 * mass[i, j] + input.A1 * damping[i, j] + hardness[i, j];
+                    equivalentHardness[i, j] = a0 * mass[i, j] + a1 * damping[i, j] + hardness[i, j];
                 }
             }
 
             return Task.FromResult(equivalentHardness);
         }
 
-        private Task<double[,]> CalculateMatrixP1(double[,] mass, double[,] damping)
+        private Task<double[,]> CalculateMatrixP1(double[,] mass, double[,] damping, uint numberOfTrueBoundaryConditions)
         {
-            double[,] p1 = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
+            double[,] p1 = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
 
-            for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+            for (int i = 0; i < numberOfTrueBoundaryConditions; i++)
             {
-                for (int j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
+                for (int j = 0; j < numberOfTrueBoundaryConditions; j++)
                 {
                     p1[i, j] = a2 * mass[i, j] + a3 * damping[i, j];
                 }
@@ -424,13 +424,13 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return Task.FromResult(p1);
         }
 
-        private Task<double[,]> CalculateMatrixP2(double[,] mass, double[,] damping)
+        private Task<double[,]> CalculateMatrixP2(double[,] mass, double[,] damping, uint numberOfTrueBoundaryConditions)
         {
-            double[,] p2 = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
+            double[,] p2 = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
 
-            for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+            for (int i = 0; i < numberOfTrueBoundaryConditions; i++)
             {
-                for (int j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
+                for (int j = 0; j < numberOfTrueBoundaryConditions; j++)
                 {
                     p2[i, j] = a4 * mass[j, i] + a5 * damping[i, j];
                 }
@@ -442,8 +442,8 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         private async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
         {
             var deltaForceTask = _arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
-            var p1Task = CalculateMatrixP1(input.Mass, input.Damping);
-            var p2Task = CalculateMatrixP2(input.Mass, input.Damping);
+            var p1Task = CalculateMatrixP1(input.Mass, input.Damping, input.NumberOfTrueBoundaryConditions);
+            var p2Task = CalculateMatrixP2(input.Mass, input.Damping, input.NumberOfTrueBoundaryConditions);
 
             double[,] p1 = await p1Task;
             double[,] p2 = await p2Task;

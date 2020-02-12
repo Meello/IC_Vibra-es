@@ -19,7 +19,7 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="profileBuilder"></param>
         /// <param name="auxiliarOperation"></param>
         public CalculateCircularBeamVibration(
-            INewmarkMethod<Beam<CircularProfile>, CircularProfile> newmarkMethod, 
+            INewmarkMethod newmarkMethod, 
             IMappingResolver mappingResolver, 
             IProfileValidator<CircularProfile> profileValidator, 
             IProfileMapper<CircularProfile> profileBuilder, 

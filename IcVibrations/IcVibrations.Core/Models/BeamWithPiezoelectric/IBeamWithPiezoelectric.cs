@@ -38,7 +38,7 @@ namespace IcVibrations.Core.Models.BeamWithPiezoelectric
         /// <summary>
         /// Piezoelectric specific mass.
         /// </summary>
-        double SpecificMass { get; set; }
+        double PiezoelectricSpecificMass { get; set; }
 
         /// <summary>
         /// Elements with piezoelectric.

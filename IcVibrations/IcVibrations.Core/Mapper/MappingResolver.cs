@@ -17,7 +17,7 @@ namespace IcVibrations.Core.Mapper
             this._arrayOperation = arrayOperation;
         }
 
-        public OperationResponseData BuildFrom(NewmarkMethodOutput output, string author, string analysisExplanation)
+        public OperationResponseData BuildFrom(NewmarkMethodResponse output, string author, string analysisExplanation)
         {
             if(output == null || string.IsNullOrEmpty(author) || string.IsNullOrEmpty(analysisExplanation))
             {

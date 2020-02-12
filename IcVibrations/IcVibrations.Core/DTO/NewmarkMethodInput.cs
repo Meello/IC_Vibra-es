@@ -28,39 +28,9 @@ namespace IcVibrations.Core.DTO
         public double[] Force { get; set; }
 
         /// <summary>
-        /// Integration constant.
-        /// </summary>
-        public double A0 { get; set; }
-
-        /// <summary>
-        /// Integration constant.
-        /// </summary>
-        public double A1 { get; set; }
-
-        /// <summary>
-        /// Integration constant.
-        /// </summary>
-        public double A2 { get; set; }
-
-        /// <summary>
-        /// Integration constant.
-        /// </summary>
-        public double A3 { get; set; }
-
-        /// <summary>
-        /// Integration constant.
-        /// </summary>
-        public double A4 { get; set; }
-
-        /// <summary>
-        /// Integration constant.
-        /// </summary>
-        public double A5 { get; set; }
-        
-        /// <summary>
         /// number of boundary conditions that is true.
         /// </summary>
-        public int NumberOfTrueBoundaryConditions { get; set; }
+        public uint NumberOfTrueBoundaryConditions { get; set; }
         
         /// <summary>
         /// Delta time.

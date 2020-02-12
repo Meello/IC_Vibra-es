@@ -8,7 +8,7 @@ namespace IcVibrations.Core.Mapper
 {
     public interface IMappingResolver
     {
-        OperationResponseData BuildFrom(NewmarkMethodOutput output, string author, string analysisExplanation);
+        OperationResponseData BuildFrom(NewmarkMethodResponse output, string author, string analysisExplanation);
 
         Task<double[]> BuildFrom(List<Force> forces, uint degreesFreedomMaximum); 
     }

@@ -1,6 +1,5 @@
 ﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
-using IcVibrations.DataContracts.Beam.Calculate;
 
 namespace IcVibrations.DataContracts.CalculateVibration
 {

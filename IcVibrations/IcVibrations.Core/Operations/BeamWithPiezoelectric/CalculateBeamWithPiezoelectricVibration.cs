@@ -1,17 +1,12 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
-using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
-using IcVibrations.DataContracts.Beam;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
 using IcVibrations.Models.Beam.Characteristics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
@@ -68,7 +63,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 PiezoelectricConstant = request.BeamData.PiezoelectricConstant,
                 PiezoelectricProfile = request.BeamData.PiezoelectricProfile,
                 Profile = request.BeamData.Profile,
-                SpecificMass = request.BeamData.PiezoelectricSpecificMass,
+                PiezoelectricSpecificMass = request.BeamData.PiezoelectricSpecificMass,
                 YoungModulus = request.BeamData.PiezoelectricYoungModulus
             };
         }

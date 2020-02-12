@@ -140,7 +140,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return Task.FromResult(matrizInv);
         }
 
-        public Task<double[,]> InverseMatrix(double[,] matrix, int size, string matrixName)
+        public Task<double[,]> InverseMatrix(double[,] matrix, uint size, string matrixName)
         {
             if (matrix.GetLength(0) != matrix.GetLength(1))
             {

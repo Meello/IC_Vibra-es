@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.BeamWithPiezoelectric;
+using IcVibrations.Models.Beam.Characteristics;
 
 namespace IcVibrations.Core.Models.Piezoelectric
 {
@@ -39,7 +40,7 @@ namespace IcVibrations.Core.Models.Piezoelectric
         /// <summary>
         /// Piezoelectric specific mass.
         /// </summary>
-        public double SpecificMass { get; set; }
+        public double PiezoelectricSpecificMass { get; set; }
 
         /// <summary>
         /// Elements with piezoelectric.

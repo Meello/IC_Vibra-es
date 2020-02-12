@@ -30,7 +30,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
         public CalculateBeamWithDvaVibration(
-            INewmarkMethod<BeamWithDva<TProfile>, TProfile> newmarkMethod, 
+            INewmarkMethod newmarkMethod, 
             IMappingResolver mappingResolver, 
             IProfileValidator<TProfile> profileValidator, 
             IAuxiliarOperation auxiliarOperation,

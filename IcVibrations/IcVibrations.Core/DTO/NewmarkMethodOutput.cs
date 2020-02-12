@@ -7,7 +7,7 @@ namespace IcVibrations.Core.DTO
     /// <summary>
     /// It represents the 
     /// </summary>
-    public class NewmarkMethodOutput
+    public class NewmarkMethodResponse
     {
         /// <summary>
         /// Time, displacement, velocity, aceleration and force for each node in the analyzed beam.

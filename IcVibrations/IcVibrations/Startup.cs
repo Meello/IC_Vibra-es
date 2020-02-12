@@ -7,17 +7,10 @@ using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Core.NewmarkNumericalIntegration;
-using IcVibrations.Core.NewmarkNumericalIntegration.Beam;
-using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva;
-using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithPiezoelectric;
 using IcVibrations.Core.Operations;
 using IcVibrations.Core.Operations.Beam;
 using IcVibrations.Core.Operations.BeamWithDva;
 using IcVibrations.Core.Operations.BeamWithPiezoelectric;
-using IcVibrations.Core.Validators.Beam;
-using IcVibrations.Core.Validators.BeamWithDynamicVibrationAbsorber;
-using IcVibrations.Core.Validators.DynamicVibrationAbsorber;
-using IcVibrations.Core.Validators.MethodParameters;
 using IcVibrations.DataContracts.CalculateVibration.Beam;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
@@ -46,18 +39,13 @@ namespace IcVibrations
             // Calculator
             services.AddScoped<IArrayOperation, ArrayOperation>();
             services.AddScoped<ICalculateGeometricProperty, CalculateGeometricProperty>();
-            services.AddScoped<IMainMatrix, MainMatrix>();
+            services.AddScoped<ICommonMainMatrix, CommonMainMatrix>();
             
             // Mapper
             services.AddScoped<IMappingResolver, MappingResolver>();
-            
-            // Methods
-            services.AddScoped<INewmarkMethod<Beam<RectangularProfile>, RectangularProfile>, NewmarkMethodToBeam<RectangularProfile>>();
-            services.AddScoped<INewmarkMethod<Beam<CircularProfile>, CircularProfile>, NewmarkMethodToBeam<CircularProfile>>();
-            services.AddScoped<INewmarkMethod<BeamWithDva<RectangularProfile>, RectangularProfile>, NewmarkMethodToBeamWithDva<RectangularProfile>>();
-            services.AddScoped<INewmarkMethod<BeamWithDva<CircularProfile>, CircularProfile>, NewmarkMethodToBeamWithDva<CircularProfile>>();
-            services.AddScoped<INewmarkMethod<BeamWithPiezoelectric<RectangularProfile>, RectangularProfile>, NewmarkMethodToBeamWithPiezoelectric<RectangularProfile>>();
-            services.AddScoped<INewmarkMethod<BeamWithPiezoelectric<CircularProfile>, CircularProfile>, NewmarkMethodToBeamWithPiezoelectric<CircularProfile>>();
+
+            // NewmarkNumericalIntegration
+            services.AddScoped<INewmarkMethod, NewmarkMethod>();
 
             // Auxiliar Operations
             services.AddScoped<IAuxiliarOperation, AuxiliarOperation>();
