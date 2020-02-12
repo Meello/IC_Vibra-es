@@ -1,7 +1,6 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
-using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.Methods.AuxiliarOperations;

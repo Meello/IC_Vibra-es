@@ -1,7 +1,7 @@
-﻿using IcVibrations.Common;
-using IcVibrations.Core.Calculator.ArrayOperations;
+﻿using IcVibrations.Common.Classes;
 using IcVibrations.Core.DTO;
 using IcVibrations.DataContracts;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,14 +9,6 @@ namespace IcVibrations.Core.Mapper
 {
     public class MappingResolver : IMappingResolver
     {
-        private readonly IArrayOperation _arrayOperation;
-
-        public MappingResolver(
-            IArrayOperation arrayOperation)
-        {
-            this._arrayOperation = arrayOperation;
-        }
-
         public OperationResponseData BuildFrom(NewmarkMethodResponse output, string author, string analysisExplanation)
         {
             if(output == null || string.IsNullOrEmpty(author) || string.IsNullOrEmpty(analysisExplanation))
@@ -32,25 +24,27 @@ namespace IcVibrations.Core.Mapper
             };
         }
 
-        public async Task<double[]> BuildFrom(List<Force> forces, uint degreesFreedomMaximum)
+        public Task<double[]> BuildFrom(List<Force> forces, uint degreesFreedomMaximum)
         {
             if(forces == null)
             {
                 return null;
             }
 
-            int i = 0;
-            double[] forceValues = new double[forces.Count];
-            uint[] forceNodePositions = new uint[forces.Count];
-
-            foreach (Force force in forces)
+            double[] force = new double[degreesFreedomMaximum];
+            foreach (Force applyedForce in forces)
             {
-                forceValues[i] = force.Value;
-                forceNodePositions[i] = force.NodePosition;
-                i += 1;
+                try
+                {
+                    force[applyedForce.NodePosition - 1] = applyedForce.Value;
+                }
+                catch(Exception ex)
+                {
+                    throw new Exception($"Error creating force matrix. {ex.Message}.");
+                }
             }
 
-            return await this._arrayOperation.Create(forceValues, degreesFreedomMaximum, forceNodePositions, nameof(forceValues));
+            return Task.FromResult(force);
         }
     }
 }

@@ -38,6 +38,11 @@ namespace IcVibrations.Core.Models.Piezoelectric
         public double ElasticityConstant { get; set; }
 
         /// <summary>
+        /// Electrical charge on piezoelectric surface.
+        /// </summary>
+        public double[] ElectricalCharge { get; set; }
+
+        /// <summary>
         /// Piezoelectric specific mass.
         /// </summary>
         public double PiezoelectricSpecificMass { get; set; }

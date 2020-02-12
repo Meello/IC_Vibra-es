@@ -36,6 +36,11 @@ namespace IcVibrations.Core.Models.BeamWithPiezoelectric
         double ElasticityConstant { get; set; }
 
         /// <summary>
+        /// Electrical charge on piezoelectric surface.
+        /// </summary>
+        double[] ElectricalCharge { get; set; }
+
+        /// <summary>
         /// Piezoelectric specific mass.
         /// </summary>
         double PiezoelectricSpecificMass { get; set; }

@@ -67,18 +67,27 @@ namespace IcVibrations.Core.Operations
         protected override async Task<CalculateVibrationResponse> ProcessOperation(TRequest request)
         {
             CalculateVibrationResponse response = new CalculateVibrationResponse();
+            
+            try
+            {
+                uint degreesFreedomMaximum = this._auxiliarOperation.CalculateDegreesFreedomMaximum(request.BeamData.NumberOfElements);
 
-            uint degreesFreedomMaximum = this._auxiliarOperation.CalculateDegreesFreedomMaximum(request.BeamData.NumberOfElements);
+                TBeam beam = await this.BuildBeam(request, degreesFreedomMaximum);
 
-            TBeam beam = await this.BuildBeam(request, degreesFreedomMaximum);
+                NewmarkMethodInput input = await this.CreateInput(beam, request.MethodParameterData, degreesFreedomMaximum);
 
-            NewmarkMethodInput input = await this.CreateInput(beam, request.MethodParameterData, degreesFreedomMaximum);
+                NewmarkMethodResponse output = await this._newmarkMethod.CalculateResponse(input, response);
 
-            NewmarkMethodResponse output = await this._newmarkMethod.CalculateResponse(input, response);
+                response.Data = this._mappingResolver.BuildFrom(output, request.Author, request.AnalysisExplanation);
 
-            response.Data = this._mappingResolver.BuildFrom(output, request.Author, request.AnalysisExplanation);
+                return response;
+            }
+            catch(Exception ex)
+            {
+                response.AddError("000", ex.Message);
 
-            return response;
+                return response;
+            }
         }
 
         /// <summary>

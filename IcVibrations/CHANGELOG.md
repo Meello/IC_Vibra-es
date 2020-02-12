@@ -6,6 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 ### Changed
-- Refact all application to accept any profile.
-- Optimize application.
-- Improve inheritances.
+- Refacted all application to accept any profile.
+- Optimized application.
+- Improved inheritances.

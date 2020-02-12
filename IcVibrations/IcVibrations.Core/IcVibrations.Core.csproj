@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="Repositories\**" />
+    <Compile Remove="Validators\Piezoelectric\**" />
     <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="Validators\Piezoelectric\**" />
     <None Remove="Repositories\**" />
+    <None Remove="Validators\Piezoelectric\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Validators\Piezoelectric\Abstract\" />
+    <Folder Include="Validators\" />
   </ItemGroup>
 
 </Project>

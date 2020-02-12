@@ -1,4 +1,4 @@
-﻿namespace IcVibrations.Common
+﻿namespace IcVibrations.Common.Classes
 {
     /// <summary>
     /// It represents the content of DynamicVibrationAbsorber.

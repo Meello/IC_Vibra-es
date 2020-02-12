@@ -21,4 +21,11 @@
     <ProjectReference Include="..\IcVibrations.Repository\IcVibrations.Repositories.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mapper\" />
+    <Folder Include="Methods\" />
+    <Folder Include="Operations\" />
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
 </Project>

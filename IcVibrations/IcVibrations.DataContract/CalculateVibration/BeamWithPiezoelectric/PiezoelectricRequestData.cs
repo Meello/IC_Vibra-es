@@ -1,5 +1,7 @@
-﻿using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Common.Classes;
+using IcVibrations.Common.Profiles;
 using IcVibrations.DataContracts.CalculateVibration.Beam;
+using System.Collections.Generic;
 
 namespace IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric
 {
@@ -34,6 +36,11 @@ namespace IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric
         /// Elasticity value for constant electric field. Variable: c11.
         /// </summary>
         public double ElasticityConstant { get; set; }
+
+        /// <summary>
+        /// Electrical charges on piezoelectric surface.
+        /// </summary>
+        public List<ElectricalCharge> ElectricalCharges { get; set; }
 
         /// <summary>
         /// Piezoelectric specific mass.

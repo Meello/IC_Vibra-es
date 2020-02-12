@@ -1,4 +1,4 @@
-﻿using IcVibrations.Common;
+﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.DataContracts.CalculateVibration.Beam;
 using System.Collections.Generic;
