@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
@@ -27,6 +28,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         private readonly IProfileMapper<TProfile> _profileMapper;
         private readonly IBeamWithPiezoelectricMainMatrix<TProfile> _mainMatrix;
         private readonly ICommonMainMatrix _commonMainMatrix;
+        private readonly IArrayOperation _arrayOperation;
 
         /// <summary>
         /// Class constructor.
@@ -38,6 +40,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         /// <param name="profileMapper"></param>
         /// <param name="mainMatrix"></param>
         /// <param name="commonMainMatrix"></param>
+        /// <param name="arrayOperation"></param>
         public CalculateBeamWithPiezoelectricVibration(
             INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
@@ -45,7 +48,8 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             IAuxiliarOperation auxiliarOperation,
             IProfileMapper<TProfile> profileMapper,
             IBeamWithPiezoelectricMainMatrix<TProfile> mainMatrix,
-            ICommonMainMatrix commonMainMatrix)
+            ICommonMainMatrix commonMainMatrix,
+            IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
@@ -53,6 +57,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             this._profileMapper = profileMapper;
             this._mainMatrix = mainMatrix;
             this._commonMainMatrix = commonMainMatrix;
+            this._arrayOperation = arrayOperation;
         }
 
         public async override Task<BeamWithPiezoelectric<TProfile>> BuildBeam(CalculateBeamWithPiezoelectricVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
@@ -90,24 +95,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
 
             uint piezoelectricDegreesFreedomMaximum = beam.NumberOfElements;
 
-            double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
-
-            double[,] hardness = await this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
-
-            double[,] piezoelectricElectromechanicalCoupling = await this._mainMatrix.CalculatePiezoelectricElectromechanicalCoupling(beam, degreesFreedomMaximum);
-
-            double[,] piezoelectricCapacitance = await this._mainMatrix.CalculatePiezoelectricCapacitance(beam);
-
-            // Matrixes to 
-            double[,] equivalentMass = await this._mainMatrix.CalculateEquivalentMass(mass, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
-
-            double[,] equivalentHardness = await this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
-
-            double[] force = beam.Forces;
-
-            double[] electricalCharge = beam.ElectricalCharge;
-
-            bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
             uint numberOfTrueBoundaryConditions = 0;
 
             for (int i = 0; i < degreesFreedomMaximum; i++)
@@ -118,15 +106,35 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 }
             }
 
-            input.Mass = this._auxiliarOperation.AplyBondaryConditions(equivalentMass, bondaryCondition, numberOfTrueBoundaryConditions);
+            // Main matrixes to create input.
+            double[,] mass = await this._mainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
-            input.Hardness = this._auxiliarOperation.AplyBondaryConditions(equivalentHardness, bondaryCondition, numberOfTrueBoundaryConditions);
+            double[,] hardness = await this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
 
-            input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, numberOfTrueBoundaryConditions);
+            double[,] piezoelectricElectromechanicalCoupling = await this._mainMatrix.CalculatePiezoelectricElectromechanicalCoupling(beam, degreesFreedomMaximum);
 
-            input.Force = this._auxiliarOperation.AplyBondaryConditions(force, bondaryCondition, numberOfTrueBoundaryConditions);
+            double[,] piezoelectricCapacitance = await this._mainMatrix.CalculatePiezoelectricCapacitance(beam);
 
-            input.ElectricalCharge = this._auxiliarOperation.AplyBondaryConditions(electricalCharge, bondaryCondition, numberOfTrueBoundaryConditions);
+            double[,] equivalentMass = await this._mainMatrix.CalculateEquivalentMass(mass, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
+
+            double[,] equivalentHardness = await this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
+            
+            double[,] damping = await this._mainMatrix.CalculateDamping(equivalentMass, equivalentHardness, degreesFreedomMaximum);
+
+            double[] force = beam.Forces;
+
+            double[] electricalCharge = beam.ElectricalCharge;
+
+            double[] equivalentForce = await this._arrayOperation.MergeArray(force, electricalCharge);
+
+            // Creating input.
+            input.Mass = this._auxiliarOperation.ApplyBondaryConditions(equivalentMass, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
+
+            input.Hardness = this._auxiliarOperation.ApplyBondaryConditions(equivalentHardness, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
+
+            input.Damping = this._auxiliarOperation.ApplyBondaryConditions(damping, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
+
+            input.Force = this._auxiliarOperation.ApplyBondaryConditions(equivalentForce, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
 
             input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
 

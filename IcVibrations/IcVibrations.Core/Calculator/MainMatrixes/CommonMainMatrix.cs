@@ -1,11 +1,5 @@
-﻿using IcVibrations.Common.Profiles;
-using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.Models;
-using IcVibrations.Core.Models.Beam;
-using IcVibrations.Core.Models.Piezoelectric;
+﻿using IcVibrations.Core.Models;
 using IcVibrations.Models.Beam.Characteristics;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Calculator.MainMatrixes
@@ -77,6 +71,37 @@ namespace IcVibrations.Calculator.MainMatrixes
         public Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum)
         {
             bool[] bondaryCondition = new bool[degreesFreedomMaximum];
+
+            for (uint i = 0; i < degreesFreedomMaximum; i++)
+            {
+                if (i == 0 || i == degreesFreedomMaximum - 2)
+                {
+                    bondaryCondition[i] = firstFastening.Displacement;
+                }
+                else if (i == 1 || i == degreesFreedomMaximum - 1)
+                {
+                    bondaryCondition[i] = firstFastening.Angle;
+                }
+                else
+                {
+                    bondaryCondition[i] = true;
+                }
+            }
+
+            return Task.FromResult(bondaryCondition);
+        }
+
+        /// <summary>
+        /// It's rewsponsible to build the bondary condition matrix.
+        /// </summary>
+        /// <param name="firstFastening"></param>
+        /// <param name="lastFastening"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="piezoelectricDegreesFreedomMaximum"></param>
+        /// <returns></returns>
+        public Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
+        {
+            bool[] bondaryCondition = new bool[degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum];
 
             for (uint i = 0; i < degreesFreedomMaximum; i++)
             {

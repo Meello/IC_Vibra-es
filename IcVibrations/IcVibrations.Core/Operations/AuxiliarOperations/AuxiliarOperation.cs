@@ -4,29 +4,13 @@ namespace IcVibrations.Methods.AuxiliarOperations
 {
     public class AuxiliarOperation : IAuxiliarOperation
     {
-        public double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, uint numberOfBondaryConditionsTrue)
+        public double[,] ApplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, uint size)
         {
-            int i, j, k, count1, count2;
+            int i, j, count1, count2;
 
             int n = matrix.GetLength(0);
 
-            double[,] matrixCC = new double[numberOfBondaryConditionsTrue, numberOfBondaryConditionsTrue];
-
-            for (i = 0; i < n; i++)
-            {
-                if (bondaryConditions[i] == false)
-                {
-                    for (j = 0; j < n; j++)
-                    {
-                        matrix[i, j] = 0;
-                    }
-
-                    for (k = 0; k < n; k++) 
-                    { 
-                        matrix[k, i] = 0;
-                    }
-                }
-            }
+            double[,] matrixBC = new double[size, size];
 
             count2 = 0;
 
@@ -38,7 +22,7 @@ namespace IcVibrations.Methods.AuxiliarOperations
                 {
                     if (bondaryConditions[i] == true && bondaryConditions[j] == true)
                     {
-                        matrixCC[count1, count2] = matrix[j, i];
+                        matrixBC[count1, count2] = matrix[j, i];
 
                         count1 += 1;
                     }
@@ -50,16 +34,16 @@ namespace IcVibrations.Methods.AuxiliarOperations
                 }
             }
 
-            return matrixCC;
+            return matrixBC;
         }
 
-        public double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions, uint numberOfBondaryConditionsTrue)
+        public double[] ApplyBondaryConditions(double[] matrix, bool[] bondaryConditions, uint size)
         {
             int i, count1 = 0;
 
             int n = matrix.GetLength(0);
 
-            double[] matrixCC = new double[numberOfBondaryConditionsTrue];
+            double[] matrixCC = new double[size];
 
             for (i = 0; i < n; i++)
             {

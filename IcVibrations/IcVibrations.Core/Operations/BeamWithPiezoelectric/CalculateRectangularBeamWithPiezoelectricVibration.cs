@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
@@ -15,7 +16,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
     public class CalculateRectangularBeamWithPiezoelectricVibration : CalculateBeamWithPiezoelectricVibration<RectangularProfile>
     {
         /// <summary>
-        /// Class contructor.
+        /// Class constructor.
         /// </summary>
         /// <param name="newmarkMethod"></param>
         /// <param name="mappingResolver"></param>
@@ -24,6 +25,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         /// <param name="profileMapper"></param>
         /// <param name="mainMatrix"></param>
         /// <param name="commonMainMatrix"></param>
+        /// <param name="arrayOperation"></param>
         public CalculateRectangularBeamWithPiezoelectricVibration(
             INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
@@ -31,8 +33,9 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             IAuxiliarOperation auxiliarOperation, 
             IProfileMapper<RectangularProfile> profileMapper, 
             IBeamWithPiezoelectricMainMatrix<RectangularProfile> mainMatrix,
-            ICommonMainMatrix commonMainMatrix) 
-            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, commonMainMatrix)
+            ICommonMainMatrix commonMainMatrix,
+            IArrayOperation arrayOperation)
+            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, commonMainMatrix, arrayOperation)
         {
         }
     }

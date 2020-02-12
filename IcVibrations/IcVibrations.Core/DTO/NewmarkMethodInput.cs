@@ -28,11 +28,6 @@ namespace IcVibrations.Core.DTO
         public double[] Force { get; set; }
 
         /// <summary>
-        /// Electrical charge on piezoelectric surface.
-        /// </summary>
-        public double[] ElectricalCharge { get; set; }
-
-        /// <summary>
         /// number of boundary conditions that is true.
         /// </summary>
         public uint NumberOfTrueBoundaryConditions { get; set; }

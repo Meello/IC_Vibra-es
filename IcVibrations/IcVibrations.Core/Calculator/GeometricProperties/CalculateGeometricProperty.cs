@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Calculator.GeometricProperties
@@ -29,8 +27,9 @@ namespace IcVibrations.Calculator.GeometricProperties
                 area = (Math.PI / 4) * (Math.Pow(diameter, 2) - Math.Pow(diameter - 2 * thickness, 2));
             }
 
-            return area;
+            return Task.FromResult(area);
         }
+
         /// <summary>
         /// Method to calculate the area to rectangular or square profile.
         /// </summary>
@@ -51,7 +50,7 @@ namespace IcVibrations.Calculator.GeometricProperties
                 area = (height * width) - ((height - 2 * thickness) * (width - 2 * thickness));
             }
 
-            return area;
+            return Task.FromResult(area);
         }
 
         /// <summary>
@@ -62,18 +61,18 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <returns></returns>
         public Task<double> MomentOfInertia(double diameter, double thickness)
         {
-            double momentoInercia;
+            double momentOfInertia;
 
             if (thickness == default)
             {
-                momentoInercia = Math.PI * Math.Pow(diameter, 4) / 64;
+                momentOfInertia = Math.PI * Math.Pow(diameter, 4) / 64;
             }
             else
             {
-                momentoInercia = (Math.PI / 64) * (Math.Pow(diameter, 4) - Math.Pow(diameter - 2 * thickness, 4));
+                momentOfInertia = (Math.PI / 64) * (Math.Pow(diameter, 4) - Math.Pow(diameter - 2 * thickness, 4));
             }
 
-            return momentoInercia;
+            return Task.FromResult(momentOfInertia);
         }
 
         /// <summary>
@@ -85,18 +84,18 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <returns></returns>
         public Task<double> MomentOfInertia(double height, double width, double thickness)
         {
-            double momentoInercia;
+            double momentOfInertia;
 
             if (thickness == default)
             {
-                momentoInercia = Math.Pow(height, 3) * width / 12;
+                momentOfInertia = Math.Pow(height, 3) * width / 12;
             }
             else
             {
-                momentoInercia = (Math.Pow(height, 3) * width - (Math.Pow(height - 2 * thickness, 3) * (width - 2 * thickness))) / 12;
+                momentOfInertia = (Math.Pow(height, 3) * width - (Math.Pow(height - 2 * thickness, 3) * (width - 2 * thickness))) / 12;
             }
 
-            return momentoInercia;
+            return Task.FromResult(momentOfInertia);
         }
     }
 }

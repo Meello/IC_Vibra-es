@@ -2,9 +2,9 @@
 {
     public interface IAuxiliarOperation
     {
-        double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, uint numberOfBondaryConditionsTrue);
+        double[,] ApplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, uint size);
 
-        double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions, uint numberOfBondaryConditionsTrue);
+        double[] ApplyBondaryConditions(double[] matrix, bool[] bondaryConditions, uint size);
 
         uint CalculateDegreesFreedomMaximum(uint numberOfElements);
 

@@ -4,6 +4,8 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 {
     public interface IArrayOperation
     {
+        Task<double[]> MergeArray(double[] array1, double[] array2);
+
         Task<double[,]> InverseMatrix(double[,] matrix, string matrixName);
 
         Task<double[,]> InverseMatrix(double[,] matrix, uint size, string matrixName);

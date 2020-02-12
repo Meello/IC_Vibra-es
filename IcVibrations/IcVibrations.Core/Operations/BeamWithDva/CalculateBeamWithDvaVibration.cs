@@ -101,6 +101,18 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
+            bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            uint numberOfTrueBoundaryConditions = 0;
+
+            for (int i = 0; i < degreesFreedomMaximum; i++)
+            {
+                if (bondaryCondition[i] == true)
+                {
+                    numberOfTrueBoundaryConditions += 1;
+                }
+            }
+
+            // Main matrixes to create input.
             double[,] mass = await this._beamMainMatrix.CalculateMass(beam, degreesFreedomMaximum);
 
             double[,] hardness = await this._beamMainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
@@ -113,24 +125,14 @@ namespace IcVibrations.Core.Operations.BeamWithDva
 
             double[] forces = beam.Forces;
 
-            bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
-            uint numberOfTrueBoundaryConditions = 0;
+            // Creating input.
+            input.Mass = this._auxiliarOperation.ApplyBondaryConditions(massWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
 
-            for (int i = 0; i < degreesFreedomMaximum; i++)
-            {
-                if (bondaryCondition[i] == true)
-                {
-                    numberOfTrueBoundaryConditions += 1;
-                }
-            }
+            input.Hardness = this._auxiliarOperation.ApplyBondaryConditions(hardnessWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
 
-            input.Mass = this._auxiliarOperation.AplyBondaryConditions(massWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
+            input.Damping = this._auxiliarOperation.ApplyBondaryConditions(dampingWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
 
-            input.Hardness = this._auxiliarOperation.AplyBondaryConditions(hardnessWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
-
-            input.Damping = await this._mainMatrix.CalculateDamping(input.Mass, input.Hardness, numberOfTrueBoundaryConditions);
-
-            input.Force = this._auxiliarOperation.AplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions);
+            input.Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions);
 
             input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
 
