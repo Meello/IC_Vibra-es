@@ -31,14 +31,6 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         private readonly IBeamMainMatrix<TProfile> _beamMainMatrix;
         private readonly ICommonMainMatrix _commonMainMatrix;
         private readonly IArrayOperation _arrayOperation;
-        private INewmarkMethod newmarkMethod;
-        private IMappingResolver mappingResolver;
-        private IProfileValidator<CircularProfile> profileValidator;
-        private IAuxiliarOperation auxiliarOperation;
-        private IProfileMapper<CircularProfile> profileMapper;
-        private IBeamWithDvaMainMatrix mainMatrix;
-        private IBeamMainMatrix<CircularProfile> beamMainMatrix;
-        private ICommonMainMatrix commonMainMatrix;
 
         /// <summary>
         /// Class contructor.

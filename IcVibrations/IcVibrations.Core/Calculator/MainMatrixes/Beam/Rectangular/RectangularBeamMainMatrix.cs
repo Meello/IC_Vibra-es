@@ -1,18 +1,18 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
 
-namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
+namespace IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular
 {
     /// <summary>
     /// It's responsible to calculate the circular beam main matrixes.
     /// </summary>
-    public class CircularBeamMainMatrix : BeamMainMatrix<CircularProfile>
+    public class RectangularBeamMainMatrix : BeamMainMatrix<RectangularProfile>, IRectangularBeamMainMatrix
     {
         /// <summary>
         /// Class construtor.
         /// </summary>
         /// <param name="commonMainMatrix"></param>
-        public CircularBeamMainMatrix(ICommonMainMatrix commonMainMatrix) : base(commonMainMatrix)
+        public RectangularBeamMainMatrix(ICommonMainMatrix commonMainMatrix) : base(commonMainMatrix)
         {
         }
     }

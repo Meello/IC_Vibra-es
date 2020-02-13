@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Common.Profiles;
-using IcVibrations.Core.Operations.Beam;
+using IcVibrations.Core.Operations.Beam.Circular;
+using IcVibrations.Core.Operations.Beam.Rectangular;
 using IcVibrations.Core.Operations.BeamWithDva;
 using IcVibrations.Core.Operations.BeamWithPiezoelectric;
 using IcVibrations.DataContracts.CalculateVibration;
@@ -17,7 +18,7 @@ namespace IC_Vibrations.Controllers
     {
         [HttpPost("rectangular")]
         public async Task<ActionResult<CalculateVibrationResponse>> Calculate(
-            [FromServices] CalculateRectangularBeamVibration calculateVibration,
+            [FromServices] ICalculateRectangularBeamVibration calculateVibration,
             [FromBody] CalculateBeamVibrationRequest<RectangularProfile> request)
         {
             CalculateVibrationResponse response = await calculateVibration.Process(request);
@@ -62,7 +63,7 @@ namespace IC_Vibrations.Controllers
 
         [HttpPost("circular")]
         public async Task<ActionResult<CalculateVibrationResponse>> Calculate(
-            [FromServices] CalculateCircularBeamVibration calculateVibration,
+            [FromServices] ICalculateCircularBeamVibration calculateVibration,
             [FromBody] CalculateBeamVibrationRequest<CircularProfile> request)
         {
             CalculateVibrationResponse response = await calculateVibration.Process(request);

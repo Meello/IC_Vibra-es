@@ -4,9 +4,9 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Mapper.Profiles
+namespace IcVibrations.Core.Mapper.Profiles.Rectangular
 {
-    public class RectangularProfileMapper : ProfileMapper<RectangularProfile>
+    public class RectangularProfileMapper : ProfileMapper<RectangularProfile>, IRectangularProfileMapper
     {
         private readonly IArrayOperation _arrayOperation;
         private readonly ICalculateGeometricProperty _calculateGeometricProperty;

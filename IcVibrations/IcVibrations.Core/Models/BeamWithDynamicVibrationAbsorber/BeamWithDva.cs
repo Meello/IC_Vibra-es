@@ -6,7 +6,7 @@ namespace IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber
     /// <summary>
     /// It represents a beam with dynamic vibration absorber.
     /// </summary>
-    public class BeamWithDva<TProfile> : Beam<TProfile>, IBeamWithDva<TProfile>
+    public class BeamWithDva<TProfile> : Beam<TProfile>
         where TProfile : Profile, new()
     {
         /// <summary>

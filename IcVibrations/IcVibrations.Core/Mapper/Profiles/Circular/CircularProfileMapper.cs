@@ -4,12 +4,12 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Mapper.Profiles
+namespace IcVibrations.Core.Mapper.Profiles.Circular
 {
     /// <summary>
     /// It's responsible to build a circular profile.
     /// </summary>
-    public class CircularProfileMapper : ProfileMapper<CircularProfile>
+    public class CircularProfileMapper : ProfileMapper<CircularProfile>, ICircularProfileMapper
     {
         private readonly IArrayOperation _arrayOperation;
         private readonly ICalculateGeometricProperty _calculateGeometricProperty;
@@ -23,19 +23,19 @@ namespace IcVibrations.Core.Mapper.Profiles
             IArrayOperation arrayOperation,
             ICalculateGeometricProperty calculateGeometricProperty)
         {
-            _arrayOperation = arrayOperation;
-            _calculateGeometricProperty = calculateGeometricProperty;
+            this._arrayOperation = arrayOperation;
+            this._calculateGeometricProperty = calculateGeometricProperty;
         }
 
         public async override Task<GeometricProperty> Execute(CircularProfile profile, uint degreesFreedomMaximum)
         {
             GeometricProperty geometricProperty = new GeometricProperty();
 
-            double area = await _calculateGeometricProperty.Area(profile.Diameter, profile.Thickness.Value);
-            double momentOfInertia = await _calculateGeometricProperty.MomentOfInertia(profile.Diameter, profile.Thickness.Value);
+            double area = await this._calculateGeometricProperty.Area(profile.Diameter, profile.Thickness.Value);
+            double momentOfInertia = await this._calculateGeometricProperty.MomentOfInertia(profile.Diameter, profile.Thickness.Value);
 
-            geometricProperty.Area = await _arrayOperation.Create(area, degreesFreedomMaximum);
-            geometricProperty.MomentOfInertia = await _arrayOperation.Create(momentOfInertia, degreesFreedomMaximum);
+            geometricProperty.Area = await this._arrayOperation.Create(area, degreesFreedomMaximum);
+            geometricProperty.MomentOfInertia = await this._arrayOperation.Create(momentOfInertia, degreesFreedomMaximum);
 
             return geometricProperty;
         }

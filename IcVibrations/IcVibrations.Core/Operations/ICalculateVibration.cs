@@ -12,7 +12,7 @@ namespace IcVibrations.Core.Operations
         where TProfile : Profile, new()
         where TRequestData : CalculateVibrationRequestData<TProfile>
         where TRequest : CalculateVibrationRequest<TProfile, TRequestData>
-        where TBeam : IBeam<TProfile>, new()
+        where TBeam : AbstractBeam<TProfile>, new()
     {
     }
 }

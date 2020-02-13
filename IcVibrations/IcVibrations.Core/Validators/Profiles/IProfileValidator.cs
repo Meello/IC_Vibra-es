@@ -1,4 +1,5 @@
 ﻿using IcVibrations.Common.Profiles;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Validators.Profiles
 {
@@ -9,5 +10,6 @@ namespace IcVibrations.Core.Validators.Profiles
     public interface IProfileValidator<TProfile>
         where TProfile : Profile
     {
+        Task<bool> Execute(TProfile profile);
     }
 }

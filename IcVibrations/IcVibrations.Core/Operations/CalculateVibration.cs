@@ -23,7 +23,7 @@ namespace IcVibrations.Core.Operations
         where TProfile : Profile, new()
         where TRequestData : CalculateVibrationRequestData<TProfile>, new()
         where TRequest : CalculateVibrationRequest<TProfile, TRequestData>
-        where TBeam : IBeam<TProfile>, new()
+        where TBeam : AbstractBeam<TProfile>, new()
     {
         private readonly INewmarkMethod _newmarkMethod;
         private readonly IMappingResolver _mappingResolver;
@@ -95,9 +95,16 @@ namespace IcVibrations.Core.Operations
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateVibrationResponse> ValidateOperation(TRequest request)
+        protected async override Task<CalculateVibrationResponse> ValidateOperation(TRequest request)
         {
-            throw new NotImplementedException();
+            CalculateVibrationResponse response = new CalculateVibrationResponse();
+
+            if(!await this._profileValidator.Execute(request.BeamData.Profile))
+            {
+                return response;
+            }
+
+            return response;
         }
     }
 }

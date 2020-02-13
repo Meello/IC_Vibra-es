@@ -11,7 +11,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
     /// It's responsible to calculate the beam main matrixes.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class BeamMainMatrix<TProfile> : IBeamMainMatrix<TProfile>
+    public abstract class BeamMainMatrix<TProfile> : IBeamMainMatrix<TProfile>
         where TProfile : Profile, new()
     {
         private readonly ICommonMainMatrix _commonMainMatrix;

@@ -1,7 +1,5 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Models.Beam;
-using IcVibrations.Core.Models.BeamWithPiezoelectric;
-using IcVibrations.Models.Beam.Characteristics;
 
 namespace IcVibrations.Core.Models.Piezoelectric
 {
@@ -9,7 +7,7 @@ namespace IcVibrations.Core.Models.Piezoelectric
     /// It represents a beam with piezoelectric.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class BeamWithPiezoelectric<TProfile> : Beam<TProfile>, IBeamWithPiezoelectric<TProfile>
+    public class BeamWithPiezoelectric<TProfile> : Beam<TProfile>
         where TProfile : Profile, new()
     {
         /// <summary>
