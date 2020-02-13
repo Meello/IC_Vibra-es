@@ -11,7 +11,7 @@ namespace IcVibrations.Core.Mapper
     {
         public OperationResponseData BuildFrom(NewmarkMethodResponse output, string author, string analysisExplanation)
         {
-            if(output == null || string.IsNullOrEmpty(author) || string.IsNullOrEmpty(analysisExplanation))
+            if (output == null || string.IsNullOrEmpty(author) || string.IsNullOrEmpty(analysisExplanation))
             {
                 return null;
             }
@@ -26,7 +26,7 @@ namespace IcVibrations.Core.Mapper
 
         public Task<double[]> BuildFrom(List<Force> forces, uint degreesFreedomMaximum)
         {
-            if(forces == null)
+            if (forces == null)
             {
                 return null;
             }
@@ -36,9 +36,9 @@ namespace IcVibrations.Core.Mapper
             {
                 try
                 {
-                    force[applyedForce.NodePosition - 1] = applyedForce.Value;
+                    force[2 * (applyedForce.NodePosition)] = applyedForce.Value;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw new Exception($"Error creating force matrix. {ex.Message}.");
                 }
@@ -59,7 +59,7 @@ namespace IcVibrations.Core.Mapper
             {
                 try
                 {
-                    electricalCharge[eC.NodePosition - 1] = eC.Value;
+                    electricalCharge[2 * (eC.NodePosition)] = eC.Value;
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,6 @@
-﻿namespace IcVibrations.Methods.AuxiliarOperations
+﻿using IcVibrations.Common.Classes;
+
+namespace IcVibrations.Methods.AuxiliarOperations
 {
     public interface IAuxiliarOperation
     {
@@ -8,6 +10,8 @@
 
         uint CalculateDegreesFreedomMaximum(uint numberOfElements);
 
-        //void WriteInFile(string path, NewmarkMethodOutput output);
+        void WriteInFile(string path, Result result);
+
+        void WriteInFile(string path, string message);
     }
 }

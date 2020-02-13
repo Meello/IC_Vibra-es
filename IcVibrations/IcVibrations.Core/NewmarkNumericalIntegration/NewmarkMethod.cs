@@ -3,8 +3,10 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
 using IcVibrations.DataContracts;
+using IcVibrations.Methods.AuxiliarOperations;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.NewmarkNumericalIntegration
@@ -20,18 +22,19 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         private double a0, a1, a2, a3, a4, a5;
         
         private readonly IArrayOperation _arrayOperation;
+        private readonly IAuxiliarOperation _auxiliarOperation;
 
         /// <summary>
         /// Class construtor.
         /// </summary>
-        /// <param name="mainMatrix"></param>
-        /// <param name="auxiliarMethod"></param>
         /// <param name="arrayOperation"></param>
-        /// <param name="geometricProperty"></param>
+        /// <param name="auxiliarOperation"></param>
         public NewmarkMethod(
-            IArrayOperation arrayOperation)
+            IArrayOperation arrayOperation,
+            IAuxiliarOperation auxiliarOperation)
         {
-            _arrayOperation = arrayOperation;
+            this._arrayOperation = arrayOperation;
+            this._auxiliarOperation = auxiliarOperation;
         }
 
         /// <summary>
@@ -62,11 +65,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             {
                 input.AngularFrequency = input.Parameter.InitialAngularFrequency + i * input.Parameter.DeltaAngularFrequency.Value;
 
-                var analysisResult = new Analysis()
-                {
-                    AngularFrequency = input.AngularFrequency,
-                    Results = new List<Result>()
-                };
+                
 
                 if (input.AngularFrequency != 0)
                 {
@@ -86,7 +85,13 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                 try
                 {
-                    analysisResult.Results = await Solution(input);
+                    var analysisResult = new Analysis()
+                    {
+                        AngularFrequency = input.AngularFrequency,
+                        Results = await Solution(input)
+                    };
+
+                    output.Analyses.Add(analysisResult);
                 }
                 catch (Exception ex)
                 {
@@ -101,7 +106,10 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
         private async Task<List<Result>> Solution(NewmarkMethodInput input)
         {
+            string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibra-es\IcVibrations\Solutions\TestSolution.txt";
+
             List<Result> results = new List<Result>();
+            Result result = new Result();
 
             int i, jn, jp;
             double time = input.Parameter.InitialTime;
@@ -132,7 +140,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                 {
                     Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                     {
-                        // Force can't initiate in 0?
+                        // Force can't initiate in 0 (?)
                         input.Force[iteration] = force[iteration] * Math.Cos(input.AngularFrequency * time);
                     });
 
@@ -142,17 +150,17 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         double[] matrix_K_Y;
                         double[] matrix_C_Vel;
 
-                        //var massInverseTask = this._arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse));
-                        //var matrix_K_YTask = this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y));
-                        //var matrix_C_VelTask = this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel));
+                        //var massInverseTask2 = this._arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse));
+                        //var matrix_K_YTask2 = this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y));
+                        //var matrix_C_VelTask2 = this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel));
 
-                        //massInverse = await massInverseTask;
-                        //matrix_K_Y = await matrix_K_YTask;
-                        //matrix_C_Vel = await matrix_C_VelTask;
+                        //massInverse = await massInverseTask2;
+                        //matrix_K_Y = await matrix_K_YTask2;
+                        //matrix_C_Vel = await matrix_C_VelTask2;
 
-                        //double[] subtractionResult = await this._arrayOperation.Subtract(input.Force, matrix_K_Y, matrix_C_Vel, $"{nameof(input.Force)}, {nameof(matrix_K_Y)}, {nameof(matrix_C_Vel)}");
+                        //double[] subtractionResult2 = await this._arrayOperation.Subtract(input.Force, matrix_K_Y, matrix_C_Vel, $"{nameof(input.Force)}, {nameof(matrix_K_Y)}, {nameof(matrix_C_Vel)}");
 
-                        //acel = await this._arrayOperation.Multiply(massInverse, subtractionResult, $"{nameof(massInverse)}, {nameof(subtractionResult)}");
+                        //acel = await this._arrayOperation.Multiply(massInverse, subtractionResult2, $"{nameof(massInverse)}, {nameof(subtractionResult2)}");
 
                         var massInverseTask = Task.Run(async () =>
                         {
@@ -175,6 +183,10 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         matrix_K_Y = matrix_K_YTask.Result;
                         matrix_C_Vel = matrix_C_VelTask.Result;
 
+                        double[] subtractionResult = await this._arrayOperation.Subtract(input.Force, matrix_K_Y, matrix_C_Vel, $"{nameof(input.Force)}, {nameof(matrix_K_Y)}, {nameof(matrix_C_Vel)}");
+
+                        acel = await this._arrayOperation.Multiply(massInverse, subtractionResult, $"{nameof(massInverse)}, {nameof(subtractionResult)}");
+
                         Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                         {
                             acelAnt[iteration] = acel[iteration];
@@ -194,7 +206,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                         Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                         {
-                            deltaVel[iteration] = a1 * deltaY[iteration] - a3 * velAnt[iteration] - a2 * acelAnt[iteration];
+                            deltaVel[iteration] = a1 * deltaY[iteration] - a3 * velAnt[iteration] - a5 * acelAnt[iteration];
                             deltaAcel[iteration] = a0 * deltaY[iteration] - a2 * velAnt[iteration] - a4 * acelAnt[iteration];
 
                             y[iteration] = yAnt[iteration] + deltaY[iteration];
@@ -203,20 +215,20 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         });
                     }
 
-                    if (jp >= 0)
+                    result.Time = time;
+                    result.Displacemens = y;
+                    result.Velocities = vel;
+                    result.Acelerations = acel;
+                    result.Forces = force;
+
+                    if (jn == 0)
                     {
-                        Result iterationResult = new Result
-                        {
-                            Time = time,
-                            Displacemens = y,
-                            Velocities = vel,
-                            Acelerations = acel,
-                            Forces = input.Force
-                        };
-
-                        results.Add(iterationResult);
-
-                        // Escrever no arquivo.
+                        this._auxiliarOperation.WriteInFile(path, $"time, y-{input.NumberOfTrueBoundaryConditions}, vel-{input.NumberOfTrueBoundaryConditions}, acel-{input.NumberOfTrueBoundaryConditions}, force-{input.NumberOfTrueBoundaryConditions}");
+                        this._auxiliarOperation.WriteInFile(path, result);
+                    }
+                    else
+                    {
+                        this._auxiliarOperation.WriteInFile(path, result);
                     }
 
                     time += input.DeltaTime;

@@ -1,4 +1,7 @@
-﻿using IcVibrations.Core.Models;
+﻿using IcVibrations.Common.Classes;
+using IcVibrations.Core.Models;
+using System;
+using System.IO;
 
 namespace IcVibrations.Methods.AuxiliarOperations
 {
@@ -62,24 +65,62 @@ namespace IcVibrations.Methods.AuxiliarOperations
             return (numberOfElements + 1) * Constants.NodesPerElement;
         }
 
-        //public void WriteInFile(string path, NewmarkMethodOutput output)
-        //{
-        //    StreamWriter streamWriter = new StreamWriter(path);
+        public void WriteInFile(string path, Result result)
+        {
+            StreamWriter streamWriter = new StreamWriter(path, true);
 
-        //    try
-        //    {
-        //        using (StreamWriter sw = streamWriter)
-        //        {
-        //            sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
+            try
+            {
+                using (StreamWriter sw = streamWriter)
+                {
+                    sw.Write(sw.NewLine);
 
-        //            sw.Close();
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        // Não quero que pare, só avise que deu erro.
-        //        throw new Exception("Couldn't open file.");
-        //    }
-        //}
+                    sw.Write(string.Format("{0}, ", result.Time));
+
+                    for(int i = 0; i< result.Displacemens.Length; i++)
+                    {
+                        sw.Write(string.Format("{0}, ", result.Displacemens[i]));
+                    }
+
+                    for (int i = 0; i < result.Velocities.Length; i++)
+                    {
+                        sw.Write(string.Format("{0}, ", result.Velocities[i]));
+                    }
+
+                    for (int i = 0; i < result.Acelerations.Length; i++)
+                    {
+                        sw.Write(string.Format("{0}, ", result.Acelerations[i]));
+                    }
+
+                    for (int i = 0; i < result.Forces.Length; i++)
+                    {
+                        sw.Write(string.Format("{0}, ", result.Forces[i]));
+                    }
+                }
+            }
+            catch
+            {
+                throw new Exception("Couldn't open file.");
+            }
+        }
+
+        public void WriteInFile(string path, string message)
+        {
+            StreamWriter streamWriter = new StreamWriter(path);
+
+            try
+            {
+                using (StreamWriter sw = streamWriter)
+                {
+                    sw.WriteLine(message);
+
+                    sw.Close();
+                }
+            }
+            catch
+            {
+                throw new Exception("Couldn't open file.");
+            }
+        }
     }
 }
