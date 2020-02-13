@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
 using IcVibrations.Core.DTO;
@@ -29,6 +30,15 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         private readonly IBeamWithDvaMainMatrix _mainMatrix;
         private readonly IBeamMainMatrix<TProfile> _beamMainMatrix;
         private readonly ICommonMainMatrix _commonMainMatrix;
+        private readonly IArrayOperation _arrayOperation;
+        private INewmarkMethod newmarkMethod;
+        private IMappingResolver mappingResolver;
+        private IProfileValidator<CircularProfile> profileValidator;
+        private IAuxiliarOperation auxiliarOperation;
+        private IProfileMapper<CircularProfile> profileMapper;
+        private IBeamWithDvaMainMatrix mainMatrix;
+        private IBeamMainMatrix<CircularProfile> beamMainMatrix;
+        private ICommonMainMatrix commonMainMatrix;
 
         /// <summary>
         /// Class contructor.
@@ -49,7 +59,8 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             IProfileMapper<TProfile> profileMapper,
             IBeamWithDvaMainMatrix mainMatrix,
             IBeamMainMatrix<TProfile> beamMainMatrix,
-            ICommonMainMatrix commonMainMatrix) 
+            ICommonMainMatrix commonMainMatrix,
+            IArrayOperation arrayOperation) 
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
@@ -58,6 +69,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             this._mainMatrix = mainMatrix;
             this._beamMainMatrix = beamMainMatrix;
             this._commonMainMatrix = commonMainMatrix;
+            this._arrayOperation = arrayOperation;
         }
 
         public async override Task<BeamWithDva<TProfile>> BuildBeam(CalculateBeamWithDvaVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
@@ -81,11 +93,23 @@ namespace IcVibrations.Core.Operations.BeamWithDva
                 i += 1;
             }
 
+            GeometricProperty geometricProperty = new GeometricProperty();
+
+            if (request.BeamData.Profile.Area != default && request.BeamData.Profile.MomentOfInertia != default)
+            {
+                geometricProperty.Area = await this._arrayOperation.Create(request.BeamData.Profile.Area.Value, request.BeamData.NumberOfElements);
+                geometricProperty.MomentOfInertia = await this._arrayOperation.Create(request.BeamData.Profile.MomentOfInertia.Value, request.BeamData.NumberOfElements);
+            }
+            else
+            {
+                geometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum);
+            }
+
             return new BeamWithDva<TProfile>()
             {
                 FirstFastening = FasteningFactory.Create(request.BeamData.FirstFastening),
                 Forces = await this._mappingResolver.BuildFrom(request.BeamData.Forces, degreesFreedomMaximum),
-                GeometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum),
+                GeometricProperty = geometricProperty,
                 LastFastening = FasteningFactory.Create(request.BeamData.LastFastening),
                 Length = request.BeamData.Length,
                 Material = MaterialFactory.Create(request.BeamData.Material),

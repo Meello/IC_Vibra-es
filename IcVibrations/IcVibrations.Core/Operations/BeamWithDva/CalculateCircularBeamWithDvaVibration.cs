@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
 using IcVibrations.Core.Mapper;
@@ -34,8 +35,9 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             IProfileMapper<CircularProfile> profileMapper,
             IBeamWithDvaMainMatrix mainMatrix, 
             IBeamMainMatrix<CircularProfile> beamMainMatrix,
-            ICommonMainMatrix commonMainMatrix) 
-            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, beamMainMatrix, commonMainMatrix)
+            ICommonMainMatrix commonMainMatrix,
+            IArrayOperation arrayOperation) 
+            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, beamMainMatrix, commonMainMatrix, arrayOperation)
         {
         }
     }

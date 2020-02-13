@@ -67,6 +67,18 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 return null;
             }
 
+            GeometricProperty geometricProperty = new GeometricProperty();
+
+            if (request.BeamData.Profile.Area != default && request.BeamData.Profile.MomentOfInertia != default)
+            {
+                geometricProperty.Area = await this._arrayOperation.Create(request.BeamData.Profile.Area.Value, request.BeamData.NumberOfElements);
+                geometricProperty.MomentOfInertia = await this._arrayOperation.Create(request.BeamData.Profile.MomentOfInertia.Value, request.BeamData.NumberOfElements);
+            }
+            else
+            {
+                geometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum);
+            }
+
             return new BeamWithPiezoelectric<TProfile>()
             {
                 DielectricConstant = request.BeamData.DielectricConstant,
@@ -75,7 +87,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 ElementsWithPiezoelectric = request.BeamData.ElementsWithPiezoelectric,
                 FirstFastening = FasteningFactory.Create(request.BeamData.FirstFastening),
                 Forces = await this._mappingResolver.BuildFrom(request.BeamData.Forces, degreesFreedomMaximum),
-                GeometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum),
+                GeometricProperty = geometricProperty,
                 LastFastening = FasteningFactory.Create(request.BeamData.LastFastening),
                 Length = request.BeamData.Length,
                 Material = MaterialFactory.Create(request.BeamData.Material),

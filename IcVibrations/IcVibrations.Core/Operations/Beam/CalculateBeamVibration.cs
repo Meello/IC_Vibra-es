@@ -1,6 +1,7 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
@@ -27,6 +28,7 @@ namespace IcVibrations.Core.Operations.Beam
         private readonly IAuxiliarOperation _auxiliarOperation;
         private readonly IBeamMainMatrix<TProfile> _mainMatrix;
         private readonly ICommonMainMatrix _commonMainMatrix;
+        private readonly IArrayOperation _arrayOperation;
 
         /// <summary>
         /// Class constructor.
@@ -38,6 +40,7 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="auxiliarOperation"></param>
         /// <param name="mainMatrix"></param>
         /// <param name="commonMainMatrix"></param>
+        /// <param name="arrayOperation"></param>
         public CalculateBeamVibration(
             INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
@@ -45,7 +48,8 @@ namespace IcVibrations.Core.Operations.Beam
             IProfileMapper<TProfile> profileMapper,
             IAuxiliarOperation auxiliarOperation,
             IBeamMainMatrix<TProfile> mainMatrix,
-            ICommonMainMatrix commonMainMatrix)
+            ICommonMainMatrix commonMainMatrix,
+            IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
@@ -53,6 +57,7 @@ namespace IcVibrations.Core.Operations.Beam
             this._auxiliarOperation = auxiliarOperation;
             this._mainMatrix = mainMatrix;
             this._commonMainMatrix = commonMainMatrix;
+            this._arrayOperation = arrayOperation;
         }
 
         public async override Task<Beam<TProfile>> BuildBeam(CalculateBeamVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
@@ -62,11 +67,23 @@ namespace IcVibrations.Core.Operations.Beam
                 return null;
             }
 
+            GeometricProperty geometricProperty = new GeometricProperty();
+
+            if(request.BeamData.Profile.Area != default && request.BeamData.Profile.MomentOfInertia != default)
+            {
+                geometricProperty.Area = await this._arrayOperation.Create(request.BeamData.Profile.Area.Value, request.BeamData.NumberOfElements);
+                geometricProperty.MomentOfInertia = await this._arrayOperation.Create(request.BeamData.Profile.MomentOfInertia.Value, request.BeamData.NumberOfElements);
+            }
+            else
+            {
+                geometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum);
+            }
+
             return new Beam<TProfile>()
             {
                 FirstFastening = FasteningFactory.Create(request.BeamData.FirstFastening),
                 Forces = await this._mappingResolver.BuildFrom(request.BeamData.Forces, degreesFreedomMaximum),
-                GeometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum),
+                GeometricProperty = geometricProperty,
                 LastFastening = FasteningFactory.Create(request.BeamData.LastFastening),
                 Length = request.BeamData.Length,
                 Material = MaterialFactory.Create(request.BeamData.Material),

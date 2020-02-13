@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
@@ -24,15 +25,17 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="auxiliarOperation"></param>
         /// <param name="mainMatrix"></param>
         /// <param name="commonMainMatrix"></param>
+        /// <param name="arrayOperation"></param>
         public CalculateRectangularBeamVibration(
             INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IProfileValidator<RectangularProfile> profileValidator,
             IProfileMapper<RectangularProfile> profileMapper,
             IAuxiliarOperation auxiliarOperation, 
-            IBeamMainMatrix<RectangularProfile> mainMatrix, 
-            ICommonMainMatrix commonMainMatrix) 
-            : base(newmarkMethod, mappingResolver, profileValidator, profileMapper, auxiliarOperation, mainMatrix, commonMainMatrix)
+            IBeamMainMatrix<RectangularProfile> mainMatrix,
+            ICommonMainMatrix commonMainMatrix,
+            IArrayOperation arrayOperation)
+            : base(newmarkMethod, mappingResolver, profileValidator, profileMapper, auxiliarOperation, mainMatrix, commonMainMatrix, arrayOperation)
         {
         }
     }

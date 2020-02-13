@@ -1,13 +1,8 @@
-﻿using IcVibrations.Calculator.GeometricProperties;
-using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Common.Classes;
-using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Common.Classes;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
-using IcVibrations.Core.Models.Beam;
 using IcVibrations.DataContracts;
-using IcVibrations.Methods.AuxiliarOperations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,17 +12,14 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
     /// <summary>
     /// It's responsible to execute the Newmark numerical integration method to calculate the vibration.
     /// </summary>
-    public abstract class NewmarkMethod : INewmarkMethod
+    public class NewmarkMethod : INewmarkMethod
     {
         /// <summary>
         /// Integration constants.
         /// </summary>
         private double a0, a1, a2, a3, a4, a5;
         
-        private readonly ICommonMainMatrix _mainMatrix;
-        private readonly IAuxiliarOperation _auxiliarMethod;
         private readonly IArrayOperation _arrayOperation;
-        private readonly ICalculateGeometricProperty _geometricProperty;
 
         /// <summary>
         /// Class construtor.
@@ -37,15 +29,9 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// <param name="arrayOperation"></param>
         /// <param name="geometricProperty"></param>
         public NewmarkMethod(
-            ICommonMainMatrix mainMatrix,
-            IAuxiliarOperation auxiliarMethod,
-            IArrayOperation arrayOperation,
-            ICalculateGeometricProperty geometricProperty)
+            IArrayOperation arrayOperation)
         {
-            _mainMatrix = mainMatrix;
-            _auxiliarMethod = auxiliarMethod;
             _arrayOperation = arrayOperation;
-            _geometricProperty = geometricProperty;
         }
 
         /// <summary>

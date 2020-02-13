@@ -47,6 +47,9 @@ namespace IcVibrations
             services.AddScoped<IProfileMapper<CircularProfile>, CircularProfileMapper>();
             services.AddScoped<IProfileMapper<RectangularProfile>, RectangularProfileMapper>();
 
+            // Models
+            //services.AddTransient<IBeam<RectangularProfile>, Beam<RectangularProfile>>();
+
             // NewmarkNumericalIntegration
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
 
