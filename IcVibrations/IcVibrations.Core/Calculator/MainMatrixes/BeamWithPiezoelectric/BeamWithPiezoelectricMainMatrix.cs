@@ -66,7 +66,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
                 {
                     for (uint j = (dfe / 2) * n; j < (dfe / 2) * n + dfe; j++)
                     {
-                        mass[i, j] += elementPiezoelectricMass[i - (dfe / 2) * n, j - (dfe / 2) * n];
+                        mass[i, j] += elementPiezoelectricMass[i - (dfe / 2) * n, j - (dfe / 2) * n] + elementBeamMass[i - (dfe / 2) * n, j - (dfe / 2) * n];
                     }
                 }
             }
@@ -277,15 +277,15 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
                     {
                         equivalentHardness[i, j] = hardness[i, j];
                     }
-                    else if (i < degreesFreedomMaximum && j > degreesFreedomMaximum)
+                    else if (i < degreesFreedomMaximum && j >= degreesFreedomMaximum)
                     {
                         equivalentHardness[i, j] = piezoelectricElectromechanicalCoupling[i, j - degreesFreedomMaximum];
                     }
-                    else if (i > degreesFreedomMaximum && j < degreesFreedomMaximum)
+                    else if (i >= degreesFreedomMaximum && j < degreesFreedomMaximum)
                     {
                         equivalentHardness[i, j] = piezoelectricElectromechanicalCouplingTransposed[i - degreesFreedomMaximum, j];
                     }
-                    else if (i > degreesFreedomMaximum && j > degreesFreedomMaximum)
+                    else if (i >= degreesFreedomMaximum && j >= degreesFreedomMaximum)
                     {
                         equivalentHardness[i, j] = piezoelectricCapacitance[i - degreesFreedomMaximum, j - degreesFreedomMaximum];
                     }
