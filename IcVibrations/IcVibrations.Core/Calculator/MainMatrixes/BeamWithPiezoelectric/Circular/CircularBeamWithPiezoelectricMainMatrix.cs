@@ -27,7 +27,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Circul
         {
         }
 
-        public override Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<CircularProfile> beamWithPiezoelectric)
+        public override Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<CircularProfile> beamWithPiezoelectric, uint elementIndex)
         {
             throw new NotImplementedException();
         }

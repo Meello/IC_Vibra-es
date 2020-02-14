@@ -59,7 +59,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
 
                 if (beamWithPiezoelectric.ElementsWithPiezoelectric.Contains(n + 1))
                 {
-                    elementPiezoelectricMass = await this._commonMainMatrix.CalculateElementMass(beamWithPiezoelectric.Profile.Area.Value, beamWithPiezoelectric.PiezoelectricSpecificMass, elementLength);
+                    elementPiezoelectricMass = await this._commonMainMatrix.CalculateElementMass(beamWithPiezoelectric.PiezoelectricGeometricProperty.Area[n], beamWithPiezoelectric.PiezoelectricSpecificMass, elementLength);
                 }
 
                 for (uint i = (dfe / 2) * n; i < (dfe / 2) * n + dfe; i++)
@@ -87,16 +87,16 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
 
             double[,] hardness = new double[degreesFreedomMaximum, degreesFreedomMaximum];
 
-            double length = beamWithPiezoelectric.Length / numberOfElements;
+            double elementLength = beamWithPiezoelectric.Length / numberOfElements;
 
             for (uint n = 0; n < numberOfElements; n++)
             {
                 double[,] piezoelectricElementHardness = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
-                double[,] beamElementHardness = await this._beamMainMatrix.CalculateElementHardness(beamWithPiezoelectric.GeometricProperty.MomentOfInertia[n], beamWithPiezoelectric.Material.YoungModulus, length);
+                double[,] beamElementHardness = await this._beamMainMatrix.CalculateElementHardness(beamWithPiezoelectric.GeometricProperty.MomentOfInertia[n], beamWithPiezoelectric.Material.YoungModulus, elementLength);
 
                 if (beamWithPiezoelectric.ElementsWithPiezoelectric.Contains(n + 1))
                 {
-                    piezoelectricElementHardness = await this.CalculatePiezoelectricElementHardness(beamWithPiezoelectric.ElasticityConstant, beamWithPiezoelectric.Profile.MomentOfInertia.Value, length);
+                    piezoelectricElementHardness = await this.CalculatePiezoelectricElementHardness(beamWithPiezoelectric.ElasticityConstant, beamWithPiezoelectric.PiezoelectricGeometricProperty.MomentOfInertia[n], elementLength);
                 }
 
                 for (uint i = (dfe / 2) * n; i < (dfe / 2) * n + dfe; i++)
@@ -200,7 +200,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
 
                 if (beamWithPiezoelectric.ElementsWithPiezoelectric.Contains(n - 1))
                 {
-                    piezoelectricElementCapacitance = await this.CalculateElementPiezoelectricCapacitance(beamWithPiezoelectric);
+                    piezoelectricElementCapacitance = await this.CalculateElementPiezoelectricCapacitance(beamWithPiezoelectric, n);
                 }
 
                 for (uint i = n; i < n + Constants.PiezoelectricElementMatrixSize; i++)
@@ -220,7 +220,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// </summary>
         /// <param name="beamWithPiezoelectric"></param>
         /// <returns></returns>
-        public abstract Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric);
+        public abstract Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint elementIndex);
 
         /// <summary>
         /// It's responsible to calculate equivalent mass matrix.

@@ -35,7 +35,7 @@ namespace IcVibrations.Models.Beam.Characteristics
         public override double SpecificMass => 7850;
     }
 
-    public class Aluminium : Material
+    public class Aluminum : Material
     {
         public override double YoungModulus => 70e9;
 
@@ -52,6 +52,7 @@ namespace IcVibrations.Models.Beam.Characteristics
             {
                 case Materials.Steel1020: return new Steel1020();
                 case Materials.Steel4130: return new Steel4130();
+                case Materials.Aluminum: return new Aluminum();
             }
 
             throw new Exception();

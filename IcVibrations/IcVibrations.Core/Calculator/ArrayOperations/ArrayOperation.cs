@@ -22,6 +22,18 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return Task.FromResult(matrixToAdd);
         }
 
+        public Task<double[]> AddValue(double[] matrixToAdd, double value, uint[] nodePositions, string matrixName)
+        {
+            int size = nodePositions.Length;
+
+            for (int i = 0; i < size; i++)
+            {
+                matrixToAdd[2 * nodePositions[i]] += value;
+            }
+
+            return Task.FromResult(matrixToAdd);
+        }
+
         public Task<double[]> Create(double value, uint size)
         {
             double[] newArray = new double[size];
@@ -235,7 +247,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 }
                 else
                 {
-                    mergedArray[i] = array1[i];
+                    mergedArray[i] = array2[i - array1.Length];
                 }
             }
 
@@ -466,7 +478,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
         {
             int row = matrix.GetLength(0);
             int column = matrix.GetLength(1);
-            double[,] matrixTransposed = new double[row, column];
+            double[,] matrixTransposed = new double[column, row];
 
             for (int i = 0; i < row; i++)
             {

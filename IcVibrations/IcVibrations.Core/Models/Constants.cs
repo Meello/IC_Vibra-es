@@ -14,9 +14,9 @@
 
         public const double Gama = 0.5;
 
-        public const double Alpha = 0.005;
+        public const double Alpha = 1e-6;
 
-        public const double Mi = 0.005;
+        public const double Mi = 0;
 
         public const int PiezoelectricElementMatrixSize = 2;
     }

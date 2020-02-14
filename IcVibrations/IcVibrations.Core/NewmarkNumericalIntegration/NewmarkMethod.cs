@@ -20,7 +20,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// Integration constants.
         /// </summary>
         private double a0, a1, a2, a3, a4, a5;
-        
+
         private readonly IArrayOperation _arrayOperation;
         private readonly IAuxiliarOperation _auxiliarOperation;
 
@@ -46,7 +46,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         public async Task<NewmarkMethodResponse> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
-            if (input.Parameter.DeltaAngularFrequency != 0)
+            if (input.Parameter.DeltaAngularFrequency != default)
             {
                 angularFrequencyLoopCount = (int)((input.Parameter.FinalAngularFrequency - input.Parameter.InitialAngularFrequency) / input.Parameter.DeltaAngularFrequency) + 1;
             }
@@ -63,9 +63,14 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
-                input.AngularFrequency = input.Parameter.InitialAngularFrequency + i * input.Parameter.DeltaAngularFrequency.Value;
-
-                
+                if(angularFrequencyLoopCount == 1)
+                {
+                    input.AngularFrequency = input.Parameter.InitialAngularFrequency;
+                }
+                else
+                {
+                    input.AngularFrequency = (input.Parameter.InitialAngularFrequency + i * input.Parameter.DeltaAngularFrequency.Value) * 2 * Math.PI;
+                }
 
                 if (input.AngularFrequency != 0)
                 {

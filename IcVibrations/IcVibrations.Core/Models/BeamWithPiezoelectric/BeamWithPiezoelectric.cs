@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Models.Beam;
+using IcVibrations.Models.Beam.Characteristics;
 
 namespace IcVibrations.Core.Models.Piezoelectric
 {
@@ -49,6 +50,11 @@ namespace IcVibrations.Core.Models.Piezoelectric
         /// Elements with piezoelectric.
         /// </summary>
         public uint[] ElementsWithPiezoelectric { get; set; }
+
+        /// <summary>
+        /// Piezoelectric geometric properties.
+        /// </summary>
+        public GeometricProperty PiezoelectricGeometricProperty { get; set; }
 
         /// <summary>
         /// Piezoelectric profile.

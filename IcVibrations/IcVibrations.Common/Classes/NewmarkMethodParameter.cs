@@ -21,17 +21,17 @@
         public uint NumberOfPeriods { get; set; }
 
         /// <summary>
-        /// Initial angular frequency.
+        /// Initial angular frequency. Receive in Hz and convert to rad/s to the calculus.
         /// </summary>
         public double InitialAngularFrequency { get; set; }
 
         /// <summary>
-        /// Delta angular frequency.
+        /// Delta angular frequency. Receive in Hz and convert to rad/s to the calculus.
         /// </summary>
         public double? DeltaAngularFrequency { get; set; }
 
         /// <summary>
-        /// Final angular frequency.
+        /// Final angular frequency. Receive in Hz and convert to rad/s to the calculus.
         /// </summary>
         public double? FinalAngularFrequency { get; set; }
     }

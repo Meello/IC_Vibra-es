@@ -68,6 +68,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             }
 
             GeometricProperty geometricProperty = new GeometricProperty();
+            GeometricProperty piezoelectricGeometricProperty = new GeometricProperty();
 
             if (request.BeamData.Profile.Area != default && request.BeamData.Profile.MomentOfInertia != default)
             {
@@ -77,6 +78,17 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             else
             {
                 geometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum);
+            }
+
+            if (request.BeamData.PiezoelectricProfile.Area != default && request.BeamData.PiezoelectricProfile.MomentOfInertia != default)
+            {
+                piezoelectricGeometricProperty.Area = await this._arrayOperation.Create(request.BeamData.PiezoelectricProfile.Area.Value, request.BeamData.NumberOfElements);
+                piezoelectricGeometricProperty.MomentOfInertia = await this._arrayOperation.Create(request.BeamData.PiezoelectricProfile.MomentOfInertia.Value, request.BeamData.NumberOfElements);
+            }
+            else
+            {
+                // Criar método similar a AddValue dentro do ProfileMapper.
+                piezoelectricGeometricProperty = await this._profileMapper.Execute(request.BeamData.PiezoelectricProfile, degreesFreedomMaximum);
             }
 
             return new BeamWithPiezoelectric<TProfile>()
@@ -94,10 +106,11 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 NumberOfElements = request.BeamData.NumberOfElements,
                 PiezoelectricConstant = request.BeamData.PiezoelectricConstant,
                 PiezoelectricProfile = request.BeamData.PiezoelectricProfile,
+                PiezoelectricGeometricProperty = piezoelectricGeometricProperty,
                 Profile = request.BeamData.Profile,
                 PiezoelectricSpecificMass = request.BeamData.PiezoelectricSpecificMass,
                 YoungModulus = request.BeamData.PiezoelectricYoungModulus,
-                ElectricalCharge = new double[degreesFreedomMaximum]
+                ElectricalCharge = new double[request.BeamData.NumberOfElements]
             };
         }
 
@@ -148,7 +161,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
 
             input.Force = this._auxiliarOperation.ApplyBondaryConditions(equivalentForce, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
 
-            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
+            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum;
 
             input.Parameter = newmarkMethodParameter;
 

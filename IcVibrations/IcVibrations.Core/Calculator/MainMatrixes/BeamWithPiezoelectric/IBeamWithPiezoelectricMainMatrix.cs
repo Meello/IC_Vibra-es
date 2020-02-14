@@ -64,7 +64,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// </summary>
         /// <param name="beamWithPiezoelectric"></param>
         /// <returns></returns>
-        Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric);
+        Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint elementIndex);
 
         /// <summary>
         /// It's responsible to calculate equivalent mass matrix.

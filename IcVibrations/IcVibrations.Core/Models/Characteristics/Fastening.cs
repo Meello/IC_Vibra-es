@@ -45,7 +45,7 @@ namespace IcVibrations.Models.Beam.Characteristics
             {
                 case Fastenings.Fixed: return new Fixed();
                 case Fastenings.Pinned: return new Pinned();
-                case Fastenings.Simple: return new None();
+                case Fastenings.None: return new None();
             }
 
             throw new Exception();

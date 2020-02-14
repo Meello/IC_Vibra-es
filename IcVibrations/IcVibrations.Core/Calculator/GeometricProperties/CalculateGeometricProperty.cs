@@ -14,7 +14,7 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="diameter"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        public Task<double> Area(double diameter, double thickness)
+        public Task<double> Area(double diameter, double? thickness)
         {
             double area;
 
@@ -24,7 +24,7 @@ namespace IcVibrations.Calculator.GeometricProperties
             }
             else
             {
-                area = (Math.PI / 4) * (Math.Pow(diameter, 2) - Math.Pow(diameter - 2 * thickness, 2));
+                area = (Math.PI / 4) * (Math.Pow(diameter, 2) - Math.Pow(diameter - 2 * thickness.Value, 2));
             }
 
             return Task.FromResult(area);
@@ -37,7 +37,7 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="width"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        public Task<double> Area(double height, double width, double thickness)
+        public Task<double> Area(double height, double width, double? thickness)
         {
             double area;
 
@@ -47,7 +47,7 @@ namespace IcVibrations.Calculator.GeometricProperties
             }
             else
             {
-                area = (height * width) - ((height - 2 * thickness) * (width - 2 * thickness));
+                area = (height * width) - ((height - 2 * thickness.Value) * (width - 2 * thickness.Value));
             }
 
             return Task.FromResult(area);
@@ -59,7 +59,7 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="diameter"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        public Task<double> MomentOfInertia(double diameter, double thickness)
+        public Task<double> MomentOfInertia(double diameter, double? thickness)
         {
             double momentOfInertia;
 
@@ -69,7 +69,7 @@ namespace IcVibrations.Calculator.GeometricProperties
             }
             else
             {
-                momentOfInertia = (Math.PI / 64) * (Math.Pow(diameter, 4) - Math.Pow(diameter - 2 * thickness, 4));
+                momentOfInertia = (Math.PI / 64) * (Math.Pow(diameter, 4) - Math.Pow(diameter - 2 * thickness.Value, 4));
             }
 
             return Task.FromResult(momentOfInertia);
@@ -82,7 +82,7 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="width"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        public Task<double> MomentOfInertia(double height, double width, double thickness)
+        public Task<double> MomentOfInertia(double height, double width, double? thickness)
         {
             double momentOfInertia;
 
@@ -92,7 +92,7 @@ namespace IcVibrations.Calculator.GeometricProperties
             }
             else
             {
-                momentOfInertia = (Math.Pow(height, 3) * width - (Math.Pow(height - 2 * thickness, 3) * (width - 2 * thickness))) / 12;
+                momentOfInertia = (Math.Pow(height, 3) * width - (Math.Pow(height - 2 * thickness.Value, 3) * (width - 2 * thickness.Value))) / 12;
             }
 
             return Task.FromResult(momentOfInertia);

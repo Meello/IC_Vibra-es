@@ -54,7 +54,7 @@ namespace IcVibrations.Calculator.MainMatrixes
             {
                 for (uint j = 0; j < size; j++)
                 {
-                    damping[i, j] = Constants.Alpha * mass[i, j] + Constants.Mi * hardness[i, j];
+                    damping[i, j] = Constants.Mi * mass[i, j] + Constants.Alpha * hardness[i, j];
                 }
             }
 
@@ -101,17 +101,26 @@ namespace IcVibrations.Calculator.MainMatrixes
         /// <returns></returns>
         public Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
         {
-            bool[] bondaryCondition = new bool[degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum];
+            uint size = degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum;
+            bool[] bondaryCondition = new bool[size];
 
-            for (uint i = 0; i < degreesFreedomMaximum; i++)
+            for (uint i = 0; i < size; i++)
             {
-                if (i == 0 || i == degreesFreedomMaximum - 2)
+                if (i == 0)
                 {
                     bondaryCondition[i] = firstFastening.Displacement;
                 }
-                else if (i == 1 || i == degreesFreedomMaximum - 1)
+                else if (i == size - 2)
+                {
+                    bondaryCondition[i] = lastFastening.Displacement;
+                }
+                else if (i == 1)
                 {
                     bondaryCondition[i] = firstFastening.Angle;
+                }
+                else if (i == size - 1)
+                {
+                    bondaryCondition[i] = lastFastening.Angle;
                 }
                 else
                 {

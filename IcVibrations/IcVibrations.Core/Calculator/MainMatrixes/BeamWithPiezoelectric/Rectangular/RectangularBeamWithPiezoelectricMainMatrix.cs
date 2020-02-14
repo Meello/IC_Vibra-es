@@ -28,12 +28,12 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectan
         {
         }
 
-        public override Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<RectangularProfile> beamWithPiezoelectric)
+        public override Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<RectangularProfile> beamWithPiezoelectric, uint elementIndex)
         {
             double[,] piezoelectricCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
             double elementLength = beamWithPiezoelectric.Length / beamWithPiezoelectric.NumberOfElements;
 
-            double constant = -beamWithPiezoelectric.DielectricConstant * beamWithPiezoelectric.PiezoelectricProfile.Area.Value * elementLength / Math.Pow(beamWithPiezoelectric.Profile.Height, 2);
+            double constant = -beamWithPiezoelectric.DielectricConstant * beamWithPiezoelectric.GeometricProperty.Area[elementIndex] * elementLength / Math.Pow(beamWithPiezoelectric.Profile.Height, 2);
 
             piezoelectricCapacitance[0, 0] = constant;
             piezoelectricCapacitance[0, 1] = -constant;

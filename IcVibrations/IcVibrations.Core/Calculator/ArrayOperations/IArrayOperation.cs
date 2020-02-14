@@ -37,5 +37,8 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
         Task<double[,]> TransposeMatrix(double[,] matrix);
 
         Task<double[,]> AddValue(double[,] matrixToAdd, double[] values, uint[] valueNodePositions, string matrixName);
+
+        // Está errado. É para criar um array com valores em alguns pontos.
+        Task<double[]> AddValue(double[] matrixToAdd, double value, uint[] valueNodePositions, string matrixName);
     }
 }

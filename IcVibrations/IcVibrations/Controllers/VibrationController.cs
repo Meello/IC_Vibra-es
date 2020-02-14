@@ -35,7 +35,7 @@ namespace IC_Vibrations.Controllers
 
         [HttpPost("rectangular/dynamic-vibration-absorber")]
         public async Task<ActionResult<CalculateVibrationResponse>> Calculate(
-            [FromServices] CalculateRectangularBeamWithDvaVibration calculateVibration,
+            [FromServices] ICalculateRectangularBeamWithDvaVibration calculateVibration,
             [FromBody] CalculateBeamWithDvaVibrationRequest<RectangularProfile> request)
         {
             CalculateVibrationResponse response = await calculateVibration.Process(request);
@@ -50,7 +50,7 @@ namespace IC_Vibrations.Controllers
 
         [HttpPost("rectangular/piezoelectric")]
         public async Task<ActionResult<CalculateVibrationResponse>> Calculate(
-            [FromServices] CalculateRectangularBeamWithPiezoelectricVibration calculateVibration,
+            [FromServices] ICalculateRectangularBeamWithPiezoelectricVibration calculateVibration,
             [FromBody] CalculateBeamWithPiezoelectricVibrationRequest<RectangularProfile> request)
         {
             CalculateVibrationResponse response = await calculateVibration.Process(request);
@@ -80,7 +80,7 @@ namespace IC_Vibrations.Controllers
 
         [HttpPost("circular/dynamic-vibration-absorber")]
         public async Task<ActionResult<CalculateVibrationResponse>> Calculate(
-            [FromServices] CalculateCircularBeamWithDvaVibration calculateVibration,
+            [FromServices] ICalculateCircularBeamWithDvaVibration calculateVibration,
             [FromBody] CalculateBeamWithDvaVibrationRequest<CircularProfile> request)
         {
             CalculateVibrationResponse response = await calculateVibration.Process(request);
@@ -95,7 +95,7 @@ namespace IC_Vibrations.Controllers
 
         [HttpPost("circular/piezoelectric")]
         public async Task<ActionResult<CalculateVibrationResponse>> Calculate(
-            [FromServices] CalculateCircularBeamWithPiezoelectricVibration calculateVibration,
+            [FromServices] ICalculateCircularBeamWithPiezoelectricVibration calculateVibration,
             [FromBody] CalculateBeamWithPiezoelectricVibrationRequest<CircularProfile> request)
         {
             CalculateVibrationResponse response = await calculateVibration.Process(request);

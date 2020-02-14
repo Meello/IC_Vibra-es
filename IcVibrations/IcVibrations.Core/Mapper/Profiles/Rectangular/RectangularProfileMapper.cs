@@ -28,8 +28,8 @@ namespace IcVibrations.Core.Mapper.Profiles.Rectangular
         {
             GeometricProperty geometricProperty = new GeometricProperty();
 
-            double area = await this._calculateGeometricProperty.Area(profile.Height, profile.Width, profile.Thickness.Value);
-            double momentOfInertia = await this._calculateGeometricProperty.MomentOfInertia(profile.Height, profile.Width, profile.Thickness.Value);
+            double area = await this._calculateGeometricProperty.Area(profile.Height, profile.Width, profile.Thickness);
+            double momentOfInertia = await this._calculateGeometricProperty.MomentOfInertia(profile.Height, profile.Width, profile.Thickness);
 
             geometricProperty.Area = await this._arrayOperation.Create(area, degreesFreedomMaximum);
             geometricProperty.MomentOfInertia = await this._arrayOperation.Create(momentOfInertia, degreesFreedomMaximum);

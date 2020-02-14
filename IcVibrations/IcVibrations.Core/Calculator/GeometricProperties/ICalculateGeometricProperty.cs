@@ -13,7 +13,7 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="diameter"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        Task<double> Area(double diameter, double thickness);
+        Task<double> Area(double diameter, double? thickness);
 
         /// <summary>
         /// Method to calculate the area to rectangular or square profile.
@@ -22,7 +22,7 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="width"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        Task<double> Area(double height, double width, double thickness);
+        Task<double> Area(double height, double width, double? thickness);
 
         /// <summary>
         /// Method to calculate the moment of inertia to circular profile.
@@ -30,7 +30,7 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="diameter"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        Task<double> MomentOfInertia(double diameter, double thickness);
+        Task<double> MomentOfInertia(double diameter, double? thickness);
 
         /// <summary>
         /// Method to calculate the moment of inertia to rectangular or square profile.
@@ -39,7 +39,7 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="width"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        Task<double> MomentOfInertia(double height, double width, double thickness);
+        Task<double> MomentOfInertia(double height, double width, double? thickness);
 
         //double StaticalMomentArea(double diameter, double thickness);
     }

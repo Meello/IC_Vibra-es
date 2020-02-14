@@ -74,12 +74,12 @@ namespace IcVibrations
             services.AddScoped<ICalculateRectangularBeamVibration, CalculateRectangularBeamVibration>();
             
             // BeamWithDva Operations
-            services.AddScoped<ICalculateVibration<CalculateBeamWithDvaVibrationRequest<CircularProfile>, BeamWithDvaRequestData<CircularProfile>, CircularProfile, BeamWithDva<CircularProfile>>, CalculateCircularBeamWithDvaVibration>();
-            services.AddScoped<ICalculateVibration<CalculateBeamWithDvaVibrationRequest<RectangularProfile>, BeamWithDvaRequestData<RectangularProfile>, RectangularProfile, BeamWithDva<RectangularProfile>>, CalculateRectangularBeamWithDvaVibration>();
+            services.AddScoped<ICalculateCircularBeamWithDvaVibration, CalculateCircularBeamWithDvaVibration>();
+            services.AddScoped<ICalculateRectangularBeamWithDvaVibration, CalculateRectangularBeamWithDvaVibration>();
             
             // Piezoelectric Operations
-            services.AddScoped<ICalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<CircularProfile>,PiezoelectricRequestData<CircularProfile>, CircularProfile, BeamWithPiezoelectric<CircularProfile>>, CalculateCircularBeamWithPiezoelectricVibration>();
-            services.AddScoped<ICalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<RectangularProfile>, PiezoelectricRequestData<RectangularProfile>, RectangularProfile, BeamWithPiezoelectric<RectangularProfile>>, CalculateRectangularBeamWithPiezoelectricVibration>();
+            services.AddScoped<ICalculateCircularBeamWithPiezoelectricVibration, CalculateCircularBeamWithPiezoelectricVibration>();
+            services.AddScoped<ICalculateRectangularBeamWithPiezoelectricVibration, CalculateRectangularBeamWithPiezoelectricVibration>();
 
             // Validators
             services.AddScoped<IRectangularProfileValidator, RectangularProfileValidator>();

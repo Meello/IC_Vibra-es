@@ -7,23 +7,24 @@ namespace IcVibrations.Common
         [Flags]
         public enum Fastenings
         {
-            Simple = 1,
-            Pinned = 2,
-            Fixed = 4
+            None,
+            Pinned,
+            Fixed,
         }
 
         [Flags]
         public enum Materials
         {
-            Steel1020 = 1,
-            Steel4130 = 2
+            Steel1020,
+            Steel4130,
+            Aluminum
         }
 
         [Flags]
         public enum Profiles
         {
-            Circular = 1,
-            Rectangular = 2
+            Circular,
+            Rectangular,
         }
     }
 }
