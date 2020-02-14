@@ -1,71 +1,52 @@
-﻿using IcVibrations.Core.DTO;
-using IcVibrations.DataContracts;
-using IcVibrations.DataContracts.Piezoelectric.Calculate;
+﻿using IcVibrations.Common.Classes;
+using IcVibrations.Core.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace IcVibrations.Methods.AuxiliarOperations
 {
     public class AuxiliarOperation : IAuxiliarOperation
     {
-        public double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, int trueBondaryContionCount)
+        public double[,] ApplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, uint size)
         {
-            int i, j, k, count1, count2;
+            int i, j, count1, count2;
 
             int n = matrix.GetLength(0);
 
-            double[,] matrixCC = new double[trueBondaryContionCount, trueBondaryContionCount];
-
+            double[,] matrixBC = new double[size, size];
+            
+            count1 = 0;
+            
             for (i = 0; i < n; i++)
             {
-                if (bondaryConditions[i] == false)
+                count2 = 0;
+                
+                if (bondaryConditions[i] == true)
                 {
                     for (j = 0; j < n; j++)
                     {
-                        matrix[i, j] = 0;
+                        if (bondaryConditions[j] == true)
+                        {
+                            matrixBC[count1, count2] = matrix[i, j];
+
+                            count2 += 1;
+                        }
                     }
 
-                    for (k = 0; k < n; k++) 
-                    { 
-                        matrix[k, i] = 0;
-                    }
+                    count1 += 1;
                 }
             }
 
-            count2 = 0;
-
-            for (i = 0; i < n; i++)
-            {
-                count1 = 0;
-
-                for (j = 0; j < n; j++)
-                {
-                    if (bondaryConditions[i] == true && bondaryConditions[j] == true)
-                    {
-                        matrixCC[count1, count2] = matrix[j, i];
-
-                        count1 += 1;
-                    }
-                }
-
-                if (bondaryConditions[i] == true)
-                {
-                    count2 += 1;
-                }
-            }
-
-            return matrixCC;
+            return matrixBC;
         }
 
-        public double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions, int trueBondaryContionCount)
+        public double[] ApplyBondaryConditions(double[] matrix, bool[] bondaryConditions, uint size)
         {
             int i, count1 = 0;
 
             int n = matrix.GetLength(0);
 
-            double[] matrixCC = new double[trueBondaryContionCount];
+            double[] matrixCC = new double[size];
 
             for (i = 0; i < n; i++)
             {
@@ -79,24 +60,67 @@ namespace IcVibrations.Methods.AuxiliarOperations
             return matrixCC;
         }
 
-        //public void WriteInFile(string path, NewmarkMethodOutput output)
-        //{
-        //    StreamWriter streamWriter = new StreamWriter(path);
+        public uint CalculateDegreesFreedomMaximum(uint numberOfElements)
+        {
+            return (numberOfElements + 1) * Constants.NodesPerElement;
+        }
 
-        //    try
-        //    {
-        //        using (StreamWriter sw = streamWriter)
-        //        {
-        //            sw.WriteLine(string.Format("{0},{1},{2},{3}", w, time, y, vel, acel, input.Force));
+        public void WriteInFile(string path, Result result)
+        {
+            StreamWriter streamWriter = new StreamWriter(path, true);
 
-        //            sw.Close();
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        // Não quero que pare, só avise que deu erro.
-        //        throw new Exception("Couldn't open file.");
-        //    }
-        //}
+            try
+            {
+                using (StreamWriter sw = streamWriter)
+                {
+                    sw.Write(sw.NewLine);
+
+                    sw.Write(string.Format("{0}, ", result.Time));
+
+                    for (int i = 0; i < result.Displacemens.Length; i++)
+                    {
+                        sw.Write(string.Format("{0}, ", result.Displacemens[i]));
+                    }
+
+                    for (int i = 0; i < result.Velocities.Length; i++)
+                    {
+                        sw.Write(string.Format("{0}, ", result.Velocities[i]));
+                    }
+
+                    for (int i = 0; i < result.Acelerations.Length; i++)
+                    {
+                        sw.Write(string.Format("{0}, ", result.Acelerations[i]));
+                    }
+
+                    for (int i = 0; i < result.Forces.Length; i++)
+                    {
+                        sw.Write(string.Format("{0}, ", result.Forces[i]));
+                    }
+                }
+            }
+            catch
+            {
+                throw new Exception("Couldn't open file.");
+            }
+        }
+
+        public void WriteInFile(string path, string message)
+        {
+            StreamWriter streamWriter = new StreamWriter(path);
+
+            try
+            {
+                using (StreamWriter sw = streamWriter)
+                {
+                    sw.WriteLine(message);
+
+                    sw.Close();
+                }
+            }
+            catch
+            {
+                throw new Exception("Couldn't open file.");
+            }
+        }
     }
 }

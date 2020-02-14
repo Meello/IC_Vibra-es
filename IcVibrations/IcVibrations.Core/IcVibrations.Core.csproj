@@ -6,17 +6,16 @@
 
   <ItemGroup>
     <Compile Remove="Repositories\**" />
+    <Compile Remove="Validators\Piezoelectric\**" />
     <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="Validators\Piezoelectric\**" />
     <None Remove="Repositories\**" />
+    <None Remove="Validators\Piezoelectric\**" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IcVibrations.Common\IcVibrations.Common.csproj" />
     <ProjectReference Include="..\IcVibrations.DataContract\IcVibrations.DataContracts.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validators\Piezoelectric\Abstract\" />
   </ItemGroup>
 
 </Project>

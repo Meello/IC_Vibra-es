@@ -1,44 +1,12 @@
-﻿using IcVibrations.Models.Beam.Characteristics;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IcVibrations.Common.Profiles;
 
-namespace IcVibrations.Models.Beam
+namespace IcVibrations.Core.Models.Beam
 {
-    public abstract class Beam
+    /// <summary>
+    /// It represents the analyzed beam.
+    /// </summary>
+    public class Beam<TProfile> : AbstractBeam<TProfile>
+        where TProfile : Profile, new()
     {
-        public uint ElementCount { get; set; }
-
-        public Material Material { get; set; }
-
-        public GeometricProperty GeometricProperty { get; set; }
-
-        public Fastening FirstFastening { get; set; }
-
-        public Fastening LastFastening { get; set; }
-
-        public double Length { get; set; }
-
-        public double[] Forces { get; set; }
-
-        public double Thickness { get; set; }
-
-        //public double[,] Mass { get; set; }
-
-        //public double[,] Hardness { get; set; }
-
-        //public double[,] Damping { get; set; }
-    }
-
-    public class CircularBeam : Beam
-    {
-        public double Diameter { get; set; }
-    }
-
-    public class RectangularBeam : Beam
-    {
-        public double Height { get; set; }
-
-        public double Width { get; set; }
     }
 }

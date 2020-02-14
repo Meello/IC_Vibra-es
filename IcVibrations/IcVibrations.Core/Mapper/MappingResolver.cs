@@ -1,197 +1,73 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
+﻿using IcVibrations.Common.Classes;
 using IcVibrations.Core.DTO;
-using IcVibrations.Core.Models;
-using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
-using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts;
-using IcVibrations.DataContracts.Beam;
-using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
-using IcVibrations.DataContracts.Piezoelectric;
-using IcVibrations.Methods.AuxiliarOperations;
-using IcVibrations.Models.Beam;
-using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using static IcVibrations.Common.Enum;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Mapper
 {
-    public class FasteningFactory
-    {
-        public static Fastening Create(string fastening)
-        {
-            switch ((Fastenings)Enum.Parse(typeof(Fastenings), fastening, ignoreCase: true))
-            {
-                case Fastenings.Fixed : return new Fixed();
-                case Fastenings.Pinned : return new Pinned();
-                case Fastenings.Simple: return new Simple();
-            }
-
-            throw new Exception();
-        }
-    }
-
-    public class MaterialFactory
-    {
-        public static Material Create(string material)
-        {
-            switch ((Materials)Enum.Parse(typeof(Materials), material, ignoreCase: true))
-            {
-                case Materials.Steel1020: return new Steel1020();
-                case Materials.Steel4130: return new Steel4130();
-            }
-
-            throw new Exception();
-        }
-    }
-
     public class MappingResolver : IMappingResolver
     {
-        public CircularBeamWithDva BuildFrom(CircularBeamWithDvaRequestData requestData)
+        public OperationResponseData BuildFrom(NewmarkMethodResponse output, string author, string analysisExplanation)
         {
-            if(requestData == null)
+            if (output == null || string.IsNullOrEmpty(author) || string.IsNullOrEmpty(analysisExplanation))
             {
                 return null;
             }
 
-            double[] forces = new double[(requestData.ElementCount + 1) * Constants.DegreesFreedom];
-
-            for (int i = 0; i < requestData.Forces.Length; i++)
+            return new OperationResponseData()
             {
-                forces[2 * (requestData.ForceNodePositions[i] - 1)] = requestData.Forces[i];
-            }
-
-            return new CircularBeamWithDva
-            {
-                Diameter = requestData.Diameter,
-                DvaHardnesses = requestData.DvaHardnesses,
-                DvaMasses = requestData.DvaMasses,
-                DvaNodePositions = requestData.DvaNodePositions,
-                ElementCount = requestData.ElementCount,
-                FirstFastening = FasteningFactory.Create(requestData.FirstFastening),
-                Forces = forces,
-                GeometricProperty = new GeometricProperty
-                {
-                    Area = default,
-                    MomentInertia = default
-                },
-                LastFastening = FasteningFactory.Create(requestData.LastFastening),
-                Length = requestData.Length,
-                Material = MaterialFactory.Create(requestData.Material),
-                Thickness = requestData.Thickness
+                Author = author,
+                AnalysisExplanation = analysisExplanation,
+                AnalysisResults = output.Analyses
             };
         }
 
-        public CircularBeam BuildFrom(CircularBeamRequestData circularBeamRequestData)
+        public Task<double[]> BuildFrom(List<Force> forces, uint degreesFreedomMaximum)
         {
-            if (circularBeamRequestData == null)
+            if (forces == null)
             {
                 return null;
             }
 
-            double[] forces = new double[(circularBeamRequestData.ElementCount + 1) * Constants.DegreesFreedom];
-
-            for (int i = 0; i < circularBeamRequestData.Forces.Length; i++)
+            double[] force = new double[degreesFreedomMaximum];
+            foreach (Force applyedForce in forces)
             {
-                forces[2 * (circularBeamRequestData.ForceNodePositions[i] - 1)] = circularBeamRequestData.Forces[i];
-            }
-
-            return new CircularBeam
-            {
-                ElementCount = circularBeamRequestData.ElementCount,
-                FirstFastening = FasteningFactory.Create(circularBeamRequestData.FirstFastening),
-                Forces = forces,
-                LastFastening = FasteningFactory.Create(circularBeamRequestData.LastFastening),
-                Length = circularBeamRequestData.Length,
-                Material = MaterialFactory.Create(circularBeamRequestData.Material),
-                Diameter = circularBeamRequestData.Diameter,
-                Thickness = circularBeamRequestData.Thickness,
-                GeometricProperty = new GeometricProperty
+                try
                 {
-                    Area = default,
-                    MomentInertia = default
+                    force[2 * (applyedForce.NodePosition)] = applyedForce.Value;
                 }
-            };
-        }
-
-        public RectangularBeam BuildFrom(RectangularBeamRequestData beamRequestData)
-        {
-            if (beamRequestData == null)
-            {
-                return null;
-            }
-
-            double[] force = new double[(beamRequestData.ElementCount + 1) * Constants.DegreesFreedom];
-
-            for (int i = 0; i < beamRequestData.Forces.Length; i++)
-            {
-                force[2 * (beamRequestData.ForceNodePositions[i] - 1)] = beamRequestData.Forces[i];
-            }
-
-            return new RectangularBeam
-            {
-                ElementCount = beamRequestData.ElementCount,
-                FirstFastening = FasteningFactory.Create(beamRequestData.FirstFastening),
-                Forces = force,
-                LastFastening = FasteningFactory.Create(beamRequestData.LastFastening),
-                Length = beamRequestData.Length,
-                Material = MaterialFactory.Create(beamRequestData.Material),
-                Height = beamRequestData.Height,
-                Thickness = beamRequestData.Thickness,
-                Width = beamRequestData.Width,
-                GeometricProperty = new GeometricProperty
+                catch (Exception ex)
                 {
-                    Area = default,
-                    MomentInertia = default
+                    throw new Exception($"Error creating force matrix. {ex.Message}.");
                 }
-            };
+            }
+
+            return Task.FromResult(force);
         }
 
-        public RectangularPiezoelectric BuildFrom(PiezoelectricRequestData piezoelectricRequestData)
+        public Task<double[]> BuildFrom(List<ElectricalCharge> electricalCharges, uint degreesFreedomMaximum)
         {
-            if(piezoelectricRequestData == null)
+            if (electricalCharges == null)
             {
                 return null;
             }
 
-            return new RectangularPiezoelectric
+            double[] electricalCharge = new double[degreesFreedomMaximum];
+            foreach (ElectricalCharge eC in electricalCharges)
             {
-                DielectricConstant = piezoelectricRequestData.DielectricConstant,
-                DielectricPermissiveness = piezoelectricRequestData.DielectricPermissiveness,
-                ElasticityConstant = piezoelectricRequestData.ElasticityConstant,
-                ElementLength = piezoelectricRequestData.ElementLength,
-                ElementsWithPiezoelectric = piezoelectricRequestData.ElementsWithPiezoelectric,
-                PiezoelectricConstant = piezoelectricRequestData.PiezoelectricConstant,
-                GeometricProperty = new GeometricProperty
+                try
                 {
-                    Area = default,
-                    MomentInertia = default
-                },
-                Height = piezoelectricRequestData.Height,
-                Thickness = piezoelectricRequestData.Thickness,
-                Width = piezoelectricRequestData.Width,
-                SpecificMass = piezoelectricRequestData.SpecificMass,
-                YoungModulus = piezoelectricRequestData.YoungModulus
-            };
-        }
-
-        public OperationResponseData BuildFrom(NewmarkMethodOutput output)
-        {
-            if(output == null)
-            {
-                return null;
+                    electricalCharge[2 * (eC.NodePosition)] = eC.Value;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error creating electrical charge matrix. {ex.Message}.");
+                }
             }
 
-            return new OperationResponseData
-            {
-                AngularFrequency = output.AngularFrequency,
-                Time = output.Time,
-                YResult = output.YResult,
-                //VelResult = output.VelResult,
-                //AcelResult = output.AcelResult,
-                Force = output.Force
-            };
+            return Task.FromResult(electricalCharge);
         }
     }
 }

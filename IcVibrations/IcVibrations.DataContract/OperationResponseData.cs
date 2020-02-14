@@ -1,6 +1,5 @@
-﻿using System;
+﻿using IcVibrations.Common.Classes;
 using System.Collections.Generic;
-using System.Text;
 
 namespace IcVibrations.DataContracts
 {
@@ -20,21 +19,8 @@ namespace IcVibrations.DataContracts
         public string AnalysisExplanation { get; set; }
 
         /// <summary>
-        /// The analysis results for each angular frequency analyzed.
+        /// The analysis results for all angular frequency analyzed.
         /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; set; }
-    }
-
-    public class AnalysisResult
-    {
-        /// <summary>
-        /// The angular frequency analyzed.
-        /// </summary>
-        public double AngularFrequency { get; set; }
-
-        /// <summary>
-        /// Time, displacement, velocity, aceleration and force for each node in the analyzed beam.
-        /// </summary>
-        public List<double> Results { get; set; }
+        public List<Analysis> AnalysisResults { get; set; }
     }
 }

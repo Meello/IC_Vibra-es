@@ -1,18 +1,17 @@
-﻿using IcVibrations.Core.DTO;
-using IcVibrations.DataContracts;
-using IcVibrations.DataContracts.Piezoelectric.Calculate;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IcVibrations.Common.Classes;
 
 namespace IcVibrations.Methods.AuxiliarOperations
 {
     public interface IAuxiliarOperation
     {
-        double[,] AplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, int trueBondaryConditionCount);
+        double[,] ApplyBondaryConditions(double[,] matrix, bool[] bondaryConditions, uint size);
 
-        double[] AplyBondaryConditions(double[] matrix, bool[] bondaryConditions, int trueBondaryConditionCount);
+        double[] ApplyBondaryConditions(double[] matrix, bool[] bondaryConditions, uint size);
 
-        //void WriteInFile(string path, NewmarkMethodOutput output);
+        uint CalculateDegreesFreedomMaximum(uint numberOfElements);
+
+        void WriteInFile(string path, Result result);
+
+        void WriteInFile(string path, string message);
     }
 }
