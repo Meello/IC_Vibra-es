@@ -14,26 +14,26 @@ namespace IcVibrations.Methods.AuxiliarOperations
             int n = matrix.GetLength(0);
 
             double[,] matrixBC = new double[size, size];
-
-            count2 = 0;
-
+            
+            count1 = 0;
+            
             for (i = 0; i < n; i++)
             {
-                count1 = 0;
-
-                for (j = 0; j < n; j++)
-                {
-                    if (bondaryConditions[i] == true && bondaryConditions[j] == true)
-                    {
-                        matrixBC[count1, count2] = matrix[j, i];
-
-                        count1 += 1;
-                    }
-                }
-
+                count2 = 0;
+                
                 if (bondaryConditions[i] == true)
                 {
-                    count2 += 1;
+                    for (j = 0; j < n; j++)
+                    {
+                        if (bondaryConditions[j] == true)
+                        {
+                            matrixBC[count1, count2] = matrix[i, j];
+
+                            count2 += 1;
+                        }
+                    }
+
+                    count1 += 1;
                 }
             }
 
@@ -77,7 +77,7 @@ namespace IcVibrations.Methods.AuxiliarOperations
 
                     sw.Write(string.Format("{0}, ", result.Time));
 
-                    for(int i = 0; i< result.Displacemens.Length; i++)
+                    for (int i = 0; i < result.Displacemens.Length; i++)
                     {
                         sw.Write(string.Format("{0}, ", result.Displacemens[i]));
                     }

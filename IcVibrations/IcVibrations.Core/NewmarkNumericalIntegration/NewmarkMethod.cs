@@ -226,7 +226,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                     result.Acelerations = acel;
                     result.Forces = force;
 
-                    if (jn == 0)
+                    if (jp == 0 && jn == 0)
                     {
                         this._auxiliarOperation.WriteInFile(path, $"time, y-{input.NumberOfTrueBoundaryConditions}, vel-{input.NumberOfTrueBoundaryConditions}, acel-{input.NumberOfTrueBoundaryConditions}, force-{input.NumberOfTrueBoundaryConditions}");
                         this._auxiliarOperation.WriteInFile(path, result);

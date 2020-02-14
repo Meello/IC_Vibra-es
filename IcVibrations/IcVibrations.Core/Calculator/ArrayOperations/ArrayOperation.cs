@@ -189,6 +189,11 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             {
                 pivot = matrix[i, i];
 
+                if(pivot == 0)
+                {
+                    throw new Exception($"Pivot can't be zero. Position: row = {i}, column = {i}.");
+                }
+
                 for (l = 0; l < n; l++)
                 {
                     matrix[i, l] = matrix[i, l] / pivot;

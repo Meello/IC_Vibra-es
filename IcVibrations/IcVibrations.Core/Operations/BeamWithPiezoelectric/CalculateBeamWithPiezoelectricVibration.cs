@@ -123,7 +123,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
             uint numberOfTrueBoundaryConditions = 0;
 
-            for (int i = 0; i < degreesFreedomMaximum; i++)
+            for (int i = 0; i < degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum; i++)
             {
                 if (bondaryCondition[i] == true)
                 {
@@ -153,15 +153,15 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             double[] equivalentForce = await this._arrayOperation.MergeArray(force, electricalCharge);
 
             // Creating input.
-            input.Mass = this._auxiliarOperation.ApplyBondaryConditions(equivalentMass, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
+            input.Mass = this._auxiliarOperation.ApplyBondaryConditions(equivalentMass, bondaryCondition, numberOfTrueBoundaryConditions);
 
-            input.Hardness = this._auxiliarOperation.ApplyBondaryConditions(equivalentHardness, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
+            input.Hardness = this._auxiliarOperation.ApplyBondaryConditions(equivalentHardness, bondaryCondition, numberOfTrueBoundaryConditions);
 
-            input.Damping = this._auxiliarOperation.ApplyBondaryConditions(damping, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
+            input.Damping = this._auxiliarOperation.ApplyBondaryConditions(damping, bondaryCondition, numberOfTrueBoundaryConditions);
 
-            input.Force = this._auxiliarOperation.ApplyBondaryConditions(equivalentForce, bondaryCondition, numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum);
+            input.Force = this._auxiliarOperation.ApplyBondaryConditions(equivalentForce, bondaryCondition, numberOfTrueBoundaryConditions);
 
-            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions + piezoelectricDegreesFreedomMaximum;
+            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
 
             input.Parameter = newmarkMethodParameter;
 
