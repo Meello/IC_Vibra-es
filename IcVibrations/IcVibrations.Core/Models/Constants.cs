@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IcVibrations.Core.Models
+﻿namespace IcVibrations.Core.Models
 {
     public class Constants
     {
@@ -18,9 +14,9 @@ namespace IcVibrations.Core.Models
 
         public const double Gama = 0.5;
 
-        public const double Alpha = 0.005;
+        public const double Alpha = 1e-6;
 
-        public const double Mi = 0.005;
+        public const double Mi = 0;
 
         public const int PiezoelectricElementMatrixSize = 2;
     }

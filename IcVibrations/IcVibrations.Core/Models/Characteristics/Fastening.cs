@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using static IcVibrations.Common.Enum;
 
 namespace IcVibrations.Models.Beam.Characteristics
 {
@@ -20,7 +21,15 @@ namespace IcVibrations.Models.Beam.Characteristics
 
     }
 
-    public class Simple : Fastening
+    public class Pinned : Fastening
+    {
+        public override bool Displacement => false;
+
+        public override bool Angle => true;
+
+    }
+
+    public class None : Fastening
     {
         public override bool Displacement => true;
 
@@ -28,11 +37,18 @@ namespace IcVibrations.Models.Beam.Characteristics
 
     }
 
-    public class Pinned : Fastening
+    public class FasteningFactory
     {
-        public override bool Displacement => false;
+        public static Fastening Create(string fastening)
+        {
+            switch ((Fastenings)Enum.Parse(typeof(Fastenings), fastening, ignoreCase: true))
+            {
+                case Fastenings.Fixed: return new Fixed();
+                case Fastenings.Pinned: return new Pinned();
+                case Fastenings.None: return new None();
+            }
 
-        public override bool Angle => true;
-
+            throw new Exception();
+        }
     }
 }

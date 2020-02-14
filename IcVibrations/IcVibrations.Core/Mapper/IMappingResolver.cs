@@ -1,24 +1,17 @@
-﻿using IcVibrations.Core.DTO;
-using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
-using IcVibrations.Core.Models.Piezoelectric;
+﻿using IcVibrations.Common.Classes;
+using IcVibrations.Core.DTO;
 using IcVibrations.DataContracts;
-using IcVibrations.DataContracts.Beam;
-using IcVibrations.DataContracts.Beam.CalculateBeamWithDynamicVibrationAbsorber;
-using IcVibrations.DataContracts.Piezoelectric;
-using IcVibrations.Models.Beam;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Mapper
 {
     public interface IMappingResolver
     {
-        CircularBeamWithDva BuildFrom(CircularBeamWithDvaRequestData requestData);
+        OperationResponseData BuildFrom(NewmarkMethodResponse output, string author, string analysisExplanation);
 
-        CircularBeam BuildFrom(CircularBeamRequestData circularBeamRequestData);
+        Task<double[]> BuildFrom(List<Force> forces, uint degreesFreedomMaximum);
 
-        RectangularBeam BuildFrom(RectangularBeamRequestData rectangularBeamRequestData);
-
-        RectangularPiezoelectric BuildFrom(PiezoelectricRequestData piezoelectricRequestData);
-
-        OperationResponseData BuildFrom(NewmarkMethodOutput output);
+        Task<double[]> BuildFrom(List<ElectricalCharge> electricalCharges, uint degreesFreedomMaximum);
     }
 }

@@ -1,33 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using IcVibrations.Common.Classes;
 
 namespace IcVibrations.Core.DTO
 {
+    /// <summary>
+    /// It represents the input contant of NewmarkMethod operation.
+    /// </summary>
     public class NewmarkMethodInput
     {
+        /// <summary>
+        /// Mass matrix of the object that is analyzed.
+        /// </summary>
         public double[,] Mass { get; set; }
 
+        /// <summary>
+        /// Hardness matrix of the object that is analyzed.
+        /// </summary>
         public double[,] Hardness { get; set; }
 
+        /// <summary>
+        /// Damping matrix of the object that is analyzed.
+        /// </summary>
         public double[,] Damping { get; set; }
 
+        /// <summary>
+        /// Force vector of the object that is analyzed.
+        /// </summary>
         public double[] Force { get; set; }
 
-        //public int DegreesFreedomMaximum { get; set; }
+        /// <summary>
+        /// number of boundary conditions that is true.
+        /// </summary>
+        public uint NumberOfTrueBoundaryConditions { get; set; }
+        
+        /// <summary>
+        /// Delta time.
+        /// </summary>
+        public double DeltaTime { get; set; }
 
-        //public int BondaryConditionTrueCount { get; set; }
-
-        //public double InitialTime { get; set; }
+        /// <summary>
+        /// Angular frequency used in the analysis.
+        /// </summary>
+        public double AngularFrequency { get; set; }
         
-        //public double TimeDivion { get; set; }
-        
-        //public double FinalTime { get; set; }
-        
-        //public double InitialAngularFrequency { get; set; }
-        
-        //public double AngularFrequencyDivision { get; set; }
-        
-        //public double FinalAngularFrequency { get; set; }
+        /// <summary>
+        /// Newmark method parameters.
+        /// </summary>
+        public NewmarkMethodParameter Parameter { get; set; }
     }
 }

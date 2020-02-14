@@ -43,10 +43,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: Valid matrix. | When: Inverse matrix. | Should: Return correctly matrix size and values.")]
-        public void InverseMatrix_ValidMatrix_ShouldExecuteCorrectly()
+        public async void InverseMatrix_ValidMatrix_ShouldExecuteCorrectly()
         {
             // Act
-            double[,] result = this._operation.InverseMatrix(this._matrix1);
+            double[,] result = await this._operation.InverseMatrix(this._matrix1, "Inverse Test");
 
             // Assert
             result.Should().NotBeEmpty();
@@ -56,10 +56,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: Two matrixes. | When: Multiply matrixes. | Should: Return correctly matrix size and values.")]
-        public void Multiply_TwoMatrixes_ShouldExecuteCorrectly()
+        public async void Multiply_TwoMatrixes_ShouldExecuteCorrectly()
         {
             // Act
-            double[,] result = this._operation.Multiply(this._matrix1, this._matrix2);
+            double[,] result = await this._operation.Multiply(this._matrix1, this._matrix2, "Multiply Test");
 
             // Assert
             result.Should().NotBeEmpty();
@@ -69,10 +69,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: One matrix and one array. | When: Multiply matrix and array. | Should: Return correctly array size and values.")]
-        public void Multiply_MatrixAndArray_ShouldExecuteCorrectly()
+        public async void Multiply_MatrixAndArray_ShouldExecuteCorrectly()
         {
             // Act
-            double[] result = this._operation.Multiply(this._matrix1, this._array1);
+            double[] result = await this._operation.Multiply(this._matrix1, this._array1,"Multiply Test");
 
             // Assert
             result.Should().NotBeEmpty();
@@ -81,10 +81,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: One array and one matrix. | When: Multiply array and matrix. | Should: Return correctly array size and values.")]
-        public void Multiply_ArrayAndMatrix_ShouldExecuteCorrectly()
+        public async void Multiply_ArrayAndMatrix_ShouldExecuteCorrectly()
         {
             // Act
-            double[] result = this._operation.Multiply(this._array1, this._matrix1);
+            double[] result = await this._operation.Multiply(this._array1, this._matrix1, "Multiply test");
 
             // Assert
             result.Should().NotBeEmpty();
@@ -93,10 +93,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: Two matrixes. | When: Subtract matrixes. | Should: Return correctly matrix size and values.")]
-        public void Subtract_TwoMatrixes_ShouldExecuteCorrectly()
+        public async void Subtract_TwoMatrixes_ShouldExecuteCorrectly()
         {
             // Act
-            double[,] result = this._operation.Subtract(this._matrix1, this._matrix2);
+            double[,] result = await this._operation.Subtract(this._matrix1, this._matrix2, "Subtract Test");
 
             // Assert
             result.Should().NotBeEmpty();
@@ -106,10 +106,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: Two arrays. | When: Subtract arrays. | Should: Return correctly array size and values.")]
-        public void Subtract_TwoArrays_ShouldExecuteCorrectly()
+        public async void Subtract_TwoArrays_ShouldExecuteCorrectly()
         {
             // Act
-            double[] result = this._operation.Subtract(this._array1, this._array2);
+            double[] result = await this._operation.Subtract(this._array1, this._array2, "Subtract Test");
 
             // Assert
             result.Should().NotBeEmpty();
@@ -119,10 +119,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: Two matrixes. | When: Sum matrixes. | Should: Return correctly matrix size and values.")]
-        public void Sum_TwoMatrixes_ShouldExecuteCorrectly()
+        public async void Sum_TwoMatrixes_ShouldExecuteCorrectly()
         {
             // Act
-            double[,] result = this._operation.Sum(this._matrix1, this._matrix2);
+            double[,] result = await this._operation.Sum(this._matrix1, this._matrix2, "Sum Test");
 
             // Assert
             result.Should().NotBeEmpty();
@@ -132,10 +132,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: Two arrays. | When: Sum arrays. | Should: Return correctly array size and values.")]
-        public void Sum_TwoArrays_ShouldExecuteCorrectly()
+        public async void Sum_TwoArrays_ShouldExecuteCorrectly()
         {
             // Act
-            double[] result = this._operation.Sum(this._array1, this._array2);
+            double[] result = await this._operation.Sum(this._array1, this._array2, "Sum test");
 
             // Assert
             result.Should().NotBeEmpty();
@@ -149,14 +149,14 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         [InlineData(1)]
         [InlineData(1000)]
         //268435456 --> maximum size of double array --> maximum size of array = 2Gb, size of double = 8bytes
-        public void Create_ShouldExecuteCorrectly(uint size)
+        public async void Create_ShouldExecuteCorrectly(uint size)
         {
             // Arrange
             Random random = new Random();
             double value = random.NextDouble();
 
             // Act
-            double[] result = this._operation.Create(value, size);
+            double[] result = await this._operation.Create(value, size);
 
             // Assert
             result.Should().NotBeNull();
@@ -168,10 +168,10 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
         }
 
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: One matrix. | When: Transpose matrix. | Should: Return correctly matrix size and values.")]
-        public void TransposeMatrix_ValidMatrix_ShouldExecuteCorrectly()
+        public async void TransposeMatrix_ValidMatrix_ShouldExecuteCorrectly()
         {
             // Act
-            double[,] result = this._operation.InverseMatrix(this._matrix1);
+            double[,] result = await this._operation.InverseMatrix(this._matrix1, "Inverse Test");
 
             // Assert
             result.Should().NotBeEmpty();

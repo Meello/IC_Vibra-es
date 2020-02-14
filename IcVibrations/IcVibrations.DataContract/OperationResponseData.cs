@@ -1,23 +1,26 @@
-﻿using System;
+﻿using IcVibrations.Common.Classes;
 using System.Collections.Generic;
-using System.Text;
 
 namespace IcVibrations.DataContracts
 {
+    /// <summary>
+    /// It represents the 'data' content of all operation response.
+    /// </summary>
     public class OperationResponseData
     {
-        //public string AnalysisExplanation { get; set; }
+        /// <summary>
+        /// Who made the analysis.
+        /// </summary>
+        public string Author { get; set; }
 
-        public double[] Time { get; set; }
+        /// <summary>
+        /// A simple analysis explanation .
+        /// </summary>
+        public string AnalysisExplanation { get; set; }
 
-        public double[] AngularFrequency { get; set; }
-
-        public double[,] YResult { get; set; }
-
-        //public double[,] VelResult { get; set; }
-
-        //public double[,] AcelResult { get; set; }
-
-        public double[,] Force { get; set; }
+        /// <summary>
+        /// The analysis results for all angular frequency analyzed.
+        /// </summary>
+        public List<Analysis> AnalysisResults { get; set; }
     }
 }
