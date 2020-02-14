@@ -1,8 +1,10 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Operations.Beam.Circular;
 using IcVibrations.Core.Operations.Beam.Rectangular;
-using IcVibrations.Core.Operations.BeamWithDva;
-using IcVibrations.Core.Operations.BeamWithPiezoelectric;
+using IcVibrations.Core.Operations.BeamWithDva.Circular;
+using IcVibrations.Core.Operations.BeamWithDva.Rectangular;
+using IcVibrations.Core.Operations.BeamWithPiezoelectric.Circular;
+using IcVibrations.Core.Operations.BeamWithPiezoelectric.Rectangular;
 using IcVibrations.DataContracts.CalculateVibration;
 using IcVibrations.DataContracts.CalculateVibration.Beam;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibrationAbsorber;

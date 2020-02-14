@@ -2,26 +2,26 @@
 using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam.Circular;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Circular;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectangular;
 using IcVibrations.Core.Mapper;
-using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Mapper.Profiles.Circular;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
-using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Operations;
 using IcVibrations.Core.Operations.Beam.Circular;
 using IcVibrations.Core.Operations.Beam.Rectangular;
-using IcVibrations.Core.Operations.BeamWithDva;
-using IcVibrations.Core.Operations.BeamWithPiezoelectric;
-using IcVibrations.Core.Validators.Profiles;
+using IcVibrations.Core.Operations.BeamWithDva.Circular;
+using IcVibrations.Core.Operations.BeamWithDva.Rectangular;
+using IcVibrations.Core.Operations.BeamWithPiezoelectric.Circular;
+using IcVibrations.Core.Operations.BeamWithPiezoelectric.Rectangular;
 using IcVibrations.Core.Validators.Profiles.Circular;
 using IcVibrations.Core.Validators.Profiles.Rectangular;
-using IcVibrations.DataContracts.CalculateVibration.Beam;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -53,6 +53,9 @@ namespace IcVibrations
             // Calculator - MainMatrix
             services.AddScoped<IRectangularBeamMainMatrix, RectangularBeamMainMatrix>();
             services.AddScoped<ICircularBeamMainMatrix, CircularBeamMainMatrix>();
+            services.AddScoped<IBeamWithDvaMainMatrix, BeamWithDvaMainMatrix>();
+            services.AddScoped<IRectangularBeamWithPiezoelectricMainMatrix, RectangularBeamWithPiezoelectricMainMatrix>();
+            services.AddScoped<ICircularBeamWithPiezoelectricMainMatrix, CircularBeamWithPiezoelectricMainMatrix>();
             services.AddScoped<ICommonMainMatrix, CommonMainMatrix>();
             
             // Mapper

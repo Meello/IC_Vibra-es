@@ -1,29 +1,29 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.Calculator.MainMatrixes.Beam;
+using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
 using IcVibrations.Core.Models;
 using IcVibrations.Core.Models.Piezoelectric;
 using System;
 using System.Threading.Tasks;
 
-namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
+namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectangular
 {
     /// <summary>
-    /// It's responsible to calculate the beam with piezoelectric main matrixes.
+    /// It's responsible to calculate the rectangular beam with piezoelectric main matrixes.
     /// </summary>
-    public class RectangularBeamWithPiezoelectricMainMatrix : BeamWithPiezoelectricMainMatrix<RectangularProfile>
+    public class RectangularBeamWithPiezoelectricMainMatrix : BeamWithPiezoelectricMainMatrix<RectangularProfile>, IRectangularBeamWithPiezoelectricMainMatrix
     {
         /// <summary>
-        /// Class construtor.
+        /// Class constructor.
         /// </summary>
         /// <param name="commonMainMatrix"></param>
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public RectangularBeamWithPiezoelectricMainMatrix(
-            ICommonMainMatrix commonMainMatrix, 
-            IBeamMainMatrix<RectangularProfile> beamMainMatrix, 
-            IArrayOperation arrayOperation) 
+            ICommonMainMatrix commonMainMatrix,
+            IRectangularBeamMainMatrix beamMainMatrix,
+            IArrayOperation arrayOperation)
             : base(commonMainMatrix, beamMainMatrix, arrayOperation)
         {
         }

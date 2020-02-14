@@ -1,20 +1,20 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.Calculator.MainMatrixes.Beam;
+using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
 using IcVibrations.Core.Mapper;
-using IcVibrations.Core.Mapper.Profiles;
+using IcVibrations.Core.Mapper.Profiles.Rectangular;
 using IcVibrations.Core.NewmarkNumericalIntegration;
-using IcVibrations.Core.Validators.Profiles;
+using IcVibrations.Core.Validators.Profiles.Rectangular;
 using IcVibrations.Methods.AuxiliarOperations;
 
-namespace IcVibrations.Core.Operations.BeamWithDva
+namespace IcVibrations.Core.Operations.BeamWithDva.Rectangular
 {
     /// <summary>
     /// It's responsible to calculate the vibration in a rectangular beam with dynamic vibration absorber.
     /// </summary>
-    public class CalculateRectangularBeamWithDvaVibration : CalculateBeamWithDvaVibration<RectangularProfile>
+    public class CalculateRectangularBeamWithDvaVibration : CalculateBeamWithDvaVibration<RectangularProfile>, ICalculateRectangularBeamWithDvaVibration
     {
         /// <summary>
         /// Class construtor.
@@ -28,13 +28,13 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         /// <param name="beamMainMatrix"></param>
         /// <param name="commonMainMatrix"></param>
         public CalculateRectangularBeamWithDvaVibration(
-            INewmarkMethod newmarkMethod, 
-            IMappingResolver mappingResolver, 
-            IProfileValidator<RectangularProfile> profileValidator,
+            INewmarkMethod newmarkMethod,
+            IMappingResolver mappingResolver,
+            IRectangularProfileValidator profileValidator,
             IAuxiliarOperation auxiliarOperation,
-            IProfileMapper<RectangularProfile> profileMapper, 
-            IBeamWithDvaMainMatrix mainMatrix, 
-            IBeamMainMatrix<RectangularProfile> beamMainMatrix,
+            IRectangularProfileMapper profileMapper,
+            IBeamWithDvaMainMatrix mainMatrix,
+            IRectangularBeamMainMatrix beamMainMatrix,
             ICommonMainMatrix commonMainMatrix,
             IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, beamMainMatrix, commonMainMatrix, arrayOperation)

@@ -1,19 +1,19 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectangular;
 using IcVibrations.Core.Mapper;
-using IcVibrations.Core.Mapper.Profiles;
+using IcVibrations.Core.Mapper.Profiles.Rectangular;
 using IcVibrations.Core.NewmarkNumericalIntegration;
-using IcVibrations.Core.Validators.Profiles;
+using IcVibrations.Core.Validators.Profiles.Rectangular;
 using IcVibrations.Methods.AuxiliarOperations;
 
-namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
+namespace IcVibrations.Core.Operations.BeamWithPiezoelectric.Rectangular
 {
     /// <summary>
     /// It's responsible to calculate the vibration in a beam with piezoelectric.
     /// </summary>
-    public class CalculateRectangularBeamWithPiezoelectricVibration : CalculateBeamWithPiezoelectricVibration<RectangularProfile>
+    public class CalculateRectangularBeamWithPiezoelectricVibration : CalculateBeamWithPiezoelectricVibration<RectangularProfile>, ICalculateRectangularBeamWithPiezoelectricVibration
     {
         /// <summary>
         /// Class constructor.
@@ -29,10 +29,10 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         public CalculateRectangularBeamWithPiezoelectricVibration(
             INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
-            IProfileValidator<RectangularProfile> profileValidator,
-            IAuxiliarOperation auxiliarOperation, 
-            IProfileMapper<RectangularProfile> profileMapper, 
-            IBeamWithPiezoelectricMainMatrix<RectangularProfile> mainMatrix,
+            IRectangularProfileValidator profileValidator,
+            IAuxiliarOperation auxiliarOperation,
+            IRectangularProfileMapper profileMapper,
+            IRectangularBeamWithPiezoelectricMainMatrix mainMatrix,
             ICommonMainMatrix commonMainMatrix,
             IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, commonMainMatrix, arrayOperation)
