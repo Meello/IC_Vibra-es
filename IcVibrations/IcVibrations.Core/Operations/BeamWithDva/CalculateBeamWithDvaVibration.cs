@@ -29,7 +29,6 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         private readonly IProfileMapper<TProfile> _profileMapper;
         private readonly IBeamWithDvaMainMatrix _mainMatrix;
         private readonly IBeamMainMatrix<TProfile> _beamMainMatrix;
-        private readonly ICommonMainMatrix _commonMainMatrix;
         private readonly IArrayOperation _arrayOperation;
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         /// <param name="profileMapper"></param>
         /// <param name="mainMatrix"></param>
         /// <param name="beamMainMatrix"></param>
-        /// <param name="commonMainMatrix"></param>
+        /// <param name="arrayOperation"></param>
         public CalculateBeamWithDvaVibration(
             INewmarkMethod newmarkMethod, 
             IMappingResolver mappingResolver, 
@@ -51,7 +50,6 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             IProfileMapper<TProfile> profileMapper,
             IBeamWithDvaMainMatrix mainMatrix,
             IBeamMainMatrix<TProfile> beamMainMatrix,
-            ICommonMainMatrix commonMainMatrix,
             IArrayOperation arrayOperation) 
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
@@ -60,7 +58,6 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             this._profileMapper = profileMapper;
             this._mainMatrix = mainMatrix;
             this._beamMainMatrix = beamMainMatrix;
-            this._commonMainMatrix = commonMainMatrix;
             this._arrayOperation = arrayOperation;
         }
 
@@ -117,7 +114,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
-            bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
             uint numberOfTrueBoundaryConditions = 0;
 
             for (int i = 0; i < degreesFreedomMaximum; i++)

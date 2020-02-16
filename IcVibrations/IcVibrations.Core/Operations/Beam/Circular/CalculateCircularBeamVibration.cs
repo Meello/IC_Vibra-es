@@ -24,7 +24,6 @@ namespace IcVibrations.Core.Operations.Beam.Circular
         /// <param name="profileMapper"></param>
         /// <param name="auxiliarOperation"></param>
         /// <param name="mainMatrix"></param>
-        /// <param name="commonMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateCircularBeamVibration(
             INewmarkMethod newmarkMethod,
@@ -33,9 +32,8 @@ namespace IcVibrations.Core.Operations.Beam.Circular
             ICircularProfileMapper profileMapper,
             IAuxiliarOperation auxiliarOperation,
             ICircularBeamMainMatrix mainMatrix,
-            ICommonMainMatrix commonMainMatrix,
             IArrayOperation arrayOperation)
-            : base(newmarkMethod, mappingResolver, profileValidator, profileMapper, auxiliarOperation, mainMatrix, commonMainMatrix, arrayOperation)
+            : base(newmarkMethod, mappingResolver, profileValidator, profileMapper, auxiliarOperation, mainMatrix, arrayOperation)
         {
         }
     }

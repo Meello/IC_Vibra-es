@@ -155,18 +155,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         double[] matrix_K_Y;
                         double[] matrix_C_Vel;
 
-                        //var massInverseTask2 = this._arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse));
-                        //var matrix_K_YTask2 = this._arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y));
-                        //var matrix_C_VelTask2 = this._arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel));
-
-                        //massInverse = await massInverseTask2;
-                        //matrix_K_Y = await matrix_K_YTask2;
-                        //matrix_C_Vel = await matrix_C_VelTask2;
-
-                        //double[] subtractionResult2 = await this._arrayOperation.Subtract(input.Force, matrix_K_Y, matrix_C_Vel, $"{nameof(input.Force)}, {nameof(matrix_K_Y)}, {nameof(matrix_C_Vel)}");
-
-                        //acel = await this._arrayOperation.Multiply(massInverse, subtractionResult2, $"{nameof(massInverse)}, {nameof(subtractionResult2)}");
-
                         var massInverseTask = Task.Run(async () =>
                         {
                             return await _arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse)).ConfigureAwait(false);

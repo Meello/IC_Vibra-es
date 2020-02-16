@@ -24,7 +24,6 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric.Circular
         /// <param name="auxiliarOperation"></param>
         /// <param name="profileMapper"></param>
         /// <param name="mainMatrix"></param>
-        /// <param name="commonMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateCircularBeamWithPiezoelectricVibration(
             INewmarkMethod newmarkMethod,
@@ -33,9 +32,8 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric.Circular
             IAuxiliarOperation auxiliarOperation,
             ICircularProfileMapper profileMapper,
             ICircularBeamWithPiezoelectricMainMatrix mainMatrix,
-            ICommonMainMatrix commonMainMatrix,
             IArrayOperation arrayOperation)
-            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, commonMainMatrix, arrayOperation)
+            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, arrayOperation)
         {
         }
     }

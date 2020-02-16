@@ -8,12 +8,5 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam.Circular
     /// </summary>
     public class CircularBeamMainMatrix : BeamMainMatrix<CircularProfile>, ICircularBeamMainMatrix
     {
-        /// <summary>
-        /// Class construtor.
-        /// </summary>
-        /// <param name="commonMainMatrix"></param>
-        public CircularBeamMainMatrix(ICommonMainMatrix commonMainMatrix) : base(commonMainMatrix)
-        {
-        }
     }
 }

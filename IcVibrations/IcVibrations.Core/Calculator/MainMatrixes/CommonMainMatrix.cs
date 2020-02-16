@@ -1,5 +1,8 @@
-﻿using IcVibrations.Core.Models;
+﻿using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Models;
+using IcVibrations.Core.Models.Beam;
 using IcVibrations.Models.Beam.Characteristics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Calculator.MainMatrixes
@@ -68,49 +71,17 @@ namespace IcVibrations.Calculator.MainMatrixes
         /// <param name="lastFastening"></param>
         /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
-        public Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum)
+        public Task<bool[]> CalculateBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum)
         {
             bool[] bondaryCondition = new bool[degreesFreedomMaximum];
 
             for (uint i = 0; i < degreesFreedomMaximum; i++)
             {
-                if (i == 0 || i == degreesFreedomMaximum - 2)
-                {
-                    bondaryCondition[i] = firstFastening.Displacement;
-                }
-                else if (i == 1 || i == degreesFreedomMaximum - 1)
-                {
-                    bondaryCondition[i] = firstFastening.Angle;
-                }
-                else
-                {
-                    bondaryCondition[i] = true;
-                }
-            }
-
-            return Task.FromResult(bondaryCondition);
-        }
-
-        /// <summary>
-        /// It's rewsponsible to build the bondary condition matrix.
-        /// </summary>
-        /// <param name="firstFastening"></param>
-        /// <param name="lastFastening"></param>
-        /// <param name="degreesFreedomMaximum"></param>
-        /// <param name="piezoelectricDegreesFreedomMaximum"></param>
-        /// <returns></returns>
-        public Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum)
-        {
-            uint size = degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum;
-            bool[] bondaryCondition = new bool[size];
-
-            for (uint i = 0; i < size; i++)
-            {
                 if (i == 0)
                 {
                     bondaryCondition[i] = firstFastening.Displacement;
                 }
-                else if (i == size - 2)
+                else if (i == degreesFreedomMaximum - 2)
                 {
                     bondaryCondition[i] = lastFastening.Displacement;
                 }
@@ -118,7 +89,7 @@ namespace IcVibrations.Calculator.MainMatrixes
                 {
                     bondaryCondition[i] = firstFastening.Angle;
                 }
-                else if (i == size - 1)
+                else if (i == degreesFreedomMaximum - 1)
                 {
                     bondaryCondition[i] = lastFastening.Angle;
                 }

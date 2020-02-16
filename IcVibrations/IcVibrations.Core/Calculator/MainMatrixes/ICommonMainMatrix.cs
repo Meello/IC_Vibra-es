@@ -33,16 +33,6 @@ namespace IcVibrations.Calculator.MainMatrixes
         /// <param name="lastFastening"></param>
         /// <param name="degreesFreedomMaximum"></param>
         /// <returns></returns>
-        Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum);
-
-        /// <summary>
-        /// It's rewsponsible to build the bondary condition matrix.
-        /// </summary>
-        /// <param name="firstFastening"></param>
-        /// <param name="lastFastening"></param>
-        /// <param name="degreesFreedomMaximum"></param>
-        /// <param name="piezoelectricDegreesFreedomMaximum"></param>
-        /// <returns></returns>
-        Task<bool[]> CalculateBeamBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum);
+        Task<bool[]> CalculateBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum);
     }
 }

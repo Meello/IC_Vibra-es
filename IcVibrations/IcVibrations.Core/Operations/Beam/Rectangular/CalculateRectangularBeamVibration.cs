@@ -24,7 +24,6 @@ namespace IcVibrations.Core.Operations.Beam.Rectangular
         /// <param name="profileMapper"></param>
         /// <param name="auxiliarOperation"></param>
         /// <param name="mainMatrix"></param>
-        /// <param name="commonMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateRectangularBeamVibration(
             INewmarkMethod newmarkMethod,
@@ -33,9 +32,8 @@ namespace IcVibrations.Core.Operations.Beam.Rectangular
             IRectangularProfileMapper profileMapper,
             IAuxiliarOperation auxiliarOperation,
             IRectangularBeamMainMatrix mainMatrix,
-            ICommonMainMatrix commonMainMatrix,
             IArrayOperation arrayOperation)
-            : base(newmarkMethod, mappingResolver, profileValidator, profileMapper, auxiliarOperation, mainMatrix, commonMainMatrix, arrayOperation)
+            : base(newmarkMethod, mappingResolver, profileValidator, profileMapper, auxiliarOperation, mainMatrix, arrayOperation)
         {
         }
     }

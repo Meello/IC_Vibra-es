@@ -259,6 +259,26 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return Task.FromResult(mergedArray);
         }
 
+        public Task<bool[]> MergeArray(bool[] array1, bool[] array2)
+        {
+            int size = array1.Length + array2.Length;
+            bool[] mergedArray = new bool[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                if (i < array1.Length)
+                {
+                    mergedArray[i] = array1[i];
+                }
+                else
+                {
+                    mergedArray[i] = array2[i - array1.Length];
+                }
+            }
+
+            return Task.FromResult(mergedArray);
+        }
+
         public Task<double[,]> Multiply(double[,] array1, double[,] array2, string matrixesName)
         {
             int rows1 = array1.GetLength(0);

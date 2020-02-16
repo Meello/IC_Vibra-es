@@ -28,7 +28,7 @@ namespace IcVibrations.Core.DTO
         public double[] Force { get; set; }
 
         /// <summary>
-        /// number of boundary conditions that is true.
+        /// Number of boundary conditions that is true.
         /// </summary>
         public uint NumberOfTrueBoundaryConditions { get; set; }
         

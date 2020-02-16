@@ -11,21 +11,9 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
     /// It's responsible to calculate the beam main matrixes.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class BeamMainMatrix<TProfile> : IBeamMainMatrix<TProfile>
+    public abstract class BeamMainMatrix<TProfile> : CommonMainMatrix, IBeamMainMatrix<TProfile>
         where TProfile : Profile, new()
     {
-        private readonly ICommonMainMatrix _commonMainMatrix;
-
-        /// <summary>
-        /// Class construtor.
-        /// </summary>
-        /// <param name="commonMainMatrix"></param>
-        public BeamMainMatrix(
-            ICommonMainMatrix commonMainMatrix)
-        {
-            this._commonMainMatrix = commonMainMatrix;
-        }
-
         /// <summary>
         /// Responsible to calculate the mass matrix of the beam.
         /// </summary>
@@ -43,7 +31,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
 
             for (uint n = 0; n < numberOfElements; n++)
             {
-                double[,] elementMass = await this._commonMainMatrix.CalculateElementMass(beam.GeometricProperty.Area[n], beam.Material.SpecificMass, length);
+                double[,] elementMass = await base.CalculateElementMass(beam.GeometricProperty.Area[n], beam.Material.SpecificMass, length);
 
                 for (uint i = (dfe / 2) * n; i < (dfe / 2) * n + dfe; i++)
                 {
@@ -119,18 +107,6 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
             elementHardness[3, 3] = 4 * Math.Pow(length, 2) * constant;
 
             return Task.FromResult(elementHardness);
-        }
-
-        /// <summary>
-        /// It's responsible to calculate the beam damping matrix.
-        /// </summary>
-        /// <param name="mass"></param>
-        /// <param name="hardness"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
-        public async Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint size)
-        {
-            return await this._commonMainMatrix.CalculateDamping(mass, hardness, size);
         }
     }
 }

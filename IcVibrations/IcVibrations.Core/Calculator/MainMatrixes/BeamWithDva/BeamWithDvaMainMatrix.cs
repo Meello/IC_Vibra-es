@@ -7,10 +7,9 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
     /// <summary>
     /// It's responsible to calculate the beam with DVA main matrixes.
     /// </summary>
-    public class BeamWithDvaMainMatrix : IBeamWithDvaMainMatrix
+    public class BeamWithDvaMainMatrix : CommonMainMatrix, IBeamWithDvaMainMatrix
     {
         private readonly IArrayOperation _arrayOperation;
-        private readonly ICommonMainMatrix _commonMainMatrix;
 
         /// <summary>
         /// Class construtor.
@@ -18,11 +17,9 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
         /// <param name="arrayOperation"></param>
         /// <param name="commonMainMatrix"></param>
         public BeamWithDvaMainMatrix(
-            IArrayOperation arrayOperation,
-            ICommonMainMatrix commonMainMatrix)
+            IArrayOperation arrayOperation)
         {
             this._arrayOperation = arrayOperation;
-            this._commonMainMatrix = commonMainMatrix;
         }
 
         /// <summary>
@@ -84,18 +81,6 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
             }
 
             return hardnessWithDva;
-        }
-
-        /// <summary>
-        /// It's responsible to calculate the beam damping matrix.
-        /// </summary>
-        /// <param name="mass"></param>
-        /// <param name="hardness"></param>
-        /// <param name="degreesFreedomMaximum"></param>
-        /// <returns></returns>
-        public async Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum)
-        {
-            return await this._commonMainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
         }
     }
 }
