@@ -52,7 +52,7 @@ namespace IcVibrations
             services.AddScoped<IRectangularBeamWithPiezoelectricMainMatrix, RectangularBeamWithPiezoelectricMainMatrix>();
             services.AddScoped<ICircularBeamWithPiezoelectricMainMatrix, CircularBeamWithPiezoelectricMainMatrix>();
             services.AddScoped<ICommonMainMatrix, CommonMainMatrix>();
-            
+
             // Mapper
             services.AddScoped<IMappingResolver, MappingResolver>();
             services.AddScoped<ICircularProfileMapper, CircularProfileMapper>();
@@ -67,11 +67,11 @@ namespace IcVibrations
             // Beam Operations
             services.AddScoped<ICalculateCircularBeamVibration, CalculateCircularBeamVibration>();
             services.AddScoped<ICalculateRectangularBeamVibration, CalculateRectangularBeamVibration>();
-            
+
             // BeamWithDva Operations
             services.AddScoped<ICalculateCircularBeamWithDvaVibration, CalculateCircularBeamWithDvaVibration>();
             services.AddScoped<ICalculateRectangularBeamWithDvaVibration, CalculateRectangularBeamWithDvaVibration>();
-            
+
             // Piezoelectric Operations
             services.AddScoped<ICalculateCircularBeamWithPiezoelectricVibration, CalculateCircularBeamWithPiezoelectricVibration>();
             services.AddScoped<ICalculateRectangularBeamWithPiezoelectricVibration, CalculateRectangularBeamWithPiezoelectricVibration>();
@@ -80,8 +80,13 @@ namespace IcVibrations
             services.AddScoped<IRectangularProfileValidator, RectangularProfileValidator>();
             services.AddScoped<ICircularProfileValidator, CircularProfileValidator>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers();
 
+            ConfigureSwagger(services);
+        }
+
+        private static void ConfigureSwagger(IServiceCollection services)
+        {
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IC Vibrations", Version = "v1" });

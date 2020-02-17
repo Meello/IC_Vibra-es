@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
@@ -26,7 +24,6 @@
     <ProjectReference Include="..\IcVibrations.Common\IcVibrations.Common.csproj" />
     <ProjectReference Include="..\IcVibrations.Core\IcVibrations.Core.csproj" />
     <ProjectReference Include="..\IcVibrations.DataContract\IcVibrations.DataContracts.csproj" />
-    <ProjectReference Include="..\IcVibrations.Repository\IcVibrations.Repositories.csproj" />
   </ItemGroup>
 
   <ItemGroup>

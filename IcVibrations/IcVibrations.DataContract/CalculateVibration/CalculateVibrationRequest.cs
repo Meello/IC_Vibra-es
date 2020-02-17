@@ -11,17 +11,6 @@ namespace IcVibrations.DataContracts.CalculateVibration
         where TProfile : Profile
         where TRequestData : CalculateVibrationRequestData<TProfile>
     {
-        /// <summary>
-        /// Class construtor.
-        /// </summary>
-        /// <param name="beamData"></param>
-        /// <param name="methodParameterData"></param>
-        public CalculateVibrationRequest(TRequestData beamData, NewmarkMethodParameter methodParameterData)
-        {
-            BeamData = beamData;
-            MethodParameterData = methodParameterData;
-        }
-
         public TRequestData BeamData { get; set; }
 
         public NewmarkMethodParameter MethodParameterData { get; set; }
