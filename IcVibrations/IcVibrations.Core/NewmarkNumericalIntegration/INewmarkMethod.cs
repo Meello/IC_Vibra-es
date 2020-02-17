@@ -1,11 +1,12 @@
-﻿using IcVibrations.Core.DTO;
+﻿using IcVibrations.Common.Classes;
+using IcVibrations.Core.DTO;
 using IcVibrations.DataContracts;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace IcVibrations.Core.NewmarkNumericalIntegration
 {
     public interface INewmarkMethod
     {
-        Task<NewmarkMethodResponse> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response);
+        IAsyncEnumerable<Analysis> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response);
     }
 }

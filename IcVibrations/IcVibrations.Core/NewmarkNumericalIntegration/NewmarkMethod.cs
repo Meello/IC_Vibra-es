@@ -1,4 +1,5 @@
-﻿using IcVibrations.Common.Classes;
+﻿using Dasync.Collections;
+using IcVibrations.Common.Classes;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Models;
@@ -43,7 +44,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// <param name="input"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public async Task<NewmarkMethodResponse> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response)
+        public IAsyncEnumerable<Analysis> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
             if (input.Parameter.DeltaAngularFrequency != default)
@@ -56,20 +57,16 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             }
 
-            NewmarkMethodResponse output = new NewmarkMethodResponse
+            return new AsyncEnumerable<Analysis>(async yield =>
             {
-                Analyses = new List<Analysis>()
-            };
-
-            for (int i = 0; i < angularFrequencyLoopCount; i++)
-            {
-                if(angularFrequencyLoopCount == 1)
+                int iterator = 0;
+                if (angularFrequencyLoopCount == 1)
                 {
                     input.AngularFrequency = input.Parameter.InitialAngularFrequency;
                 }
                 else
                 {
-                    input.AngularFrequency = (input.Parameter.InitialAngularFrequency + i * input.Parameter.DeltaAngularFrequency.Value) * 2 * Math.PI;
+                    input.AngularFrequency = (input.Parameter.InitialAngularFrequency + iterator * input.Parameter.DeltaAngularFrequency.Value) * 2 * Math.PI;
                 }
 
                 if (input.AngularFrequency != 0)
@@ -96,17 +93,16 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         Results = await Solution(input)
                     };
 
-                    output.Analyses.Add(analysisResult);
+                    iterator += 1;
+
+                    await yield.ReturnAsync(analysisResult);
                 }
                 catch (Exception ex)
                 {
                     response.AddError("000", $"Error executing the solution. {ex.Message}");
-
-                    return null;
+                    throw;
                 }
-            }
-
-            return output;
+            });
         }
 
         private async Task<List<Result>> Solution(NewmarkMethodInput input)

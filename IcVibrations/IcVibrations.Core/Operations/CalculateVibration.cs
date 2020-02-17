@@ -1,4 +1,5 @@
-﻿using IcVibrations.Common.Classes;
+﻿using Dasync.Collections;
+using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.Mapper;
@@ -8,6 +9,7 @@ using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.CalculateVibration;
 using IcVibrations.Methods.AuxiliarOperations;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Operations
@@ -76,9 +78,9 @@ namespace IcVibrations.Core.Operations
 
                 NewmarkMethodInput input = await this.CreateInput(beam, request.MethodParameterData, degreesFreedomMaximum);
 
-                NewmarkMethodResponse output = await this._newmarkMethod.CalculateResponse(input, response);
+                List<Analysis> output = await this._newmarkMethod.CalculateResponse(input, response).ToListAsync();
 
-                response.Data = this._mappingResolver.BuildFrom(output, request.Author, request.AnalysisExplanation);
+                //response.Data = this._mappingResolver.BuildFrom(output, request.Author, request.AnalysisExplanation);
 
                 return response;
             }

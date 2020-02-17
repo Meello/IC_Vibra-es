@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IcVibrations.Common\IcVibrations.Common.csproj" />
   </ItemGroup>
 
