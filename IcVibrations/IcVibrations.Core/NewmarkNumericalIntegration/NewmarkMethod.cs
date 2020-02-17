@@ -57,6 +57,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             }
 
+            // Só fez uma vez
             return new AsyncEnumerable<Analysis>(async yield =>
             {
                 int iterator = 0;
@@ -107,7 +108,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
         private async Task<List<Result>> Solution(NewmarkMethodInput input)
         {
-            string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibra-es\IcVibrations\Solutions\TestSolution.txt";
+            string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\Solutions\TestSolution.txt";
 
             List<Result> results = new List<Result>();
             Result result = new Result();
