@@ -1,4 +1,5 @@
-﻿using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Models.Beam;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
     /// It's responsible to calculate the beam main matrixes.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public interface IBeamMainMatrix<TProfile>
+    public interface IBeamMainMatrix<TProfile> : ICommonMainMatrix
         where TProfile : Profile, new()
     {
         /// <summary>
@@ -35,14 +36,5 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
         /// <param name="elementLength"></param>
         /// <returns></returns>
         Task<double[,]> CalculateElementHardness(double momentInertia, double youngModulus, double elementLength);
-
-        /// <summary>
-        /// It's responsible to calculate the beam damping matrix.
-        /// </summary>
-        /// <param name="mass"></param>
-        /// <param name="hardness"></param>
-        /// <param name="degreesFreedomMaximum"></param>
-        /// <returns></returns>
-        Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum);
     }
 }

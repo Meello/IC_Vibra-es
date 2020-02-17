@@ -4,6 +4,7 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.Models;
 using IcVibrations.Core.Models.Piezoelectric;
+using IcVibrations.Models.Beam.Characteristics;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +15,9 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
     /// It's responsible to calculate the beam with piezoelectric main matrixes.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class BeamWithPiezoelectricMainMatrix<TProfile> : IBeamWithPiezoelectricMainMatrix<TProfile>
+    public abstract class BeamWithPiezoelectricMainMatrix<TProfile> : CommonMainMatrix, IBeamWithPiezoelectricMainMatrix<TProfile>
         where TProfile : Profile, new()
     {
-        private readonly ICommonMainMatrix _commonMainMatrix;
         private readonly IBeamMainMatrix<TProfile> _beamMainMatrix;
         private readonly IArrayOperation _arrayOperation;
 
@@ -28,11 +28,9 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public BeamWithPiezoelectricMainMatrix(
-            ICommonMainMatrix commonMainMatrix,
             IBeamMainMatrix<TProfile> beamMainMatrix,
             IArrayOperation arrayOperation)
         {
-            this._commonMainMatrix = commonMainMatrix;
             this._beamMainMatrix = beamMainMatrix;
             this._arrayOperation = arrayOperation;
         }
@@ -55,11 +53,11 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
             for (uint n = 0; n < numberOfElements; n++)
             {
                 double[,] elementPiezoelectricMass = new double[Constants.DegreesFreedomElement, Constants.DegreesFreedomElement];
-                double[,] elementBeamMass = await this._commonMainMatrix.CalculateElementMass(beamWithPiezoelectric.GeometricProperty.Area[n], beamWithPiezoelectric.Material.SpecificMass, elementLength);
+                double[,] elementBeamMass = await base.CalculateElementMass(beamWithPiezoelectric.GeometricProperty.Area[n], beamWithPiezoelectric.Material.SpecificMass, elementLength);
 
                 if (beamWithPiezoelectric.ElementsWithPiezoelectric.Contains(n + 1))
                 {
-                    elementPiezoelectricMass = await this._commonMainMatrix.CalculateElementMass(beamWithPiezoelectric.PiezoelectricGeometricProperty.Area[n], beamWithPiezoelectric.PiezoelectricSpecificMass, elementLength);
+                    elementPiezoelectricMass = await base.CalculateElementMass(beamWithPiezoelectric.PiezoelectricGeometricProperty.Area[n], beamWithPiezoelectric.PiezoelectricSpecificMass, elementLength);
                 }
 
                 for (uint i = (dfe / 2) * n; i < (dfe / 2) * n + dfe; i++)
@@ -152,10 +150,10 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <returns></returns>
         public async Task<double[,]> CalculatePiezoelectricElectromechanicalCoupling(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum)
         {
-            uint numberOfElements = beamWithPiezoelectric.NumberOfElements;
-            double[,] piezoelectricElectromechanicalCoupling = new double[degreesFreedomMaximum, numberOfElements + 1];
+            uint numberOfNodes = beamWithPiezoelectric.NumberOfElements + 1;
+            double[,] piezoelectricElectromechanicalCoupling = new double[degreesFreedomMaximum, numberOfNodes];
 
-            for (uint n = 0; n < numberOfElements; n++)
+            for (uint n = 0; n < numberOfNodes; n++)
             {
                 double[,] piezoelectricElementElectromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricElementMatrixSize];
 
@@ -296,15 +294,31 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         }
     
         /// <summary>
-        /// It's responsible to build the damping matrix.
+        /// It's rewsponsible to build the bondary condition matrix.
         /// </summary>
-        /// <param name="mass"></param>
-        /// <param name="hardness"></param>
-        /// <param name="size"></param>
+        /// <param name="firstFastening"></param>
+        /// <param name="lastFastening"></param>
+        /// <param name="numberOfNodes"></param>
+        /// <param name="elementsWithPiezoelectric"></param>
         /// <returns></returns>
-        public async Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint size)
+        public Task<bool[]> CalculatePiezoelectricBondaryCondition(uint numberOfNodes, uint[] elementsWithPiezoelectric)
         {
-            return await this._commonMainMatrix.CalculateDamping(mass, hardness, size);
+            bool[] bondaryCondition = new bool[numberOfNodes];
+
+            for (uint i = 0; i < numberOfNodes; i++)
+            {
+                if(elementsWithPiezoelectric.Contains(i + 1))
+                {
+                    bondaryCondition[i] = true;
+                    bondaryCondition[i + 1] = true;
+                }
+                else
+                {
+                    bondaryCondition[i] = false;
+                }
+            }
+
+            return Task.FromResult(bondaryCondition);
         }
     }
 }

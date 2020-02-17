@@ -17,14 +17,12 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectan
         /// <summary>
         /// Class constructor.
         /// </summary>
-        /// <param name="commonMainMatrix"></param>
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public RectangularBeamWithPiezoelectricMainMatrix(
-            ICommonMainMatrix commonMainMatrix,
             IRectangularBeamMainMatrix beamMainMatrix,
             IArrayOperation arrayOperation)
-            : base(commonMainMatrix, beamMainMatrix, arrayOperation)
+            : base(beamMainMatrix, arrayOperation)
         {
         }
 

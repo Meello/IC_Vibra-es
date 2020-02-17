@@ -27,7 +27,6 @@ namespace IcVibrations.Core.Operations.Beam
         private readonly IProfileMapper<TProfile> _profileMapper;
         private readonly IAuxiliarOperation _auxiliarOperation;
         private readonly IBeamMainMatrix<TProfile> _mainMatrix;
-        private readonly ICommonMainMatrix _commonMainMatrix;
         private readonly IArrayOperation _arrayOperation;
 
         /// <summary>
@@ -39,7 +38,6 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="profileMapper"></param>
         /// <param name="auxiliarOperation"></param>
         /// <param name="mainMatrix"></param>
-        /// <param name="commonMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateBeamVibration(
             INewmarkMethod newmarkMethod,
@@ -48,7 +46,6 @@ namespace IcVibrations.Core.Operations.Beam
             IProfileMapper<TProfile> profileMapper,
             IAuxiliarOperation auxiliarOperation,
             IBeamMainMatrix<TProfile> mainMatrix,
-            ICommonMainMatrix commonMainMatrix,
             IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
@@ -56,7 +53,6 @@ namespace IcVibrations.Core.Operations.Beam
             this._profileMapper = profileMapper;
             this._auxiliarOperation = auxiliarOperation;
             this._mainMatrix = mainMatrix;
-            this._commonMainMatrix = commonMainMatrix;
             this._arrayOperation = arrayOperation;
         }
 
@@ -96,7 +92,7 @@ namespace IcVibrations.Core.Operations.Beam
         {
             NewmarkMethodInput input = new NewmarkMethodInput();
 
-            bool[] bondaryCondition = await this._commonMainMatrix.CalculateBeamBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
             uint numberOfTrueBoundaryConditions = 0;
 
             for (int i = 0; i < degreesFreedomMaximum; i++)

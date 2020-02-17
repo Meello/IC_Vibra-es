@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
 {
     /// <summary>
     /// It's responsible to calculate the beam with DVA main matrixes.
     /// </summary>
-    public interface IBeamWithDvaMainMatrix
+    public interface IBeamWithDvaMainMatrix : ICommonMainMatrix
     {
         /// <summary>
         /// Responsible to calculate the mass matrix of the beam.
@@ -24,14 +25,5 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
         /// <param name="dvaNodePositions"></param>
         /// <returns></returns>
         Task<double[,]> CalculateHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions);
-
-        /// <summary>
-        /// It's responsible to calculate the beam damping matrix.
-        /// </summary>
-        /// <param name="mass"></param>
-        /// <param name="hardness"></param>
-        /// <param name="degreesFreedomMaximum"></param>
-        /// <returns></returns>
-        Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint degreesFreedomMaximum);
     }
 }

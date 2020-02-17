@@ -1,5 +1,7 @@
-﻿using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Models.Piezoelectric;
+using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
@@ -8,7 +10,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
     /// It's responsible to calculate the beam with piezoelectric main matrixes.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public interface IBeamWithPiezoelectricMainMatrix<TProfile>
+    public interface IBeamWithPiezoelectricMainMatrix<TProfile> : ICommonMainMatrix
         where TProfile : Profile, new()
     {
         /// <summary>
@@ -87,12 +89,13 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         Task<double[,]> CalculateEquivalentHardness(double[,] hardness, double[,] piezoelectricElectromechanicalCoupling, double[,] piezoelectricCapacitance, uint degreesFreedomMaximum, uint piezoelectricDegreesFreedomMaximum);
 
         /// <summary>
-        /// It's responsible to build the damping matrix.
+        /// It's rewsponsible to build the bondary condition matrix.
         /// </summary>
-        /// <param name="mass"></param>
-        /// <param name="hardness"></param>
-        /// <param name="size"></param>
+        /// <param name="firstFastening"></param>
+        /// <param name="lastFastening"></param>
+        /// <param name="numberOfNodes"></param>
+        /// <param name="elementsWithPiezoelectric"></param>
         /// <returns></returns>
-        Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint size);
+        Task<bool[]> CalculatePiezoelectricBondaryCondition(uint numberOfNodes, uint[] elementsWithPiezoelectric);
     }
 }

@@ -6,6 +6,7 @@ using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
+using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.CalculateVibration;
 using IcVibrations.Methods.AuxiliarOperations;
 using System;

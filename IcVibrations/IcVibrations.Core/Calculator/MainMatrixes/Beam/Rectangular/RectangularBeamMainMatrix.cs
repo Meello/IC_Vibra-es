@@ -8,12 +8,5 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular
     /// </summary>
     public class RectangularBeamMainMatrix : BeamMainMatrix<RectangularProfile>, IRectangularBeamMainMatrix
     {
-        /// <summary>
-        /// Class construtor.
-        /// </summary>
-        /// <param name="commonMainMatrix"></param>
-        public RectangularBeamMainMatrix(ICommonMainMatrix commonMainMatrix) : base(commonMainMatrix)
-        {
-        }
     }
 }

@@ -16,14 +16,12 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Circul
         /// <summary>
         /// Class constructor.
         /// </summary>
-        /// <param name="commonMainMatrix"></param>
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CircularBeamWithPiezoelectricMainMatrix(
-            ICommonMainMatrix commonMainMatrix, 
             ICircularBeamMainMatrix beamMainMatrix, 
             IArrayOperation arrayOperation) 
-            : base(commonMainMatrix, beamMainMatrix, arrayOperation)
+            : base(beamMainMatrix, arrayOperation)
         {
         }
 
