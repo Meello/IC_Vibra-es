@@ -1,13 +1,12 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Common.Classes;
+﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric;
-using IcVibrations.Core.DTO;
+using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Piezoelectric;
-using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithPiezoelectric;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -20,7 +19,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
     /// It's responsible to calculate the vibration in a beam with piezoelectric.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateBeamWithPiezoelectricVibration<TProfile> : CalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<TProfile>, PiezoelectricRequestData<TProfile>, TProfile, BeamWithPiezoelectric<TProfile>>, ICalculateBeamWithPiezoelectricVibration<TProfile>
+    public abstract class CalculateBeamWithPiezoelectricVibration<TProfile> : CalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<TProfile>, PiezoelectricRequestData<TProfile>, TProfile, BeamWithPiezoelectric<TProfile>, NewmarkMethodBeamWithPiezoelectricInput>, ICalculateBeamWithPiezoelectricVibration<TProfile>
         where TProfile : Profile, new()
     {
         private readonly IMappingResolver _mappingResolver;
@@ -40,7 +39,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         /// <param name="mainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateBeamWithPiezoelectricVibration(
-            INewmarkMethod newmarkMethod,
+            IBeamWithPiezoelectricNewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IProfileValidator<TProfile> profileValidator,
             IAuxiliarOperation auxiliarOperation,
@@ -110,10 +109,8 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             };
         }
 
-        public async override Task<NewmarkMethodInput> CreateInput(BeamWithPiezoelectric<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
+        public async override Task<NewmarkMethodBeamWithPiezoelectricInput> CreateInput(BeamWithPiezoelectric<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
-            NewmarkMethodInput input = new NewmarkMethodInput();
-
             uint piezoelectricDegreesFreedomMaximum = beam.NumberOfElements;
 
             bool[] beamBondaryConditions = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
@@ -163,17 +160,24 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             double[] equivalentForce = await this._arrayOperation.MergeArray(force, electricalCharge);
 
             // Creating input.
-            input.Mass = this._auxiliarOperation.ApplyBondaryConditions(equivalentMass, bondaryConditions, numberOfTrueBoundaryConditions);
+            NewmarkMethodBeamWithPiezoelectricInput input = new NewmarkMethodBeamWithPiezoelectricInput
+            {
+                Mass = this._auxiliarOperation.ApplyBondaryConditions(equivalentMass, bondaryConditions, numberOfTrueBoundaryConditions),
 
-            input.Hardness = this._auxiliarOperation.ApplyBondaryConditions(equivalentHardness, bondaryConditions, numberOfTrueBoundaryConditions);
+                Hardness = this._auxiliarOperation.ApplyBondaryConditions(equivalentHardness, bondaryConditions, numberOfTrueBoundaryConditions),
 
-            input.Damping = this._auxiliarOperation.ApplyBondaryConditions(damping, bondaryConditions, numberOfTrueBoundaryConditions);
+                Damping = this._auxiliarOperation.ApplyBondaryConditions(damping, bondaryConditions, numberOfTrueBoundaryConditions),
 
-            input.Force = this._auxiliarOperation.ApplyBondaryConditions(equivalentForce, bondaryConditions, numberOfTrueBoundaryConditions);
+                Force = this._auxiliarOperation.ApplyBondaryConditions(equivalentForce, bondaryConditions, numberOfTrueBoundaryConditions),
 
-            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
+                NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions,
 
-            input.Parameter = newmarkMethodParameter;
+                NumberOfTrueBeamBoundaryConditions = numberOfTrueBeamBoundaryConditions,
+
+                NumberOfTruePiezoelectricBoundaryConditions = numberOfTruePiezoelectricBoundaryConditions,
+
+                Parameter = newmarkMethodParameter
+            };
 
             return input;
         }

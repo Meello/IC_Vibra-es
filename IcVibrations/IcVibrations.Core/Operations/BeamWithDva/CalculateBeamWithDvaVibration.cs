@@ -1,14 +1,13 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Common.Classes;
+﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
-using IcVibrations.Core.DTO;
+using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
-using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NewmarkNumericalIntegration.Beam;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -21,7 +20,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
     /// It's responsible to calculate the vibration in a beam with dynamic vibration absorber.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateBeamWithDvaVibration<TProfile> : CalculateVibration<CalculateBeamWithDvaVibrationRequest<TProfile>, BeamWithDvaRequestData<TProfile>, TProfile, BeamWithDva<TProfile>>, ICalculateBeamWithDvaVibration<TProfile>
+    public abstract class CalculateBeamWithDvaVibration<TProfile> : CalculateVibration<CalculateBeamWithDvaVibrationRequest<TProfile>, BeamWithDvaRequestData<TProfile>, TProfile, BeamWithDva<TProfile>, NewmarkMethodBeamInput>, ICalculateBeamWithDvaVibration<TProfile>
         where TProfile : Profile, new()
     {
         private readonly IMappingResolver _mappingResolver;
@@ -43,7 +42,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateBeamWithDvaVibration(
-            INewmarkMethod newmarkMethod, 
+            IBeamNewmarkMethod newmarkMethod, 
             IMappingResolver mappingResolver, 
             IProfileValidator<TProfile> profileValidator, 
             IAuxiliarOperation auxiliarOperation,
@@ -110,10 +109,8 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             };
         }
 
-        public async override Task<NewmarkMethodInput> CreateInput(BeamWithDva<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
+        public async override Task<NewmarkMethodBeamInput> CreateInput(BeamWithDva<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
-            NewmarkMethodInput input = new NewmarkMethodInput();
-
             bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
             uint numberOfTrueBoundaryConditions = 0;
 
@@ -139,17 +136,20 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             double[] forces = beam.Forces;
 
             // Creating input.
-            input.Mass = this._auxiliarOperation.ApplyBondaryConditions(massWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
+            NewmarkMethodBeamInput input = new NewmarkMethodBeamInput
+            {
+                Mass = this._auxiliarOperation.ApplyBondaryConditions(massWithDva, bondaryCondition, numberOfTrueBoundaryConditions),
 
-            input.Hardness = this._auxiliarOperation.ApplyBondaryConditions(hardnessWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
+                Hardness = this._auxiliarOperation.ApplyBondaryConditions(hardnessWithDva, bondaryCondition, numberOfTrueBoundaryConditions),
 
-            input.Damping = this._auxiliarOperation.ApplyBondaryConditions(dampingWithDva, bondaryCondition, numberOfTrueBoundaryConditions);
+                Damping = this._auxiliarOperation.ApplyBondaryConditions(dampingWithDva, bondaryCondition, numberOfTrueBoundaryConditions),
 
-            input.Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions);
+                Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions),
 
-            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
+                NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions,
 
-            input.Parameter = newmarkMethodParameter;
+                Parameter = newmarkMethodParameter
+            };
 
             return input;
         }

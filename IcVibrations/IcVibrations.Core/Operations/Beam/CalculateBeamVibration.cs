@@ -3,11 +3,12 @@ using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam;
-using IcVibrations.Core.DTO;
+using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NewmarkNumericalIntegration.Beam;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.CalculateVibration.Beam;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -20,7 +21,7 @@ namespace IcVibrations.Core.Operations.Beam
     /// It's responsible to calculate the vibration in a beam.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateBeamVibration<TProfile> : CalculateVibration<CalculateBeamVibrationRequest<TProfile>, BeamRequestData<TProfile>, TProfile, Beam<TProfile>>, ICalculateBeamVibration<TProfile>
+    public abstract class CalculateBeamVibration<TProfile> : CalculateVibration<CalculateBeamVibrationRequest<TProfile>, BeamRequestData<TProfile>, TProfile, Beam<TProfile>, NewmarkMethodBeamInput>, ICalculateBeamVibration<TProfile>
         where TProfile : Profile, new()
     {
         private readonly IMappingResolver _mappingResolver;
@@ -40,7 +41,7 @@ namespace IcVibrations.Core.Operations.Beam
         /// <param name="mainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateBeamVibration(
-            INewmarkMethod newmarkMethod,
+            IBeamNewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IProfileValidator<TProfile> profileValidator,
             IProfileMapper<TProfile> profileMapper,
@@ -88,10 +89,8 @@ namespace IcVibrations.Core.Operations.Beam
             };
         }
 
-        public async override Task<NewmarkMethodInput> CreateInput(Beam<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
+        public async override Task<NewmarkMethodBeamInput> CreateInput(Beam<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
-            NewmarkMethodInput input = new NewmarkMethodInput();
-
             bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
             uint numberOfTrueBoundaryConditions = 0;
 
@@ -113,17 +112,15 @@ namespace IcVibrations.Core.Operations.Beam
             double[] forces = beam.Forces;
 
             // Creating input.
-            input.Mass = this._auxiliarOperation.ApplyBondaryConditions(mass, bondaryCondition, numberOfTrueBoundaryConditions);
-
-            input.Hardness = this._auxiliarOperation.ApplyBondaryConditions(hardness, bondaryCondition, numberOfTrueBoundaryConditions);
-
-            input.Damping = this._auxiliarOperation.ApplyBondaryConditions(damping, bondaryCondition, numberOfTrueBoundaryConditions);
-
-            input.Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions);
-
-            input.NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions;
-
-            input.Parameter = newmarkMethodParameter;
+            NewmarkMethodBeamInput input = new NewmarkMethodBeamInput
+            {
+                Mass = this._auxiliarOperation.ApplyBondaryConditions(mass, bondaryCondition, numberOfTrueBoundaryConditions),
+                Hardness = this._auxiliarOperation.ApplyBondaryConditions(hardness, bondaryCondition, numberOfTrueBoundaryConditions),
+                Damping = this._auxiliarOperation.ApplyBondaryConditions(damping, bondaryCondition, numberOfTrueBoundaryConditions),
+                Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions),
+                NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions,
+                Parameter = newmarkMethodParameter
+            };
 
             return input;
         }

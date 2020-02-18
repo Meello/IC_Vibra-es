@@ -9,7 +9,8 @@ using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectangula
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Circular;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
-using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NewmarkNumericalIntegration.Beam;
+using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithPiezoelectric;
 using IcVibrations.Core.Operations.Beam.Circular;
 using IcVibrations.Core.Operations.Beam.Rectangular;
 using IcVibrations.Core.Operations.BeamWithDva.Circular;
@@ -21,7 +22,6 @@ using IcVibrations.Core.Validators.Profiles.Rectangular;
 using IcVibrations.Methods.AuxiliarOperations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -59,7 +59,8 @@ namespace IcVibrations
             services.AddScoped<IRectangularProfileMapper, RectangularProfileMapper>();
 
             // NewmarkNumericalIntegration
-            services.AddScoped<INewmarkMethod, NewmarkMethod>();
+            services.AddScoped<IBeamWithPiezoelectricNewmarkMethod, BeamWithPiezoelectricNewmarkMethod>();
+            services.AddScoped<IBeamNewmarkMethod, BeamNewmarkMethod>();
 
             // Auxiliar Operations
             services.AddScoped<IAuxiliarOperation, AuxiliarOperation>();
