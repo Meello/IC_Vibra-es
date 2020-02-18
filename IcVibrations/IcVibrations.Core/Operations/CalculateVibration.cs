@@ -1,12 +1,11 @@
-﻿using Dasync.Collections;
-using IcVibrations.Common.Classes;
+﻿using IcVibrations.Common.Classes;
 using IcVibrations.Common.Profiles;
 using IcVibrations.Core.DTO;
+using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Models.Beam;
 using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
-using IcVibrations.DataContracts;
 using IcVibrations.DataContracts.CalculateVibration;
 using IcVibrations.Methods.AuxiliarOperations;
 using System;
@@ -22,13 +21,14 @@ namespace IcVibrations.Core.Operations
     /// <typeparam name="TRequestData"></typeparam>
     /// <typeparam name="TProfile"></typeparam>
     /// <typeparam name="TBeam"></typeparam>
-    public abstract class CalculateVibration<TRequest, TRequestData, TProfile, TBeam> : OperationBase<TRequest, CalculateVibrationResponse>, ICalculateVibration<TRequest, TRequestData, TProfile, TBeam>
+    public abstract class CalculateVibration<TRequest, TRequestData, TProfile, TBeam, TInput> : OperationBase<TRequest, CalculateVibrationResponse>, ICalculateVibration<TRequest, TRequestData, TProfile, TBeam, TInput>
         where TProfile : Profile, new()
         where TRequestData : CalculateVibrationRequestData<TProfile>, new()
         where TRequest : CalculateVibrationRequest<TProfile, TRequestData>
         where TBeam : AbstractBeam<TProfile>, new()
+        where TInput : INewmarkMethodInput
     {
-        private readonly INewmarkMethod _newmarkMethod;
+        private readonly INewmarkMethod<TInput> _newmarkMethod;
         private readonly IMappingResolver _mappingResolver;
         private readonly IProfileValidator<TProfile> _profileValidator;
         private readonly IAuxiliarOperation _auxiliarOperation;
@@ -41,7 +41,7 @@ namespace IcVibrations.Core.Operations
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
         public CalculateVibration(
-            INewmarkMethod newmarkMethod,
+            INewmarkMethod<TInput> newmarkMethod,
             IMappingResolver mappingResolver,
             IProfileValidator<TProfile> profileValidator,
             IAuxiliarOperation auxiliarOperation)
@@ -65,7 +65,7 @@ namespace IcVibrations.Core.Operations
         /// <param name="beam"></param>
         /// <param name="newmarkMethodParameter"></param>
         /// <returns></returns>
-        public abstract Task<NewmarkMethodInput> CreateInput(TBeam beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum);
+        public abstract Task<TInput> CreateInput(TBeam beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum);
 
         protected override async Task<CalculateVibrationResponse> ProcessOperation(TRequest request)
         {
@@ -77,9 +77,9 @@ namespace IcVibrations.Core.Operations
 
                 TBeam beam = await this.BuildBeam(request, degreesFreedomMaximum);
 
-                NewmarkMethodInput input = await this.CreateInput(beam, request.MethodParameterData, degreesFreedomMaximum);
+                TInput input = await this.CreateInput(beam, request.MethodParameterData, degreesFreedomMaximum);
 
-                List<Analysis> output = await this._newmarkMethod.CalculateResponse(input, response).ToListAsync();
+                IAsyncEnumerable<Analysis> output = this._newmarkMethod.CalculateResponse(input, response);
 
                 //response.Data = this._mappingResolver.BuildFrom(output, request.Author, request.AnalysisExplanation);
 

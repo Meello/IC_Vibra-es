@@ -53,7 +53,6 @@ namespace IC_Vibrations.Controllers
             [FromServices] ICalculateRectangularBeamWithPiezoelectricVibration calculateVibration,
             [FromBody] CalculateBeamWithPiezoelectricVibrationRequest<RectangularProfile> request)
         {
-            // Matriz massa equivalente possui valores zero na diagonal impedindo o cálculo de sua inversa.
             CalculateVibrationResponse response = await calculateVibration.Process(request);
 
             if (!response.Success)

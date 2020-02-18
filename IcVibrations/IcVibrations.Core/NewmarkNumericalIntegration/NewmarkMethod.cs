@@ -1,13 +1,12 @@
 ﻿using Dasync.Collections;
 using IcVibrations.Common.Classes;
 using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.DTO;
+using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Models;
 using IcVibrations.DataContracts;
 using IcVibrations.Methods.AuxiliarOperations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.NewmarkNumericalIntegration
@@ -15,12 +14,22 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
     /// <summary>
     /// It's responsible to execute the Newmark numerical integration method to calculate the vibration.
     /// </summary>
-    public class NewmarkMethod : INewmarkMethod
+    public abstract class NewmarkMethod<TInput> : INewmarkMethod<TInput>
+        where TInput : INewmarkMethodInput
     {
         /// <summary>
         /// Integration constants.
         /// </summary>
         private double a0, a1, a2, a3, a4, a5;
+
+        /// <summary>
+        /// It's responsible to calculate the aceleration in the time = 0.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="displacement"></param>
+        /// <param name="velocity"></param>
+        /// <returns></returns>
+        public abstract Task<double[]> CalculateAcelInTime0(TInput input);
 
         private readonly IArrayOperation _arrayOperation;
         private readonly IAuxiliarOperation _auxiliarOperation;
@@ -44,7 +53,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// <param name="input"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public IAsyncEnumerable<Analysis> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response)
+        public IAsyncEnumerable<Analysis> CalculateResponse(TInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
             if (input.Parameter.DeltaAngularFrequency != default)
@@ -57,13 +66,12 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             }
 
-            // Só fez uma vez
             return new AsyncEnumerable<Analysis>(async yield =>
             {
                 int iterator = 0;
                 if (angularFrequencyLoopCount == 1)
                 {
-                    input.AngularFrequency = input.Parameter.InitialAngularFrequency;
+                    input.AngularFrequency = input.Parameter.InitialAngularFrequency * 2 * Math.PI;
                 }
                 else
                 {
@@ -106,7 +114,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             });
         }
 
-        private async Task<List<Result>> Solution(NewmarkMethodInput input)
+        private async Task<List<Result>> Solution(TInput input)
         {
             string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\Solutions\TestSolution.txt";
 
@@ -148,34 +156,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                     if (time == 0)
                     {
-                        double[,] massInverse;
-                        double[] matrix_K_Y;
-                        double[] matrix_C_Vel;
-
-                        var massInverseTask = Task.Run(async () =>
-                        {
-                            return await _arrayOperation.InverseMatrix(input.Mass, input.NumberOfTrueBoundaryConditions, nameof(massInverse)).ConfigureAwait(false);
-                        });
-
-                        var matrix_K_YTask = Task.Run(async () =>
-                        {
-                            return await _arrayOperation.Multiply(input.Hardness, y, nameof(matrix_K_Y)).ConfigureAwait(false);
-                        });
-
-                        var matrix_C_VelTask = Task.Run(async () =>
-                        {
-                            return await _arrayOperation.Multiply(input.Damping, vel, nameof(matrix_C_Vel)).ConfigureAwait(false);
-                        });
-
-                        await Task.WhenAll(massInverseTask, matrix_K_YTask, matrix_C_VelTask).ConfigureAwait(false);
-
-                        massInverse = massInverseTask.Result;
-                        matrix_K_Y = matrix_K_YTask.Result;
-                        matrix_C_Vel = matrix_C_VelTask.Result;
-
-                        double[] subtractionResult = await this._arrayOperation.Subtract(input.Force, matrix_K_Y, matrix_C_Vel, $"{nameof(input.Force)}, {nameof(matrix_K_Y)}, {nameof(matrix_C_Vel)}");
-
-                        acel = await this._arrayOperation.Multiply(massInverse, subtractionResult, $"{nameof(massInverse)}, {nameof(subtractionResult)}");
+                        acel = await this.CalculateAcelInTime0(input);
 
                         Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                         {
@@ -281,7 +262,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return Task.FromResult(p2);
         }
 
-        private async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
+        private async Task<double[]> CalculateEquivalentForce(TInput input, double[] force_ant, double[] vel, double[] acel)
         {
             var deltaForceTask = _arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
             var p1Task = CalculateMatrixP1(input.Mass, input.Damping, input.NumberOfTrueBoundaryConditions);

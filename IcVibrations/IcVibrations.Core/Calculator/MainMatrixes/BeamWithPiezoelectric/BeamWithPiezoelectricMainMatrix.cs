@@ -151,9 +151,11 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         public async Task<double[,]> CalculatePiezoelectricElectromechanicalCoupling(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum)
         {
             uint numberOfNodes = beamWithPiezoelectric.NumberOfElements + 1;
+            uint numberOfElements = beamWithPiezoelectric.NumberOfElements;
+            uint dfe = Constants.DegreesFreedomElement;
             double[,] piezoelectricElectromechanicalCoupling = new double[degreesFreedomMaximum, numberOfNodes];
 
-            for (uint n = 0; n < numberOfNodes; n++)
+            for (uint n = 0; n < numberOfElements; n++)
             {
                 double[,] piezoelectricElementElectromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricElementMatrixSize];
 
@@ -162,7 +164,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
                     piezoelectricElementElectromechanicalCoupling = await this.CalculatePiezoelectricElementElectromechanicalCoupling(beamWithPiezoelectric);
                 }
 
-                for (uint i = 2 * n; i < 2 * n + Constants.DegreesFreedomElement; i++)
+                for (uint i = (dfe / 2) * n; i < (dfe / 2) * n + dfe; i++)
                 {
                     for (uint j = n; j < n + Constants.PiezoelectricElementMatrixSize; j++)
                     {
@@ -196,7 +198,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
             {
                 double[,] piezoelectricElementCapacitance = new double[Constants.PiezoelectricElementMatrixSize, Constants.PiezoelectricElementMatrixSize];
 
-                if (beamWithPiezoelectric.ElementsWithPiezoelectric.Contains(n - 1))
+                if (beamWithPiezoelectric.ElementsWithPiezoelectric.Contains(n + 1))
                 {
                     piezoelectricElementCapacitance = await this.CalculateElementPiezoelectricCapacitance(beamWithPiezoelectric, n);
                 }
@@ -296,8 +298,6 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// It's rewsponsible to build the bondary condition matrix.
         /// </summary>
-        /// <param name="firstFastening"></param>
-        /// <param name="lastFastening"></param>
         /// <param name="numberOfNodes"></param>
         /// <param name="elementsWithPiezoelectric"></param>
         /// <returns></returns>
@@ -307,10 +307,10 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
 
             for (uint i = 0; i < numberOfNodes; i++)
             {
-                if(elementsWithPiezoelectric.Contains(i + 1))
+                if(elementsWithPiezoelectric.Contains(i))
                 {
+                    bondaryCondition[i - 1] = true;
                     bondaryCondition[i] = true;
-                    bondaryCondition[i + 1] = true;
                 }
                 else
                 {

@@ -1,10 +1,9 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
-using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NewmarkNumericalIntegration.Beam;
 using IcVibrations.Core.Validators.Profiles.Rectangular;
 using IcVibrations.Methods.AuxiliarOperations;
 
@@ -26,7 +25,7 @@ namespace IcVibrations.Core.Operations.Beam.Rectangular
         /// <param name="mainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateRectangularBeamVibration(
-            INewmarkMethod newmarkMethod,
+            IBeamNewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IRectangularProfileValidator profileValidator,
             IRectangularProfileMapper profileMapper,
