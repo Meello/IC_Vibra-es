@@ -63,7 +63,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             else
             {
                 angularFrequencyLoopCount = 1;
-
             }
 
             return new AsyncEnumerable<Analysis>(async yield =>
@@ -99,12 +98,12 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                     var analysisResult = new Analysis()
                     {
                         AngularFrequency = input.AngularFrequency,
-                        Results = await Solution(input)
+                        Results = await Solution(input).ConfigureAwait(false)
                     };
 
                     iterator += 1;
 
-                    await yield.ReturnAsync(analysisResult);
+                    await yield.ReturnAsync(analysisResult).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
