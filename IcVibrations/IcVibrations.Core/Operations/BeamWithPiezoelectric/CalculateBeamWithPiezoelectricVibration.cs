@@ -105,13 +105,13 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 Profile = request.BeamData.Profile,
                 PiezoelectricSpecificMass = request.BeamData.PiezoelectricSpecificMass,
                 YoungModulus = request.BeamData.PiezoelectricYoungModulus,
-                ElectricalCharge = new double[request.BeamData.NumberOfElements]
+                ElectricalCharge = new double[request.BeamData.NumberOfElements + 1]
             };
         }
 
         public async override Task<NewmarkMethodBeamWithPiezoelectricInput> CreateInput(BeamWithPiezoelectric<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
-            uint piezoelectricDegreesFreedomMaximum = beam.NumberOfElements;
+            uint piezoelectricDegreesFreedomMaximum = beam.NumberOfElements + 1;
 
             bool[] beamBondaryConditions = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
             uint numberOfTrueBeamBoundaryConditions = 0;
@@ -124,10 +124,10 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 }
             }
 
-            bool[] piezoelectricBondaryConditions = await this._mainMatrix.CalculatePiezoelectricBondaryCondition(beam.NumberOfElements + 1, beam.ElementsWithPiezoelectric);
+            bool[] piezoelectricBondaryConditions = await this._mainMatrix.CalculatePiezoelectricBondaryCondition(piezoelectricDegreesFreedomMaximum, beam.ElementsWithPiezoelectric);
             uint numberOfTruePiezoelectricBoundaryConditions = 0;
 
-            for (int i = 0; i < beam.NumberOfElements + 1; i++)
+            for (int i = 0; i < piezoelectricDegreesFreedomMaximum; i++)
             {
                 if (piezoelectricBondaryConditions[i] == true)
                 {
@@ -150,8 +150,8 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             double[,] equivalentMass = await this._mainMatrix.CalculateEquivalentMass(mass, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
 
             double[,] equivalentHardness = await this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
-            
-            double[,] damping = await this._mainMatrix.CalculateDamping(equivalentMass, equivalentHardness, degreesFreedomMaximum);
+
+            double[,] damping = await this._mainMatrix.CalculateDamping(equivalentMass, equivalentHardness, degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum);
 
             double[] force = beam.Forces;
 

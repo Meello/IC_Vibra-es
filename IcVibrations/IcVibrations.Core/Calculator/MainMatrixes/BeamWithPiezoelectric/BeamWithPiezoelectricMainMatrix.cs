@@ -151,10 +151,11 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         public async Task<double[,]> CalculatePiezoelectricElectromechanicalCoupling(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint degreesFreedomMaximum)
         {
             uint numberOfNodes = beamWithPiezoelectric.NumberOfElements + 1;
+            uint numberOfElements = beamWithPiezoelectric.NumberOfElements;
             uint dfe = Constants.DegreesFreedomElement;
             double[,] piezoelectricElectromechanicalCoupling = new double[degreesFreedomMaximum, numberOfNodes];
 
-            for (uint n = 0; n < numberOfNodes; n++)
+            for (uint n = 0; n < numberOfElements; n++)
             {
                 double[,] piezoelectricElementElectromechanicalCoupling = new double[Constants.DegreesFreedomElement, Constants.PiezoelectricElementMatrixSize];
 
@@ -165,7 +166,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
 
                 for (uint i = (dfe / 2) * n; i < (dfe / 2) * n + dfe; i++)
                 {
-                    for (uint j = (dfe / 2) * n; j < (dfe / 2) * n + dfe; j++)
+                    for (uint j = n; j < n + Constants.PiezoelectricElementMatrixSize; j++)
                     {
                         piezoelectricElectromechanicalCoupling[i, j] += piezoelectricElementElectromechanicalCoupling[i - 2 * n, j - n];
                     }

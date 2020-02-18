@@ -68,53 +68,53 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             }
 
-            int iterator = 0;
-            if (angularFrequencyLoopCount == 1)
-            {
-                input.AngularFrequency = input.Parameter.InitialAngularFrequency;
-            }
-            else
-            {
-                input.AngularFrequency = (input.Parameter.InitialAngularFrequency + iterator * input.Parameter.DeltaAngularFrequency.Value) * 2 * Math.PI;
-            }
-
-            if (input.AngularFrequency != 0)
-            {
-                input.DeltaTime = Math.PI * 2 / input.AngularFrequency / input.Parameter.PeriodDivision;
-            }
-            else
-            {
-                input.DeltaTime = Math.PI * 2 / input.Parameter.PeriodDivision;
-            }
-
-            a0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
-            a1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
-            a2 = 1.0 / (Constants.Beta * input.DeltaTime);
-            a3 = Constants.Gama / Constants.Beta;
-            a4 = 1 / (2 * Constants.Beta);
-            a5 = input.DeltaTime * (Constants.Gama / (2 * Constants.Beta) - 1);
-
             NewmarkMethodResponse output = new NewmarkMethodResponse
             {
                 Analyses = new List<Analysis>()
             };
 
-            try
+            for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
-                var analysisResult = new Analysis()
+                if (angularFrequencyLoopCount == 1)
                 {
-                    AngularFrequency = input.AngularFrequency,
-                    Results = await Solution(input)
-                };
+                    input.AngularFrequency = input.Parameter.InitialAngularFrequency * 2 * Math.PI;
+                }
+                else
+                {
+                    input.AngularFrequency = (input.Parameter.InitialAngularFrequency + i * input.Parameter.DeltaAngularFrequency.Value) * 2 * Math.PI;
+                }
 
-                iterator += 1;
+                if (input.AngularFrequency != 0)
+                {
+                    input.DeltaTime = Math.PI * 2 / input.AngularFrequency / input.Parameter.PeriodDivision;
+                }
+                else
+                {
+                    input.DeltaTime = Math.PI * 2 / input.Parameter.PeriodDivision;
+                }
 
-                output.Analyses.Add(analysisResult);
-            }
-            catch (Exception ex)
-            {
-                response.AddError("000", $"Error executing the solution. {ex.Message}");
-                throw;
+                a0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
+                a1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
+                a2 = 1.0 / (Constants.Beta * input.DeltaTime);
+                a3 = Constants.Gama / Constants.Beta;
+                a4 = 1 / (2 * Constants.Beta);
+                a5 = input.DeltaTime * (Constants.Gama / (2 * Constants.Beta) - 1);
+
+                try
+                {
+                    var analysisResult = new Analysis()
+                    {
+                        AngularFrequency = input.AngularFrequency,
+                        Results = await Solution(input)
+                    };
+
+                    output.Analyses.Add(analysisResult);
+                }
+                catch (Exception ex)
+                {
+                    response.AddError("000", $"Error executing the solution. {ex.Message}");
+                    throw;
+                }
             }
 
             return output;
@@ -122,7 +122,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
         private async Task<List<Result>> Solution(TInput input)
         {
-            string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibra-es\IcVibrations\Solutions\TestSolution.txt";
+            string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\Solutions\TestSolution.txt";
 
             List<Result> results = new List<Result>();
             Result result = new Result();
@@ -168,8 +168,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         {
                             acelAnt[iteration] = acel[iteration];
                         });
-
-                        
                     }
                     else
                     {
