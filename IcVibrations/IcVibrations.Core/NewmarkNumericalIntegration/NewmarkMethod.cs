@@ -22,7 +22,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// <summary>
         /// Integration constants.
         /// </summary>
-        private double a0, a1, a2, a3, a4, a5;
+        private double a0, a1, a2, a3, a4, a5, a6, a7;
 
         /// <summary>
         /// It's responsible to calculate the aceleration in the time = 0.
@@ -96,9 +96,11 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                 a0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
                 a1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
                 a2 = 1.0 / (Constants.Beta * input.DeltaTime);
-                a3 = Constants.Gama / Constants.Beta;
-                a4 = 1 / (2 * Constants.Beta);
-                a5 = input.DeltaTime * (Constants.Gama / (2 * Constants.Beta) - 1);
+                a3 = 1 / (2 * Constants.Beta) - 1;
+                a4 = (Constants.Gama / Constants.Beta) - 1;
+                a5 = (input.DeltaTime / 2) * ((Constants.Beta / Constants.Beta) - 2);
+                a6 = input.DeltaTime * (1 - Constants.Gama);
+                a7 = Constants.Gama * input.DeltaTime;
 
                 try
                 {
@@ -122,7 +124,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
         private async Task<List<Result>> Solution(TInput input)
         {
-            string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\Solutions\TestSolution.txt";
+            //string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\Solutions\TestSolution.txt";
 
             List<Result> results = new List<Result>();
             Result result = new Result();
@@ -160,37 +162,33 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         input.Force[iteration] = force[iteration] * Math.Cos(input.AngularFrequency * time);
                     });
 
-                    if (time == 0)
+                    //if (time == 0)
+                    //{
+                    //    acel = await this.CalculateAcelInTime0(input);
+
+                    //    Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
+                    //    {
+                    //        acelAnt[iteration] = acel[iteration];
+                    //    });
+                    //}
+                    //else
+                    //{
+                    double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions);
+
+                    var inversedEquivalentHardnessTask = _arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness));
+                    var equivalentForceTask = CalculateEquivalentForce(input, forceAnt, vel, acel);
+
+                    double[] equivalentForce = await equivalentForceTask;
+                    double[,] inversedEquivalentHardness = await inversedEquivalentHardnessTask;
+
+                    y = await _arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
+
+                    Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                     {
-                        acel = await this.CalculateAcelInTime0(input);
-
-                        Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
-                        {
-                            acelAnt[iteration] = acel[iteration];
-                        });
-                    }
-                    else
-                    {
-                        double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions);
-
-                        var inversedEquivalentHardnessTask = _arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness));
-                        var equivalentForceTask = CalculateEquivalentForce(input, forceAnt, vel, acel);
-
-                        double[] equivalentForce = await equivalentForceTask;
-                        double[,] inversedEquivalentHardness = await inversedEquivalentHardnessTask;
-
-                        deltaY = await _arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
-
-                        Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
-                        {
-                            deltaVel[iteration] = a1 * deltaY[iteration] - a3 * velAnt[iteration] - a5 * acelAnt[iteration];
-                            deltaAcel[iteration] = a0 * deltaY[iteration] - a2 * velAnt[iteration] - a4 * acelAnt[iteration];
-
-                            y[iteration] = yAnt[iteration] + deltaY[iteration];
-                            vel[iteration] = velAnt[iteration] + deltaVel[iteration];
-                            acel[iteration] = acelAnt[iteration] + deltaAcel[iteration];
-                        });
-                    }
+                        acel[iteration] = a6 * (y[iteration] - yAnt[iteration]) - a2 * velAnt[iteration] - a3 * acelAnt[iteration];
+                        vel[iteration] = velAnt[iteration] + a6 * acelAnt[iteration] + a7 * vel[iteration];
+                    });
+                    //}
 
                     result.Time = time;
                     result.Displacemens = y;
@@ -198,15 +196,15 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                     result.Acelerations = acel;
                     result.Forces = force;
 
-                    if (jp == 0 && jn == 0)
-                    {
-                        this._auxiliarOperation.WriteInFile(path, $"time, y-{input.NumberOfTrueBoundaryConditions}, vel-{input.NumberOfTrueBoundaryConditions}, acel-{input.NumberOfTrueBoundaryConditions}, force-{input.NumberOfTrueBoundaryConditions}");
-                        this._auxiliarOperation.WriteInFile(path, result);
-                    }
-                    else
-                    {
-                        this._auxiliarOperation.WriteInFile(path, result);
-                    }
+                    //if (jp == 0 && jn == 0)
+                    //{
+                    //    this._auxiliarOperation.WriteInFile(path, $"time, y-{input.NumberOfTrueBoundaryConditions}, vel-{input.NumberOfTrueBoundaryConditions}, acel-{input.NumberOfTrueBoundaryConditions}, force-{input.NumberOfTrueBoundaryConditions}");
+                    //    this._auxiliarOperation.WriteInFile(path, result);
+                    //}
+                    //else
+                    //{
+                    //    this._auxiliarOperation.WriteInFile(path, result);
+                    //}
 
                     time += input.DeltaTime;
 
@@ -270,7 +268,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
         private async Task<double[]> CalculateEquivalentForce(TInput input, double[] force_ant, double[] vel, double[] acel)
         {
-            var deltaForceTask = _arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
+            //var deltaForceTask = _arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
             var p1Task = CalculateMatrixP1(input.Mass, input.Damping, input.NumberOfTrueBoundaryConditions);
             var p2Task = CalculateMatrixP2(input.Mass, input.Damping, input.NumberOfTrueBoundaryConditions);
 
@@ -282,9 +280,9 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             double[] vel_p1 = await vel_p1Task;
             double[] acel_p2 = await acel_p2Task;
-            double[] deltaForce = await deltaForceTask;
+            //double[] deltaForce = await deltaForceTask;
 
-            double[] equivalentForce = await _arrayOperation.Sum(deltaForce, vel_p1, acel_p2, $"{nameof(deltaForce)}, {nameof(vel_p1)}, {nameof(acel_p2)}");
+            double[] equivalentForce = await _arrayOperation.Sum(input.Force, vel_p1, acel_p2, $"{nameof(input.Force)}, {nameof(vel_p1)}, {nameof(acel_p2)}");
 
             return equivalentForce;
         }
