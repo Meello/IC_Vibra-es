@@ -9,7 +9,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
     /// It's responsible to calculate the vibration in a beam with dynamic vibration absorber.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public interface ICalculateBeamWithDvaVibration<TProfile> : ICalculateVibration<CalculateBeamWithDvaVibrationRequest<TProfile>, BeamWithDvaRequestData<TProfile>, TProfile, BeamWithDva<TProfile>, NewmarkMethodBeamInput>
+    public interface ICalculateBeamWithDvaVibration<TProfile> : ICalculateVibration<CalculateBeamWithDvaVibrationRequest<TProfile>, BeamWithDvaRequestData<TProfile>, TProfile, BeamWithDva<TProfile>>
         where TProfile : Profile, new()
     {
     }

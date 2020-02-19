@@ -16,22 +16,12 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
     /// <summary>
     /// It's responsible to execute the Newmark numerical integration method to calculate the vibration.
     /// </summary>
-    public abstract class NewmarkMethod<TInput> : INewmarkMethod<TInput>
-        where TInput : INewmarkMethodInput
+    public abstract class NewmarkMethod : INewmarkMethod
     {
         /// <summary>
         /// Integration constants.
         /// </summary>
         private double a0, a1, a2, a3, a4, a5, a6, a7;
-
-        /// <summary>
-        /// It's responsible to calculate the aceleration in the time = 0.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="displacement"></param>
-        /// <param name="velocity"></param>
-        /// <returns></returns>
-        public abstract Task<double[]> CalculateAcelInTime0(TInput input);
 
         private readonly IArrayOperation _arrayOperation;
         private readonly IAuxiliarOperation _auxiliarOperation;
@@ -55,7 +45,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// <param name="input"></param>
         /// <param name="response"></param>
         /// <returns></returns>
-        public async Task<NewmarkMethodResponse> CalculateResponse(TInput input, OperationResponseBase response)
+        public async Task<NewmarkMethodResponse> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
             if (input.Parameter.DeltaAngularFrequency != default)
@@ -122,7 +112,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return output;
         }
 
-        private async Task<List<Result>> Solution(TInput input)
+        private async Task<List<Result>> Solution(NewmarkMethodInput input)
         {
             //string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\Solutions\TestSolution.txt";
 
@@ -162,17 +152,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         input.Force[iteration] = force[iteration] * Math.Cos(input.AngularFrequency * time);
                     });
 
-                    //if (time == 0)
-                    //{
-                    //    acel = await this.CalculateAcelInTime0(input);
-
-                    //    Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
-                    //    {
-                    //        acelAnt[iteration] = acel[iteration];
-                    //    });
-                    //}
-                    //else
-                    //{
                     double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions);
 
                     var inversedEquivalentHardnessTask = _arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness));
@@ -188,7 +167,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         acel[iteration] = a6 * (y[iteration] - yAnt[iteration]) - a2 * velAnt[iteration] - a3 * acelAnt[iteration];
                         vel[iteration] = velAnt[iteration] + a6 * acelAnt[iteration] + a7 * vel[iteration];
                     });
-                    //}
 
                     result.Time = time;
                     result.Displacemens = y;
@@ -266,7 +244,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return Task.FromResult(p2);
         }
 
-        private async Task<double[]> CalculateEquivalentForce(TInput input, double[] force_ant, double[] vel, double[] acel)
+        private async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
         {
             //var deltaForceTask = _arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
             var p1Task = CalculateMatrixP1(input.Mass, input.Damping, input.NumberOfTrueBoundaryConditions);

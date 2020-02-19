@@ -6,7 +6,7 @@ using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Piezoelectric;
-using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithPiezoelectric;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -19,7 +19,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
     /// It's responsible to calculate the vibration in a beam with piezoelectric.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class CalculateBeamWithPiezoelectricVibration<TProfile> : CalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<TProfile>, PiezoelectricRequestData<TProfile>, TProfile, BeamWithPiezoelectric<TProfile>, NewmarkMethodBeamWithPiezoelectricInput>, ICalculateBeamWithPiezoelectricVibration<TProfile>
+    public abstract class CalculateBeamWithPiezoelectricVibration<TProfile> : CalculateVibration<CalculateBeamWithPiezoelectricVibrationRequest<TProfile>, PiezoelectricRequestData<TProfile>, TProfile, BeamWithPiezoelectric<TProfile>>, ICalculateBeamWithPiezoelectricVibration<TProfile>
         where TProfile : Profile, new()
     {
         private readonly IMappingResolver _mappingResolver;
@@ -39,7 +39,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         /// <param name="mainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateBeamWithPiezoelectricVibration(
-            IBeamWithPiezoelectricNewmarkMethod newmarkMethod,
+            INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IProfileValidator<TProfile> profileValidator,
             IAuxiliarOperation auxiliarOperation,
@@ -109,7 +109,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             };
         }
 
-        public async override Task<NewmarkMethodBeamWithPiezoelectricInput> CreateInput(BeamWithPiezoelectric<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
+        public async override Task<NewmarkMethodInput> CreateInput(BeamWithPiezoelectric<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
             uint piezoelectricDegreesFreedomMaximum = beam.NumberOfElements + 1;
 
@@ -160,7 +160,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             double[] equivalentForce = await this._arrayOperation.MergeArray(force, electricalCharge);
 
             // Creating input.
-            NewmarkMethodBeamWithPiezoelectricInput input = new NewmarkMethodBeamWithPiezoelectricInput
+            NewmarkMethodInput input = new NewmarkMethodInput
             {
                 Mass = this._auxiliarOperation.ApplyBondaryConditions(equivalentMass, bondaryConditions, numberOfTrueBoundaryConditions),
 
@@ -171,10 +171,6 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 Force = this._auxiliarOperation.ApplyBondaryConditions(equivalentForce, bondaryConditions, numberOfTrueBoundaryConditions),
 
                 NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions,
-
-                NumberOfTrueBeamBoundaryConditions = numberOfTrueBeamBoundaryConditions,
-
-                NumberOfTruePiezoelectricBoundaryConditions = numberOfTruePiezoelectricBoundaryConditions,
 
                 Parameter = newmarkMethodParameter
             };

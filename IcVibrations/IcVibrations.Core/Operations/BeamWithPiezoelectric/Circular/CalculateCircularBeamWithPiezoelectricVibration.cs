@@ -3,7 +3,7 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Circular;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Circular;
-using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithPiezoelectric;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles.Circular;
 using IcVibrations.Methods.AuxiliarOperations;
 
@@ -25,7 +25,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric.Circular
         /// <param name="mainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateCircularBeamWithPiezoelectricVibration(
-            IBeamWithPiezoelectricNewmarkMethod newmarkMethod,
+            INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             ICircularProfileValidator profileValidator,
             IAuxiliarOperation auxiliarOperation,

@@ -3,7 +3,7 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectangular;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
-using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithPiezoelectric;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles.Rectangular;
 using IcVibrations.Methods.AuxiliarOperations;
 
@@ -25,7 +25,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric.Rectangular
         /// <param name="mainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateRectangularBeamWithPiezoelectricVibration(
-            IBeamWithPiezoelectricNewmarkMethod newmarkMethod,
+            INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IRectangularProfileValidator profileValidator,
             IAuxiliarOperation auxiliarOperation,

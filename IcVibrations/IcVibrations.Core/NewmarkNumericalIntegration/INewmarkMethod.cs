@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace IcVibrations.Core.NewmarkNumericalIntegration
 {
-    public interface INewmarkMethod<TNewmarMethod>
-        where TNewmarMethod : INewmarkMethodInput
+    public interface INewmarkMethod
     {
-        Task<NewmarkMethodResponse> CalculateResponse(TNewmarMethod input, OperationResponseBase response);
+        Task<NewmarkMethodResponse> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response);
     }
 }

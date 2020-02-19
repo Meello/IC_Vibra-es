@@ -3,7 +3,7 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam.Circular;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Circular;
-using IcVibrations.Core.NewmarkNumericalIntegration.Beam;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles.Circular;
 using IcVibrations.Methods.AuxiliarOperations;
 
@@ -25,7 +25,7 @@ namespace IcVibrations.Core.Operations.Beam.Circular
         /// <param name="mainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateCircularBeamVibration(
-            IBeamNewmarkMethod newmarkMethod,
+            INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             ICircularProfileValidator profileValidator,
             ICircularProfileMapper profileMapper,

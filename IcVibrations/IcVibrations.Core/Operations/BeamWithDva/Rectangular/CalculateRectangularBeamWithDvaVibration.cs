@@ -4,7 +4,7 @@ using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
-using IcVibrations.Core.NewmarkNumericalIntegration.Beam;
+using IcVibrations.Core.NewmarkNumericalIntegration;
 using IcVibrations.Core.Validators.Profiles.Rectangular;
 using IcVibrations.Methods.AuxiliarOperations;
 
@@ -27,7 +27,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva.Rectangular
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateRectangularBeamWithDvaVibration(
-            IBeamNewmarkMethod newmarkMethod,
+            INewmarkMethod newmarkMethod,
             IMappingResolver mappingResolver,
             IRectangularProfileValidator profileValidator,
             IAuxiliarOperation auxiliarOperation,

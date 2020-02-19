@@ -2,7 +2,7 @@
 
 namespace IcVibrations.Core.DTO.Input
 {
-    public class NewmarkMethodBeamWithPiezoelectricInput : INewmarkMethodInput
+    public class NewmarkMethodInput
     {
         /// <summary>
         /// Mass matrix of the object that is analyzed.
@@ -35,23 +35,13 @@ namespace IcVibrations.Core.DTO.Input
         public double AngularFrequency { get; set; }
 
         /// <summary>
-        /// Newmark method parameters.
-        /// </summary>
-        public NewmarkMethodParameter Parameter { get; set; }
-
-        /// <summary>
         /// Number of boundary conditions that is true.
         /// </summary>
         public uint NumberOfTrueBoundaryConditions { get; set; }
 
         /// <summary>
-        /// Number of boundary conditions that is true in the beam.
+        /// Newmark method parameters.
         /// </summary>
-        public uint NumberOfTrueBeamBoundaryConditions { get; set; }
-
-        /// <summary>
-        /// Number of boundary conditions that is true in the piezoelectric.
-        /// </summary>
-        public uint NumberOfTruePiezoelectricBoundaryConditions { get; set; }
+        public NewmarkMethodParameter Parameter { get; set; }
     }
 }
