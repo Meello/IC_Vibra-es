@@ -21,10 +21,9 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// <summary>
         /// Integration constants.
         /// </summary>
-        private double a0, a1, a2, a3, a4, a5, a6, a7;
+        public double a0, a1, a2, a3, a4, a5, a6, a7;
 
         private readonly IArrayOperation _arrayOperation;
-        private readonly IAuxiliarOperation _auxiliarOperation;
 
         /// <summary>
         /// Class construtor.
@@ -32,11 +31,9 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// <param name="arrayOperation"></param>
         /// <param name="auxiliarOperation"></param>
         public NewmarkMethod(
-            IArrayOperation arrayOperation,
-            IAuxiliarOperation auxiliarOperation)
+            IArrayOperation arrayOperation)
         {
             this._arrayOperation = arrayOperation;
-            this._auxiliarOperation = auxiliarOperation;
         }
 
         /// <summary>
@@ -85,7 +82,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                 a0 = 1 / (Constants.Beta * Math.Pow(input.DeltaTime, 2));
                 a1 = Constants.Gama / (Constants.Beta * input.DeltaTime);
-                a2 = 1.0 / (Constants.Beta * input.DeltaTime);
+                a2 = 1 / (Constants.Beta * input.DeltaTime);
                 a3 = 1 / (2 * Constants.Beta) - 1;
                 a4 = (Constants.Gama / Constants.Beta) - 1;
                 a5 = (input.DeltaTime / 2) * ((Constants.Beta / Constants.Beta) - 2);
@@ -114,8 +111,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
         private async Task<List<Result>> Solution(NewmarkMethodInput input)
         {
-            //string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\Solutions\TestSolution.txt";
-
             List<Result> results = new List<Result>();
             Result result = new Result();
 
@@ -136,9 +131,9 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             double[] velAnt = new double[input.NumberOfTrueBoundaryConditions];
             double[] deltaVel = new double[input.NumberOfTrueBoundaryConditions];
 
-            double[] acel = new double[input.NumberOfTrueBoundaryConditions];
-            double[] acelAnt = new double[input.NumberOfTrueBoundaryConditions];
-            double[] deltaAcel = new double[input.NumberOfTrueBoundaryConditions];
+            double[] accel = new double[input.NumberOfTrueBoundaryConditions];
+            double[] accelAnt = new double[input.NumberOfTrueBoundaryConditions];
+            double[] deltaAccel = new double[input.NumberOfTrueBoundaryConditions];
 
             double[] forceAnt = new double[input.NumberOfTrueBoundaryConditions];
 
@@ -154,8 +149,17 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                     double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions);
 
-                    var inversedEquivalentHardnessTask = _arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness));
-                    var equivalentForceTask = CalculateEquivalentForce(input, forceAnt, vel, acel);
+                    var inversedEquivalentHardnessTask = Task.Run(async () =>
+                    {
+                        return await this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness)).ConfigureAwait(false);
+                    });
+
+                    var equivalentForceTask = Task.Run(async () =>
+                    {
+                        return await this.CalculateEquivalentForce(input, forceAnt, vel, accel).ConfigureAwait(false);
+                    });
+
+                    await Task.WhenAll(inversedEquivalentHardnessTask, equivalentForceTask).ConfigureAwait(false);
 
                     double[] equivalentForce = await equivalentForceTask;
                     double[,] inversedEquivalentHardness = await inversedEquivalentHardnessTask;
@@ -164,25 +168,15 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                     Parallel.For(0, input.NumberOfTrueBoundaryConditions, iteration =>
                     {
-                        acel[iteration] = a6 * (y[iteration] - yAnt[iteration]) - a2 * velAnt[iteration] - a3 * acelAnt[iteration];
-                        vel[iteration] = velAnt[iteration] + a6 * acelAnt[iteration] + a7 * vel[iteration];
+                        accel[iteration] = a6 * (y[iteration] - yAnt[iteration]) - a2 * velAnt[iteration] - a3 * accelAnt[iteration];
+                        vel[iteration] = velAnt[iteration] + a6 * accelAnt[iteration] + a7 * vel[iteration];
                     });
 
                     result.Time = time;
                     result.Displacemens = y;
                     result.Velocities = vel;
-                    result.Acelerations = acel;
+                    result.Accelerations = accel;
                     result.Forces = force;
-
-                    //if (jp == 0 && jn == 0)
-                    //{
-                    //    this._auxiliarOperation.WriteInFile(path, $"time, y-{input.NumberOfTrueBoundaryConditions}, vel-{input.NumberOfTrueBoundaryConditions}, acel-{input.NumberOfTrueBoundaryConditions}, force-{input.NumberOfTrueBoundaryConditions}");
-                    //    this._auxiliarOperation.WriteInFile(path, result);
-                    //}
-                    //else
-                    //{
-                    //    this._auxiliarOperation.WriteInFile(path, result);
-                    //}
 
                     time += input.DeltaTime;
 
@@ -190,13 +184,86 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                     {
                         yAnt[iteration] = y[iteration];
                         velAnt[iteration] = vel[iteration];
-                        acelAnt[iteration] = acel[iteration];
+                        accelAnt[iteration] = accel[iteration];
                         forceAnt[iteration] = input.Force[iteration];
                     });
                 }
             }
 
             return results;
+        }
+
+        private async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryConditions)
+        {
+            uint trueBC = numberOfTrueBondaryConditions;
+
+            if (displacement.Length != trueBC)// || velocity.Length != trueBC || acceleration.Length != trueBC)
+            {
+                throw new Exception($"Lenth of displacement: {displacement.Length} have to be equals to number of true bondary conditions: {trueBC}.");
+            }
+
+            if (velocity.Length != trueBC)
+            {
+                throw new Exception($"Lenth of velocity: {velocity.Length} have to be equals to number of true bondary conditions: {trueBC}.");
+            }
+
+            if (acceleration.Length != trueBC)
+            {
+                throw new Exception($"Lenth of acceleration: {acceleration.Length} have to be equals to number of true bondary conditions: {trueBC}.");
+            }
+
+            if (input.Mass.Length != Math.Pow(trueBC, 2))
+            {
+                throw new Exception($"Lenth of input mass: {input.Mass.Length} have to be equals to number of true bondary conditions squared: {Math.Pow(trueBC, 2)}.");
+            }
+
+            if (input.Damping.Length != Math.Pow(trueBC, 2))
+            {
+                throw new Exception($"Lenth of input damping: {input.Damping.Length} have to be equals to number of true bondary conditions squared: {Math.Pow(trueBC, 2)}.");
+            }
+
+            if (input.Force.Length != trueBC)
+            {
+                throw new Exception($"Lenth of input force: {input.Force.Length} have to be equals to number of true bondary conditions: {trueBC}.");
+            }
+
+            double[] equivalentForce = new double[trueBC];
+
+            var equivalentAccelerationTask = Task.Run(async () =>
+            {
+                return await this.CalculateEquivalentAcceleration(displacement, velocity, acceleration, trueBC);
+            });
+
+            var equivalentVelocityTask = Task.Run(async () => 
+            {
+                return await this.CalculateEquivalentVelocity(displacement, velocity, acceleration, trueBC);
+            });
+
+            return equivalentForce;
+        }
+
+        private Task<double[]> CalculateEquivalentAcceleration(double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryCOnditions)
+        {
+            double[] equivalentAcceleration = new double[numberOfTrueBondaryCOnditions];
+
+            Parallel.For(0, numberOfTrueBondaryCOnditions, iterator =>
+            {
+                equivalentAcceleration[iterator] = a0 * displacement[iterator] + a2 * velocity[iterator] + a3 * acceleration[iterator];
+            });
+
+            return Task.FromResult(equivalentAcceleration);
+        }
+
+        private Task<double[]> CalculateEquivalentVelocity(double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryCOnditions)
+        {
+            double[] equivalentVelocity = new double[numberOfTrueBondaryCOnditions];
+
+            Parallel.For(0, numberOfTrueBondaryCOnditions, iterator =>
+            {
+                equivalentVelocity[iterator] = a1 * displacement[iterator] + a4 * velocity[iterator] + a5 * acceleration[iterator];
+            });
+
+            return Task.FromResult(equivalentVelocity);
         }
 
         private Task<double[,]> CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness, uint numberOfTrueBoundaryConditions)
@@ -212,57 +279,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             }
 
             return Task.FromResult(equivalentHardness);
-        }
-
-        private Task<double[,]> CalculateMatrixP1(double[,] mass, double[,] damping, uint numberOfTrueBoundaryConditions)
-        {
-            double[,] p1 = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
-
-            for (int i = 0; i < numberOfTrueBoundaryConditions; i++)
-            {
-                for (int j = 0; j < numberOfTrueBoundaryConditions; j++)
-                {
-                    p1[i, j] = a2 * mass[i, j] + a3 * damping[i, j];
-                }
-            }
-
-            return Task.FromResult(p1);
-        }
-
-        private Task<double[,]> CalculateMatrixP2(double[,] mass, double[,] damping, uint numberOfTrueBoundaryConditions)
-        {
-            double[,] p2 = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
-
-            for (int i = 0; i < numberOfTrueBoundaryConditions; i++)
-            {
-                for (int j = 0; j < numberOfTrueBoundaryConditions; j++)
-                {
-                    p2[i, j] = a4 * mass[j, i] + a5 * damping[i, j];
-                }
-            }
-
-            return Task.FromResult(p2);
-        }
-
-        private async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] force_ant, double[] vel, double[] acel)
-        {
-            //var deltaForceTask = _arrayOperation.Subtract(input.Force, force_ant, $"{nameof(input.Force)}, {nameof(force_ant)}");
-            var p1Task = CalculateMatrixP1(input.Mass, input.Damping, input.NumberOfTrueBoundaryConditions);
-            var p2Task = CalculateMatrixP2(input.Mass, input.Damping, input.NumberOfTrueBoundaryConditions);
-
-            double[,] p1 = await p1Task;
-            double[,] p2 = await p2Task;
-
-            var vel_p1Task = _arrayOperation.Multiply(p1, vel, $"{nameof(p1)}, {nameof(vel)}");
-            var acel_p2Task = _arrayOperation.Multiply(p2, acel, $"{nameof(p2)}, {nameof(acel)}");
-
-            double[] vel_p1 = await vel_p1Task;
-            double[] acel_p2 = await acel_p2Task;
-            //double[] deltaForce = await deltaForceTask;
-
-            double[] equivalentForce = await _arrayOperation.Sum(input.Force, vel_p1, acel_p2, $"{nameof(input.Force)}, {nameof(vel_p1)}, {nameof(acel_p2)}");
-
-            return equivalentForce;
         }
     }
 }

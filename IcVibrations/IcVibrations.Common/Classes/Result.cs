@@ -23,7 +23,7 @@
         /// <summary>
         /// Iteration aceleration (linear and angular) for each node.
         /// </summary>
-        public double[] Acelerations { get; set; }
+        public double[] Accelerations { get; set; }
 
         /// <summary>
         /// Force iteration for each node.
