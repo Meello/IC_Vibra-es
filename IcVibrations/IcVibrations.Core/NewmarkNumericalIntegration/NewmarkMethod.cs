@@ -13,7 +13,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
     /// <summary>
     /// It's responsible to execute the Newmark numerical integration method to calculate the vibration.
     /// </summary>
-    public abstract class NewmarkMethod : INewmarkMethod
+    public class NewmarkMethod : INewmarkMethod
     {
         /// <summary>
         /// Integration constants.
@@ -49,7 +49,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             else
             {
                 angularFrequencyLoopCount = 1;
-
             }
 
             NewmarkMethodResponse output = new NewmarkMethodResponse
@@ -113,10 +112,10 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             Result result = new Result()
             {
-                Accelerations = new double[input.NumberOfTrueBoundaryConditions, matrixSize],
-                Velocities = new double[input.NumberOfTrueBoundaryConditions, matrixSize],
-                Displacements = new double[input.NumberOfTrueBoundaryConditions, matrixSize],
-                Forces = new double[input.NumberOfTrueBoundaryConditions, matrixSize],
+                Accelerations = new double[matrixSize, input.NumberOfTrueBoundaryConditions],
+                Velocities = new double[matrixSize, input.NumberOfTrueBoundaryConditions],
+                Displacements = new double[matrixSize, input.NumberOfTrueBoundaryConditions],
+                Forces = new double[matrixSize, input.NumberOfTrueBoundaryConditions],
                 Time = new double[matrixSize]
             };
 
@@ -181,16 +180,16 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         });
                     }
 
+                    result.Time[line] = time;
                     Parallel.For(0, input.NumberOfTrueBoundaryConditions, iterator => 
                     {
-                        result.Time[iterator] = time;
-                        result.Displacements[iterator, line] = y[iterator];
-                        result.Velocities[iterator, line] = vel[iterator];
-                        result.Accelerations[iterator, line] = accel[iterator];
-                        result.Forces[iterator, line] = force[iterator];
+                        result.Displacements[line, iterator] = y[iterator];
+                        result.Velocities[line, iterator] = vel[iterator];
+                        result.Accelerations[line, iterator] = accel[iterator];
+                        result.Forces[line, iterator] = force[iterator];
                     });
 
-                    line = +1;
+                    line += 1;
 
                     time += input.DeltaTime;
 
