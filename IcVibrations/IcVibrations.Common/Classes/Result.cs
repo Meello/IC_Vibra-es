@@ -8,26 +8,26 @@
         /// <summary>
         /// Iteration time.
         /// </summary>
-        public double Time { get; set; }
+        public double[] Time { get; set; }
 
         /// <summary>
         /// Iteration displacement (linear and angular) for each node.
         /// </summary>
-        public double[] Displacemens { get; set; }
+        public double[,] Displacements { get; set; }
 
         /// <summary>
         /// Iteration velocity (linear and angular) for each node.
         /// </summary>
-        public double[] Velocities { get; set; }
+        public double[,] Velocities { get; set; }
 
         /// <summary>
         /// Iteration aceleration (linear and angular) for each node.
         /// </summary>
-        public double[] Accelerations { get; set; }
+        public double[,] Accelerations { get; set; }
 
         /// <summary>
         /// Force iteration for each node.
         /// </summary>
-        public double[] Forces { get; set; }
+        public double[,] Forces { get; set; }
     }
 }

@@ -65,44 +65,44 @@ namespace IcVibrations.Methods.AuxiliarOperations
             return (numberOfElements + 1) * Constants.NodesPerElement;
         }
 
-        public void WriteInFile(string path, Result result)
-        {
-            StreamWriter streamWriter = new StreamWriter(path, true);
+        //public void WriteInFile(string path, Result result)
+        //{
+        //    StreamWriter streamWriter = new StreamWriter(path, true);
 
-            try
-            {
-                using (StreamWriter sw = streamWriter)
-                {
-                    sw.Write(sw.NewLine);
+        //    try
+        //    {
+        //        using (StreamWriter sw = streamWriter)
+        //        {
+        //            sw.Write(sw.NewLine);
 
-                    sw.Write(string.Format("{0}, ", result.Time));
+        //            sw.Write(string.Format("{0}, ", result.Time));
 
-                    for (int i = 0; i < result.Displacemens.Length; i++)
-                    {
-                        sw.Write(string.Format("{0}, ", result.Displacemens[i]));
-                    }
+        //            for (int i = 0; i < result.Displacements.Length; i++)
+        //            {
+        //                sw.Write(string.Format("{0}, ", result.Displacements[i]));
+        //            }
 
-                    for (int i = 0; i < result.Velocities.Length; i++)
-                    {
-                        sw.Write(string.Format("{0}, ", result.Velocities[i]));
-                    }
+        //            for (int i = 0; i < result.Velocities.Length; i++)
+        //            {
+        //                sw.Write(string.Format("{0}, ", result.Velocities[i]));
+        //            }
 
-                    for (int i = 0; i < result.Accelerations.Length; i++)
-                    {
-                        sw.Write(string.Format("{0}, ", result.Accelerations[i]));
-                    }
+        //            for (int i = 0; i < result.Accelerations.Length; i++)
+        //            {
+        //                sw.Write(string.Format("{0}, ", result.Accelerations[i]));
+        //            }
 
-                    for (int i = 0; i < result.Forces.Length; i++)
-                    {
-                        sw.Write(string.Format("{0}, ", result.Forces[i]));
-                    }
-                }
-            }
-            catch
-            {
-                throw new Exception("Couldn't open file.");
-            }
-        }
+        //            for (int i = 0; i < result.Forces.Length; i++)
+        //            {
+        //                sw.Write(string.Format("{0}, ", result.Forces[i]));
+        //            }
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        throw new Exception("Couldn't open file.");
+        //    }
+        //}
 
         public void WriteInFile(string path, string message)
         {

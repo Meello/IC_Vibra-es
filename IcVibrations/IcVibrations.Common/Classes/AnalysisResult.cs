@@ -15,6 +15,6 @@ namespace IcVibrations.Common.Classes
         /// <summary>
         /// Time, displacement, velocity, aceleration and force for each node in the analyzed beam.
         /// </summary>
-        public List<Result> Results { get; set; }
+        public Result Result { get; set; }
     }
 }   

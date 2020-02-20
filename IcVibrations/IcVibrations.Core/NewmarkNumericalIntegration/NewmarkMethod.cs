@@ -1,12 +1,9 @@
 ﻿using IcVibrations.Common.Classes;
-using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO;
 using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Models;
-using IcVibrations.Core.Models.Beam;
 using IcVibrations.DataContracts;
-using IcVibrations.Methods.AuxiliarOperations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -94,7 +91,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                     var analysisResult = new Analysis()
                     {
                         AngularFrequency = input.AngularFrequency,
-                        Results = await Solution(input)
+                        Result = await Solution(input)
                     };
 
                     output.Analyses.Add(analysisResult);
@@ -109,10 +106,19 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return output;
         }
 
-        private async Task<List<Result>> Solution(NewmarkMethodInput input)
+        private async Task<Result> Solution(NewmarkMethodInput input)
         {
-            List<Result> results = new List<Result>();
-            Result result = new Result();
+            uint matrixSize = input.Parameter.NumberOfPeriods * input.Parameter.PeriodDivision;
+            uint line = 0;
+
+            Result result = new Result()
+            {
+                Accelerations = new double[input.NumberOfTrueBoundaryConditions, matrixSize],
+                Velocities = new double[input.NumberOfTrueBoundaryConditions, matrixSize],
+                Displacements = new double[input.NumberOfTrueBoundaryConditions, matrixSize],
+                Forces = new double[input.NumberOfTrueBoundaryConditions, matrixSize],
+                Time = new double[matrixSize]
+            };
 
             int i, jn, jp;
             double time = input.Parameter.InitialTime;
@@ -175,11 +181,16 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         });
                     }
 
-                    result.Time = time;
-                    result.Displacemens = y;
-                    result.Velocities = vel;
-                    result.Accelerations = accel;
-                    result.Forces = force;
+                    Parallel.For(0, input.NumberOfTrueBoundaryConditions, iterator => 
+                    {
+                        result.Time[iterator] = time;
+                        result.Displacements[iterator, line] = y[iterator];
+                        result.Velocities[iterator, line] = vel[iterator];
+                        result.Accelerations[iterator, line] = accel[iterator];
+                        result.Forces[iterator, line] = force[iterator];
+                    });
+
+                    line = +1;
 
                     time += input.DeltaTime;
 
@@ -193,7 +204,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                 }
             }
 
-            return results;
+            return result;
         }
 
         private async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBoundaryConditions)
