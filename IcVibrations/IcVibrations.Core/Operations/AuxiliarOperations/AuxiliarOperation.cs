@@ -87,9 +87,9 @@ namespace IcVibrations.Methods.AuxiliarOperations
                         sw.Write(string.Format("{0}, ", result.Velocities[i]));
                     }
 
-                    for (int i = 0; i < result.Acelerations.Length; i++)
+                    for (int i = 0; i < result.Accelerations.Length; i++)
                     {
-                        sw.Write(string.Format("{0}, ", result.Acelerations[i]));
+                        sw.Write(string.Format("{0}, ", result.Accelerations[i]));
                     }
 
                     for (int i = 0; i < result.Forces.Length; i++)
