@@ -7,6 +7,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 {
     public interface INewmarkMethod
     {
-        Task<NewmarkMethodResponse> CalculateResponse(NewmarkMethodInput input, OperationResponseBase response);
+        Task CalculateResponse(NewmarkMethodInput input, OperationResponseBase response);
     }
 }

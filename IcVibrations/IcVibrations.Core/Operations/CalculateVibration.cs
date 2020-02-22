@@ -77,9 +77,7 @@ namespace IcVibrations.Core.Operations
 
                 NewmarkMethodInput input = await this.CreateInput(beam, request.MethodParameterData, degreesFreedomMaximum);
 
-                NewmarkMethodResponse output = await this._newmarkMethod.CalculateResponse(input, response);
-
-                response.Data = this._mappingResolver.BuildFrom(output, request.Author, request.AnalysisExplanation);
+                await this._newmarkMethod.CalculateResponse(input, response);
 
                 return response;
             }

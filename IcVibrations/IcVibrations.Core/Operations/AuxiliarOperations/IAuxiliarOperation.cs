@@ -10,8 +10,8 @@ namespace IcVibrations.Methods.AuxiliarOperations
 
         uint CalculateDegreesFreedomMaximum(uint numberOfElements);
 
-        //void WriteInFile(string path, Result result);
+        void WriteInFile(double time, double[] values);
 
-        void WriteInFile(string path, string message);
+        void WriteInFile(double angularFrequency);
     }
 }
