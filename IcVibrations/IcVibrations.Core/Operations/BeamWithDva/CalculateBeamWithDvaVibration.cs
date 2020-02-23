@@ -146,7 +146,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
 
                 Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions),
 
-                NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions,
+                NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions + (uint)beam.DvaNodePositions.Length,
 
                 Parameter = newmarkMethodParameter
             };

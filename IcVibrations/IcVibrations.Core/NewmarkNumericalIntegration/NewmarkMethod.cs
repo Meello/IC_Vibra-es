@@ -87,7 +87,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                 try
                 {
-                    this._auxiliarOperation.WriteInFile();
+                    this._auxiliarOperation.WriteInFile(input.AngularFrequency);
                     await Solution(input);
                 }
                 catch (Exception ex)
