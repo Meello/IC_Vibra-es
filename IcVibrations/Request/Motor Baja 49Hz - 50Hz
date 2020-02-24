@@ -1,25 +1,27 @@
 {
-  "BeamData": {
-    "Diameter": 0.03175,
-    "ElementCount": 67,
-    "Material": "Steel4130",
-    "Thickness": 0.0021,
-    "FirstFastening": "Fixed",
-    "LastFastening": "Fixed",
-    "Length": 0.335,
-    "Forces": [
-      -115
+  "beamData": {
+    "numberOfElements": 67,
+    "material": "Steel4130",
+    "firstFastening": "Fixed",
+    "lastFastening": "Fixed",
+    "length": 0.335,
+    "forces": [
+      {
+        "nodePosition": 25,
+        "value": -115
+      }
     ],
-    "ForceNodePositions": [
-      25
-    ]
+    "profile": {
+      "diameter": 0.03175,
+      "thickness": 0.0021
+    }
   },
-  "MethodParameterData": {
-    "InitialTime": 0,
-    "PeriodDivion": 10,
-    "PeriodCount": 10,
-    "InitialAngularFrequency": 49,
-    "DeltaAngularFrequency": 1,
-    "FinalAngularFrequency": 50
-  }
+  "methodParameterData": {
+    "initialTime": 0,
+    "periodDivision": 10,
+    "numberOfPeriods": 10,
+    "initialAngularFrequency": 30
+  },
+  "author": "Mud Runner Baja SAE Team",
+  "analysisExplanation": "A vibration analysis in the engine support with 2 dynamic vibration absorbers."
 }

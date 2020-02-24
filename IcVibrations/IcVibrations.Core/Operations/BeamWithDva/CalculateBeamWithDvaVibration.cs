@@ -111,10 +111,10 @@ namespace IcVibrations.Core.Operations.BeamWithDva
 
         public async override Task<NewmarkMethodInput> CreateInput(BeamWithDva<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
-            bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);
+            bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum, (uint)beam.DvaNodePositions.Length);
             uint numberOfTrueBoundaryConditions = 0;
 
-            for (int i = 0; i < degreesFreedomMaximum; i++)
+            for (int i = 0; i < degreesFreedomMaximum + (uint)beam.DvaNodePositions.Length; i++)
             {
                 if (bondaryCondition[i] == true)
                 {
@@ -146,7 +146,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
 
                 Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions),
 
-                NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions + (uint)beam.DvaNodePositions.Length,
+                NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions,
 
                 Parameter = newmarkMethodParameter
             };

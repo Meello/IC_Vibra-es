@@ -1,5 +1,6 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.Calculator.ArrayOperations;
+using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
@@ -43,9 +44,10 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
                 }
             }
 
-            for (int i = beamMass.GetLength(0); i < beamMass.GetLength(0) + dvaMasses.Length; i++)
+            for (int i = 0; i < dvaMasses.Length; i++)
             {
-                massWithDva[i, i] = dvaMasses[i - beamMass.GetLength(0)];
+                massWithDva[dvaNodePositions[i], dvaNodePositions[i]] = dvaMasses[i];
+                massWithDva[i + beamMass.GetLength(0), i + beamMass.GetLength(0)] = dvaMasses[i];
             }
 
             return massWithDva;
@@ -69,18 +71,50 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
                 for (int j = 0; j < beamHardness.GetLength(1); j++)
                 {
                     hardnessWithDva[i, j] = beamHardness[i, j];
-
                 }
             }
 
-            for (int i = beamHardness.GetLength(0); i < beamHardness.GetLength(0) + dvaHardness.Length; i++)
+            for (int i = 0; i < dvaHardness.Length; i++)
             {
-                hardnessWithDva[i, i] = dvaHardness[i - beamHardness.GetLength(0)];
-                hardnessWithDva[dvaNodePositions[i], i] = -dvaHardness[i - beamHardness.GetLength(0)];
-                hardnessWithDva[i, dvaNodePositions[i]] = -dvaHardness[i - beamHardness.GetLength(0)];
+                hardnessWithDva[dvaNodePositions[i], dvaNodePositions[i]] += dvaHardness[i];
+                hardnessWithDva[i + beamHardness.GetLength(0), i + beamHardness.GetLength(0)] = dvaHardness[i];
+                hardnessWithDva[dvaNodePositions[i], i + beamHardness.GetLength(0)] = -dvaHardness[i];
+                hardnessWithDva[i + beamHardness.GetLength(0), dvaNodePositions[i]] = -dvaHardness[i];
             }
 
             return hardnessWithDva;
+        }
+
+        public Task<bool[]> CalculateBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum, uint numberOfDvas)
+        {
+            uint size = degreesFreedomMaximum + numberOfDvas;
+            bool[] bondaryCondition = new bool[size];
+
+            for (uint i = 0; i < size; i++)
+            {
+                if (i == 0)
+                {
+                    bondaryCondition[i] = firstFastening.Displacement;
+                }
+                else if (i == degreesFreedomMaximum - 2)
+                {
+                    bondaryCondition[i] = lastFastening.Displacement;
+                }
+                else if (i == 1)
+                {
+                    bondaryCondition[i] = firstFastening.Angle;
+                }
+                else if (i == degreesFreedomMaximum - 1)
+                {
+                    bondaryCondition[i] = lastFastening.Angle;
+                }
+                else
+                {
+                    bondaryCondition[i] = true;
+                }
+            }
+
+            return Task.FromResult(bondaryCondition);
         }
     }
 }

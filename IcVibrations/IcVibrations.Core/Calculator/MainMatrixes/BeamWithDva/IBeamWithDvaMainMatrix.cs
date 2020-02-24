@@ -1,4 +1,5 @@
 ﻿using IcVibrations.Calculator.MainMatrixes;
+using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
@@ -25,5 +26,15 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
         /// <param name="dvaNodePositions"></param>
         /// <returns></returns>
         Task<double[,]> CalculateHardnessWithDva(double[,] beamHardness, double[] dvaHardness, uint[] dvaNodePositions);
+
+        /// <summary>
+        /// Responsible to calculate the bondary conditions matrix of the beam with dynamic vibration absorbers.
+        /// </summary>
+        /// <param name="firstFastening"></param>
+        /// <param name="lastFastening"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="numberOfDvas"></param>
+        /// <returns></returns>
+        Task<bool[]> CalculateBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum, uint numberOfDvas);
     }
 }

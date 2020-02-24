@@ -14,13 +14,13 @@ namespace IcVibrations.Methods.AuxiliarOperations
             int n = matrix.GetLength(0);
 
             double[,] matrixBC = new double[size, size];
-            
+
             count1 = 0;
-            
+
             for (i = 0; i < n; i++)
             {
                 count2 = 0;
-                
+
                 if (bondaryConditions[i] == true)
                 {
                     for (j = 0; j < n; j++)
@@ -67,7 +67,7 @@ namespace IcVibrations.Methods.AuxiliarOperations
 
         public void WriteInFile(double time, double[] values)
         {
-            string path = "C:/Users/bruno/OneDrive/Documentos/GitHub/IC_Vibra-es/IcVibrations/Solutions/TestSolution.csv";
+            const string path = "C:/Users/bruno/OneDrive/Documentos/GitHub/IC_Vibra-es/IcVibrations/Solutions/TestSolution.csv";
 
             StreamWriter streamWriter = new StreamWriter(path, true);
 
@@ -79,9 +79,16 @@ namespace IcVibrations.Methods.AuxiliarOperations
 
                     sw.Write(string.Format("{0}; ", time));
 
-                    for (int i = 0; i < values.Length; i++)
+                    for (int i = 0; i < values.Length / 2; i++)
                     {
-                        sw.Write(string.Format("{0}; ", values[i]));
+                        sw.Write(string.Format("{0}; ", values[2 * i]));
+                    }
+
+                    sw.Write(" ;");
+
+                    for (int i = 0; i < values.Length / 2; i++)
+                    {
+                        sw.Write(string.Format("{0}; ", values[2 * i + 1]));
                     }
                 }
             }
@@ -93,7 +100,7 @@ namespace IcVibrations.Methods.AuxiliarOperations
 
         public void WriteInFile(double angularFrequency)
         {
-            string path = "C:/Users/bruno/OneDrive/Documentos/GitHub/IC_Vibra-es/IcVibrations/Solutions/TestSolution.csv";
+            const string path = "C:/Users/bruno/OneDrive/Documentos/GitHub/IC_Vibra-es/IcVibrations/Solutions/TestSolution.csv";
 
             StreamWriter streamWriter = new StreamWriter(path, true);
 
