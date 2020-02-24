@@ -7,7 +7,7 @@ using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.BeamWithDynamicVibrationAbsorber;
-using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibrationAbsorber;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -42,7 +42,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateBeamWithDvaVibration(
-            INewmarkMethod newmarkMethod, 
+            IBeamWithDvaNewmarkMethod newmarkMethod, 
             IMappingResolver mappingResolver, 
             IProfileValidator<TProfile> profileValidator, 
             IAuxiliarOperation auxiliarOperation,
@@ -147,6 +147,8 @@ namespace IcVibrations.Core.Operations.BeamWithDva
                 Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions),
 
                 NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions,
+
+                NumberOfDvas = (uint) beam.DvaNodePositions.Length,
 
                 Parameter = newmarkMethodParameter
             };

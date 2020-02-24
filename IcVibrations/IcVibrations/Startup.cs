@@ -10,6 +10,7 @@ using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Circular;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
 using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva;
 using IcVibrations.Core.Operations.Beam.Circular;
 using IcVibrations.Core.Operations.Beam.Rectangular;
 using IcVibrations.Core.Operations.BeamWithDva.Circular;
@@ -59,6 +60,7 @@ namespace IcVibrations
 
             // NewmarkNumericalIntegration
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
+            services.AddScoped<IBeamWithDvaNewmarkMethod, BeamWithDvaNewmarkMethod>();
 
             // Auxiliar Operations
             services.AddScoped<IAuxiliarOperation, AuxiliarOperation>();
