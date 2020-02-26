@@ -42,14 +42,14 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CalculateBeamWithDvaVibration(
-            IBeamWithDvaNewmarkMethod newmarkMethod, 
-            IMappingResolver mappingResolver, 
-            IProfileValidator<TProfile> profileValidator, 
+            IBeamWithDvaNewmarkMethod newmarkMethod,
+            IMappingResolver mappingResolver,
+            IProfileValidator<TProfile> profileValidator,
             IAuxiliarOperation auxiliarOperation,
             IProfileMapper<TProfile> profileMapper,
             IBeamWithDvaMainMatrix mainMatrix,
             IBeamMainMatrix<TProfile> beamMainMatrix,
-            IArrayOperation arrayOperation) 
+            IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
@@ -68,7 +68,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             }
 
             int i = 0;
-            
+
             double[] dvaMasses = new double[request.BeamData.Dvas.Count];
             double[] dvaHardnesses = new double[request.BeamData.Dvas.Count];
             uint[] dvaNodePositions = new uint[request.BeamData.Dvas.Count];
@@ -114,7 +114,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum, (uint)beam.DvaNodePositions.Length);
             uint numberOfTrueBoundaryConditions = 0;
 
-            for (int i = 0; i < degreesFreedomMaximum + (uint)beam.DvaNodePositions.Length; i++)
+            for (int i = 0; i < degreesFreedomMaximum; i++)
             {
                 if (bondaryCondition[i] == true)
                 {
@@ -138,17 +138,17 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             // Creating input.
             NewmarkMethodInput input = new NewmarkMethodInput
             {
-                Mass = this._auxiliarOperation.ApplyBondaryConditions(massWithDva, bondaryCondition, numberOfTrueBoundaryConditions),
+                Mass = this._auxiliarOperation.ApplyBondaryConditions(massWithDva, bondaryCondition, numberOfTrueBoundaryConditions + (uint)beam.DvaNodePositions.Length),
 
-                Hardness = this._auxiliarOperation.ApplyBondaryConditions(hardnessWithDva, bondaryCondition, numberOfTrueBoundaryConditions),
+                Hardness = this._auxiliarOperation.ApplyBondaryConditions(hardnessWithDva, bondaryCondition, numberOfTrueBoundaryConditions + (uint)beam.DvaNodePositions.Length),
 
-                Damping = this._auxiliarOperation.ApplyBondaryConditions(dampingWithDva, bondaryCondition, numberOfTrueBoundaryConditions),
+                Damping = this._auxiliarOperation.ApplyBondaryConditions(dampingWithDva, bondaryCondition, numberOfTrueBoundaryConditions + (uint)beam.DvaNodePositions.Length),
 
-                Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions),
+                Force = this._auxiliarOperation.ApplyBondaryConditions(forces, bondaryCondition, numberOfTrueBoundaryConditions + (uint)beam.DvaNodePositions.Length),
 
                 NumberOfTrueBoundaryConditions = numberOfTrueBoundaryConditions,
 
-                NumberOfDvas = (uint) beam.DvaNodePositions.Length,
+                NumberOfDvas = (uint)beam.DvaNodePositions.Length,
 
                 Parameter = newmarkMethodParameter
             };

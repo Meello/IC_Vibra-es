@@ -30,27 +30,22 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva
 
         protected override async Task<double[]> CalculateDisplacement(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration)
         {
-            double[,] equivalentHardness = await base.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
+            double[,] equivalentHardness = await base.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions + input.NumberOfDvas).ConfigureAwait(false);
             double[,] inversedEquivalentHardness = await this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness)).ConfigureAwait(false);
 
             double[] equivalentForce = await this.CalculateEquivalentForce(input, previousDisplacement, previousVelocity, previousAcceleration, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
 
-            uint size = input.NumberOfTrueBoundaryConditions - input.NumberOfDvas;
+            double[,] dvaInversedHardness = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
 
-            double[] dvaForce = new double[size];
-            double[,] dvaInversedHardness = new double[size, size];
-
-            for(uint i = 0; i < size; i++)
+            for(uint i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
             {
-                dvaForce[i] = equivalentForce[i];
-
-                for(uint j = 0; j < size; j++)
+                for(uint j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
                 {
                     dvaInversedHardness[i, j] = inversedEquivalentHardness[i, j];
                 }
             }
 
-            double[] displacement = await this._arrayOperation.Multiply(dvaForce, dvaInversedHardness, $"{nameof(dvaForce)}, {nameof(dvaInversedHardness)}");
+            double[] displacement = await this._arrayOperation.Multiply(equivalentForce, dvaInversedHardness, $"{nameof(equivalentForce)}, {nameof(dvaInversedHardness)}");
 
             return displacement;
         }
