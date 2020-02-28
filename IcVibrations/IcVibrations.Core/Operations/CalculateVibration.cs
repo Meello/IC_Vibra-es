@@ -98,7 +98,7 @@ namespace IcVibrations.Core.Operations
         {
             CalculateVibrationResponse response = new CalculateVibrationResponse();
 
-            if(!await this._profileValidator.Execute(request.BeamData.Profile))
+            if(!await this._profileValidator.Execute(request.BeamData.Profile, response))
             {
                 return response;
             }
