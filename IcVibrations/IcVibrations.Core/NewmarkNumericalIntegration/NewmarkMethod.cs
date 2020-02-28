@@ -135,8 +135,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                         double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions);
                         double[,] inversedEquivalentHardness = await this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness)).ConfigureAwait(false);
 
-                        // Para barra com ADV tem que ter um método próprio.
-
                         double[] equivalentForce = await this.CalculateEquivalentForce(input, y, vel, accel, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
 
                         y = await this._arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
