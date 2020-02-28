@@ -311,11 +311,30 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return Task.FromResult(arrayMultiplication);
         }
 
-        public Task<double[]> Multiply(double[,] array1, double[] array2, string matrixesName)
+        public Task<double[]> Multiply(double[,] matrix, double[] array, uint size, string arraysName)
         {
-            int rows1 = array1.GetLength(0);
-            int columns1 = array1.GetLength(1);
-            int size2 = array2.Length;
+            double[] arrayMultiplication = new double[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                double sum = 0;
+
+                for (int j = 0; j < size; j++)
+                {
+                    sum += matrix[i, j] * array[j];
+                }
+
+                arrayMultiplication[i] = sum;
+            }
+
+            return Task.FromResult(arrayMultiplication);
+        }
+
+        public Task<double[]> Multiply(double[,] matrix, double[] array, string matrixesName)
+        {
+            int rows1 = matrix.GetLength(0);
+            int columns1 = matrix.GetLength(1);
+            int size2 = array.Length;
 
             if (columns1 != size2)
             {
@@ -330,7 +349,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
                 for (int j = 0; j < columns1; j++)
                 {
-                    sum += array1[i, j] * array2[j];
+                    sum += matrix[i, j] * array[j];
                 }
 
                 arrayMultiplication[i] = sum;

@@ -21,33 +21,46 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva
         /// <param name="arrayOperation"></param>
         /// <param name="auxiliarOperation"></param>
         public BeamWithDvaNewmarkMethod(
-            IArrayOperation arrayOperation, 
-            IAuxiliarOperation auxiliarOperation) 
+            IArrayOperation arrayOperation,
+            IAuxiliarOperation auxiliarOperation)
             : base(arrayOperation, auxiliarOperation)
         {
             this._arrayOperation = arrayOperation;
         }
 
-        protected override async Task<double[]> CalculateDisplacement(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration)
+        protected override async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBoundaryConditions)
         {
-            double[,] equivalentHardness = await base.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions + input.NumberOfDvas).ConfigureAwait(false);
-            double[,] inversedEquivalentHardness = await this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness)).ConfigureAwait(false);
+            double[] equivalentVelocity = await base.CalculateEquivalentVelocity(displacement, velocity, acceleration, numberOfTrueBoundaryConditions);
+            double[] equivalentAcceleration = await base.CalculateEquivalentAcceleration(displacement, velocity, acceleration, numberOfTrueBoundaryConditions);
 
-            double[] equivalentForce = await this.CalculateEquivalentForce(input, previousDisplacement, previousVelocity, previousAcceleration, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
+            double[,] mass = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
+            double[,] damping = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
+            double[] force = new double[numberOfTrueBoundaryConditions];
 
-            double[,] dvaInversedHardness = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
-
-            for(uint i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+            for (int i = 0; i < numberOfTrueBoundaryConditions; i++)
             {
-                for(uint j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
+                force[i] = input.Force[i];
+
+                for (int j = 0; j < numberOfTrueBoundaryConditions; j++)
                 {
-                    dvaInversedHardness[i, j] = inversedEquivalentHardness[i, j];
+                    mass[i, j] = input.Mass[i, j];
+                    damping[i, j] = input.Damping[i, j];
                 }
             }
 
-            double[] displacement = await this._arrayOperation.Multiply(equivalentForce, dvaInversedHardness, $"{nameof(equivalentForce)}, {nameof(dvaInversedHardness)}");
+            double[] mass_accel = await this._arrayOperation.Multiply(mass, equivalentAcceleration, $"{nameof(input.Mass)} and {nameof(equivalentAcceleration)}");
+            double[] damping_vel = await this._arrayOperation.Multiply(damping, equivalentVelocity, $"{nameof(input.Damping)} and {nameof(equivalentVelocity)}");
 
-            return displacement;
+            double[] equivalentForce = await this._arrayOperation.Sum(force, mass_accel, damping_vel, $"{nameof(input.Force)}, {nameof(mass_accel)} and {nameof(damping_vel)}");
+
+            double[] dvaForce = new double[input.NumberOfTrueBoundaryConditions];
+
+            for (uint i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+            {
+                dvaForce[i] = equivalentForce[i];
+            }
+
+            return dvaForce;
         }
     }
 }
