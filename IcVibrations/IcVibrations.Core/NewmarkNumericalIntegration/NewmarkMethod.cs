@@ -110,15 +110,15 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             }
 
             double[] y = new double[input.NumberOfTrueBoundaryConditions];
-            double[] yAnt = new double[input.NumberOfTrueBoundaryConditions];
+            double[] yPre = new double[input.NumberOfTrueBoundaryConditions];
 
             double[] vel = new double[input.NumberOfTrueBoundaryConditions];
-            double[] velAnt = new double[input.NumberOfTrueBoundaryConditions];
+            double[] velPre = new double[input.NumberOfTrueBoundaryConditions];
 
             double[] accel = new double[input.NumberOfTrueBoundaryConditions];
-            double[] accelAnt = new double[input.NumberOfTrueBoundaryConditions];
+            double[] accelPre = new double[input.NumberOfTrueBoundaryConditions];
 
-            double[] forceAnt = new double[input.NumberOfTrueBoundaryConditions];
+            double[] forcePre = new double[input.NumberOfTrueBoundaryConditions];
 
             for (jp = 0; jp < input.Parameter.NumberOfPeriods; jp++)
             {
@@ -132,17 +132,12 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                     if (time != 0)
                     {
-                        double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions);
-                        double[,] inversedEquivalentHardness = await this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness)).ConfigureAwait(false);
-
-                        double[] equivalentForce = await this.CalculateEquivalentForce(input, y, vel, accel, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
-
-                        y = await this._arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
+                        y = await CalculateDisplacement(input, yPre, velPre, accelPre);
 
                         for (i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
                         {
-                            accel[i] = a0 * (y[i] - yAnt[i]) - a2 * velAnt[i] - a3 * accelAnt[i];
-                            vel[i] = velAnt[i] + a6 * accelAnt[i] + a7 * accel[i];
+                            accel[i] = a0 * (y[i] - yPre[i]) - a2 * velPre[i] - a3 * accelPre[i];
+                            vel[i] = velPre[i] + a6 * accelPre[i] + a7 * accel[i];
                         }
                     }
 
@@ -152,16 +147,26 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                     for (i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
                     {
-                        yAnt[i] = y[i];
-                        velAnt[i] = vel[i];
-                        accelAnt[i] = accel[i];
-                        forceAnt[i] = input.Force[i];
+                        yPre[i] = y[i];
+                        velPre[i] = vel[i];
+                        accelPre[i] = accel[i];
+                        forcePre[i] = input.Force[i];
                     }
                 }
             }
         }
 
-        private async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBoundaryConditions)
+        protected async Task<double[]> CalculateDisplacement(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration)
+        {
+            double[,] equivalentHardness = await this.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
+            double[,] inversedEquivalentHardness = await this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness)).ConfigureAwait(false);
+
+            double[] equivalentForce = await this.CalculateEquivalentForce(input, previousDisplacement, previousVelocity, previousAcceleration, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
+
+            return await this._arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
+        }
+
+        protected virtual async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBoundaryConditions)
         {
             uint trueBC = numberOfTrueBoundaryConditions;
 
@@ -206,7 +211,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return equivalentForce;
         }
 
-        private Task<double[]> CalculateEquivalentAcceleration(double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryConditions)
+        protected Task<double[]> CalculateEquivalentAcceleration(double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryConditions)
         {
             double[] equivalentAcceleration = new double[numberOfTrueBondaryConditions];
 
@@ -218,7 +223,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return Task.FromResult(equivalentAcceleration);
         }
 
-        private Task<double[]> CalculateEquivalentVelocity(double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryConditions)
+        protected Task<double[]> CalculateEquivalentVelocity(double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryConditions)
         {
             double[] equivalentVelocity = new double[numberOfTrueBondaryConditions];
 
@@ -230,7 +235,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return Task.FromResult(equivalentVelocity);
         }
 
-        private Task<double[,]> CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness, uint numberOfTrueBoundaryConditions)
+        protected Task<double[,]> CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness, uint numberOfTrueBoundaryConditions)
         {
             double[,] equivalentHardness = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
 

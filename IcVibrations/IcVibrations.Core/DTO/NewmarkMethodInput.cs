@@ -40,6 +40,11 @@ namespace IcVibrations.Core.DTO.Input
         public uint NumberOfTrueBoundaryConditions { get; set; }
 
         /// <summary>
+        /// Number of dynamic vibration absorbers.
+        /// </summary>
+        public uint NumberOfDvas { get; set; }
+
+        /// <summary>
         /// Newmark method parameters.
         /// </summary>
         public NewmarkMethodParameter Parameter { get; set; }
