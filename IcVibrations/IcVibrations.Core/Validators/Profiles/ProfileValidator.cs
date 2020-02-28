@@ -1,4 +1,5 @@
 ﻿using IcVibrations.Common.Profiles;
+using IcVibrations.DataContracts;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Validators.Profiles
@@ -10,6 +11,6 @@ namespace IcVibrations.Core.Validators.Profiles
     public abstract class ProfileValidator<TProfile> : IProfileValidator<TProfile>
         where TProfile : Profile
     {
-        public abstract Task<bool> Execute(TProfile profile);
+        public abstract Task<bool> Execute(TProfile profile, OperationResponseBase response);
     }
 }
