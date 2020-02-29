@@ -22,6 +22,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.DataContracts"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.Common", "IcVibrations.Common\IcVibrations.Common.csproj", "{662E2DBA-DE30-4711-82FC-73695762E920}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "programs in C", "programs in C", "{1078E301-A86F-42BF-BC6E-F6155B423122}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "initial code", "initial code", "{956B4127-97B8-4005-8351-AB94AB66C2EF}"
+	ProjectSection(SolutionItems) = preProject
+		..\Programas em C\Arquivo original\dados_piezo.inp = ..\Programas em C\Arquivo original\dados_piezo.inp
+		..\Programas em C\Arquivo original\DEFVAR19_09.H = ..\Programas em C\Arquivo original\DEFVAR19_09.H
+		..\Programas em C\Arquivo original\NEWMARK_PIEZOELETRICO.CPP = ..\Programas em C\Arquivo original\NEWMARK_PIEZOELETRICO.CPP
+		..\Programas em C\Arquivo original\TEST_ARQ.C = ..\Programas em C\Arquivo original\TEST_ARQ.C
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "piezoelectric", "piezoelectric", "{FA302BD0-2381-48D9-8067-339CF9914A8A}"
+	ProjectSection(SolutionItems) = preProject
+		..\Programas em C\programapiezo (1)\ALLOC_.H = ..\Programas em C\programapiezo (1)\ALLOC_.H
+		..\Programas em C\programapiezo (1)\dados_piezo.inp = ..\Programas em C\programapiezo (1)\dados_piezo.inp
+		..\Programas em C\programapiezo\DEFVAR19_09.H = ..\Programas em C\programapiezo\DEFVAR19_09.H
+		..\Programas em C\programapiezo\NEWMARK_com_PIEZOELETRICO_28-01.CPP = ..\Programas em C\programapiezo\NEWMARK_com_PIEZOELETRICO_28-01.CPP
+		..\Programas em C\programapiezo\TEST_ARQ.C = ..\Programas em C\programapiezo\TEST_ARQ.C
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +77,8 @@ Global
 		{998BEBC4-76F2-492C-9D16-5206867286B7} = {D5717D01-5421-460A-AEC6-16B201467754}
 		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32} = {D5717D01-5421-460A-AEC6-16B201467754}
 		{662E2DBA-DE30-4711-82FC-73695762E920} = {D5717D01-5421-460A-AEC6-16B201467754}
+		{956B4127-97B8-4005-8351-AB94AB66C2EF} = {1078E301-A86F-42BF-BC6E-F6155B423122}
+		{FA302BD0-2381-48D9-8067-339CF9914A8A} = {1078E301-A86F-42BF-BC6E-F6155B423122}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E443C2FD-9CF5-49EE-9F79-AEAD24219189}
