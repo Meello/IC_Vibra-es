@@ -24,7 +24,6 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// <summary>
         /// Class construtor.
         /// </summary>
-        /// <param name="commonMainMatrix"></param>
         /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public BeamWithPiezoelectricMainMatrix(

@@ -34,9 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "initial code", "initial cod
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "piezoelectric", "piezoelectric", "{FA302BD0-2381-48D9-8067-339CF9914A8A}"
 	ProjectSection(SolutionItems) = preProject
-		..\Programas em C\programapiezo (1)\ALLOC_.H = ..\Programas em C\programapiezo (1)\ALLOC_.H
 		..\Programas em C\programapiezo (1)\dados_piezo.inp = ..\Programas em C\programapiezo (1)\dados_piezo.inp
-		..\Programas em C\programapiezo\DEFVAR19_09.H = ..\Programas em C\programapiezo\DEFVAR19_09.H
 		..\Programas em C\programapiezo\NEWMARK_com_PIEZOELETRICO_28-01.CPP = ..\Programas em C\programapiezo\NEWMARK_com_PIEZOELETRICO_28-01.CPP
 		..\Programas em C\programapiezo\TEST_ARQ.C = ..\Programas em C\programapiezo\TEST_ARQ.C
 	EndProjectSection
