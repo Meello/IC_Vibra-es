@@ -1,0 +1,13 @@
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\bin\Debug\netstandard2.0\IcVibrations.Core.deps.json
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\bin\Debug\netstandard2.0\IcVibrations.Core.dll
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\bin\Debug\netstandard2.0\IcVibrations.Core.pdb
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\bin\Debug\netstandard2.0\IcVibrations.Common.dll
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\bin\Debug\netstandard2.0\IcVibrations.DataContracts.dll
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\bin\Debug\netstandard2.0\IcVibrations.Common.pdb
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\bin\Debug\netstandard2.0\IcVibrations.DataContracts.pdb
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\obj\Debug\netstandard2.0\IcVibrations.Core.csprojAssemblyReference.cache
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\obj\Debug\netstandard2.0\IcVibrations.Core.AssemblyInfoInputs.cache
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\obj\Debug\netstandard2.0\IcVibrations.Core.AssemblyInfo.cs
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\obj\Debug\netstandard2.0\IcVibrations.Core.csproj.CopyComplete
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\obj\Debug\netstandard2.0\IcVibrations.Core.dll
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.Core\obj\Debug\netstandard2.0\IcVibrations.Core.pdb

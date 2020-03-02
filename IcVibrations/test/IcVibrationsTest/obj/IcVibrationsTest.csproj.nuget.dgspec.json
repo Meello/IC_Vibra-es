@@ -1,0 +1,99 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrationsTest\\IcVibrationsTest.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrationsTest\\IcVibrationsTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrationsTest\\IcVibrationsTest.csproj",
+        "projectName": "IcVibrationsTest",
+        "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrationsTest\\IcVibrationsTest.csproj",
+        "packagesPath": "C:\\Users\\bruno.silveira\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrationsTest\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\bruno.silveira\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Common\\IcVibrations.Common.csproj": {
+                "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Common\\IcVibrations.Common.csproj"
+              },
+              "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Core\\IcVibrations.Core.csproj": {
+                "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Core\\IcVibrations.Core.csproj"
+              },
+              "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj": {
+                "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[5.10.2, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.5.0, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.2.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
