@@ -311,25 +311,6 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             return Task.FromResult(arrayMultiplication);
         }
 
-        public Task<double[]> Multiply(double[,] matrix, double[] array, uint size, string arraysName)
-        {
-            double[] arrayMultiplication = new double[size];
-
-            for (int i = 0; i < size; i++)
-            {
-                double sum = 0;
-
-                for (int j = 0; j < size; j++)
-                {
-                    sum += matrix[i, j] * array[j];
-                }
-
-                arrayMultiplication[i] = sum;
-            }
-
-            return Task.FromResult(arrayMultiplication);
-        }
-
         public Task<double[]> Multiply(double[,] matrix, double[] array, string matrixesName)
         {
             int rows1 = matrix.GetLength(0);

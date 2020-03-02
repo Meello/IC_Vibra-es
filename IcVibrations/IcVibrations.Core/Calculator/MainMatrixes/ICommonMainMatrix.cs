@@ -24,7 +24,7 @@ namespace IcVibrations.Calculator.MainMatrixes
         /// <param name="hardness"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness, uint size);
+        Task<double[,]> CalculateDamping(double[,] mass, double[,] hardness);
         
         /// <summary>
         /// It's rewsponsible to build the bondary condition matrix.

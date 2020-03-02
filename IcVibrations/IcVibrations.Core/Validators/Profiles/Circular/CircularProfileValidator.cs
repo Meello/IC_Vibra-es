@@ -32,6 +32,8 @@ namespace IcVibrations.Core.Validators.Profiles.Circular
                     
                     return Task.FromResult(false);
                 }
+
+                return Task.FromResult(true);
             }
             else
             {
@@ -46,6 +48,8 @@ namespace IcVibrations.Core.Validators.Profiles.Circular
 
                     return Task.FromResult(false);
                 }
+
+                return Task.FromResult(true);
             }
             else
             {
@@ -54,8 +58,6 @@ namespace IcVibrations.Core.Validators.Profiles.Circular
 
                 return Task.FromResult(false);
             }
-
-            return Task.FromResult(true);
         }
     }
 }

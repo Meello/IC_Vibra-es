@@ -151,7 +151,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
 
             double[,] equivalentHardness = await this._mainMatrix.CalculateEquivalentHardness(hardness, piezoelectricElectromechanicalCoupling, piezoelectricCapacitance, degreesFreedomMaximum, piezoelectricDegreesFreedomMaximum);
 
-            double[,] damping = await this._mainMatrix.CalculateDamping(equivalentMass, equivalentHardness, degreesFreedomMaximum + piezoelectricDegreesFreedomMaximum);
+            double[,] damping = await this._mainMatrix.CalculateDamping(equivalentMass, equivalentHardness);
 
             double[] force = beam.Forces;
 

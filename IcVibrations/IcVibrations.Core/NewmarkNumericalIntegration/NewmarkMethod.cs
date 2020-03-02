@@ -1,13 +1,9 @@
-﻿using IcVibrations.Common.Classes;
-using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.DTO;
+﻿using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Models;
 using IcVibrations.DataContracts;
 using IcVibrations.Methods.AuxiliarOperations;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.NewmarkNumericalIntegration
@@ -87,7 +83,7 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                 try
                 {
-                    this._auxiliarOperation.WriteInFile(input.AngularFrequency);
+                    //this._auxiliarOperation.WriteInFile(input.AngularFrequency);
                     await Solution(input);
                 }
                 catch (Exception ex)
@@ -100,11 +96,10 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
         private async Task Solution(NewmarkMethodInput input)
         {
-            int i, jn, jp;
             double time = input.Parameter.InitialTime;
 
             double[] force = new double[input.NumberOfTrueBoundaryConditions];
-            for (i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+            for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
             {
                 force[i] = input.Force[i];
             }
@@ -120,11 +115,11 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
             double[] forcePre = new double[input.NumberOfTrueBoundaryConditions];
 
-            for (jp = 0; jp < input.Parameter.NumberOfPeriods; jp++)
+            for (int jp = 0; jp < input.Parameter.NumberOfPeriods; jp++)
             {
-                for (jn = 0; jn < input.Parameter.PeriodDivision; jn++)
+                for (int jn = 0; jn < input.Parameter.PeriodDivision; jn++)
                 {
-                    for (i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+                    for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
                     {
                         // Force can't initiate in 0 (?)
                         input.Force[i] = force[i] * Math.Cos(input.AngularFrequency * time);
@@ -134,18 +129,18 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                     {
                         y = await CalculateDisplacement(input, yPre, velPre, accelPre);
 
-                        for (i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+                        for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
                         {
                             accel[i] = a0 * (y[i] - yPre[i]) - a2 * velPre[i] - a3 * accelPre[i];
                             vel[i] = velPre[i] + a6 * accelPre[i] + a7 * accel[i];
                         }
                     }
 
-                    this._auxiliarOperation.WriteInFile(time, y);
+                    //this._auxiliarOperation.WriteInFile(time, y);
 
                     time += input.DeltaTime;
 
-                    for (i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
+                    for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
                     {
                         yPre[i] = y[i];
                         velPre[i] = vel[i];
@@ -166,42 +161,40 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return await this._arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
         }
 
-        protected virtual async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBoundaryConditions)
+        protected virtual async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration, uint numberOfTrueBoundaryConditions)
         {
-            uint trueBC = numberOfTrueBoundaryConditions;
-
-            if (displacement.Length != trueBC)
+            if (previousDisplacement.Length != numberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of displacement: {displacement.Length} have to be equals to number of true bondary conditions: {trueBC}.");
+                throw new Exception($"Lenth of displacement: {previousDisplacement.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
             }
 
-            if (velocity.Length != trueBC)
+            if (previousVelocity.Length != numberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of velocity: {velocity.Length} have to be equals to number of true bondary conditions: {trueBC}.");
+                throw new Exception($"Lenth of velocity: {previousVelocity.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
             }
 
-            if (acceleration.Length != trueBC)
+            if (previousAcceleration.Length != numberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of acceleration: {acceleration.Length} have to be equals to number of true bondary conditions: {trueBC}.");
+                throw new Exception($"Lenth of acceleration: {previousAcceleration.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
             }
 
-            if (input.Mass.Length != Math.Pow(trueBC, 2))
+            if (input.Mass.Length != Math.Pow(numberOfTrueBoundaryConditions, 2))
             {
-                throw new Exception($"Lenth of input mass: {input.Mass.Length} have to be equals to number of true bondary conditions squared: {Math.Pow(trueBC, 2)}.");
+                throw new Exception($"Lenth of input mass: {input.Mass.Length} have to be equals to number of true bondary conditions squared: {Math.Pow(numberOfTrueBoundaryConditions, 2)}.");
             }
 
-            if (input.Damping.Length != Math.Pow(trueBC, 2))
+            if (input.Damping.Length != Math.Pow(numberOfTrueBoundaryConditions, 2))
             {
-                throw new Exception($"Lenth of input damping: {input.Damping.Length} have to be equals to number of true bondary conditions squared: {Math.Pow(trueBC, 2)}.");
+                throw new Exception($"Lenth of input damping: {input.Damping.Length} have to be equals to number of true bondary conditions squared: {Math.Pow(numberOfTrueBoundaryConditions, 2)}.");
             }
 
-            if (input.Force.Length != trueBC)
+            if (input.Force.Length != numberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of input force: {input.Force.Length} have to be equals to number of true bondary conditions: {trueBC}.");
+                throw new Exception($"Lenth of input force: {input.Force.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
             }
 
-            double[] equivalentVelocity = await this.CalculateEquivalentVelocity(displacement, velocity, acceleration, trueBC);
-            double[] equivalentAcceleration = await this.CalculateEquivalentAcceleration(displacement, velocity, acceleration, trueBC);
+            double[] equivalentVelocity = await this.CalculateEquivalentVelocity(previousDisplacement, previousVelocity, previousAcceleration, numberOfTrueBoundaryConditions);
+            double[] equivalentAcceleration = await this.CalculateEquivalentAcceleration(previousDisplacement, previousVelocity, previousAcceleration, numberOfTrueBoundaryConditions);
 
             double[] mass_accel = await this._arrayOperation.Multiply(input.Mass, equivalentAcceleration, $"{nameof(input.Mass)} and {nameof(equivalentAcceleration)}");
             double[] damping_vel = await this._arrayOperation.Multiply(input.Damping, equivalentVelocity, $"{nameof(input.Damping)} and {nameof(equivalentVelocity)}");

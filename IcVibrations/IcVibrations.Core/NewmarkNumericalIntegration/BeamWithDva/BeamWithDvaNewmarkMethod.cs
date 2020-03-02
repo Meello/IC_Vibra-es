@@ -2,8 +2,6 @@
 using IcVibrations.Core.DTO.Input;
 using IcVibrations.Methods.AuxiliarOperations;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva
@@ -28,19 +26,31 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva
             this._arrayOperation = arrayOperation;
         }
 
-        protected override async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBoundaryConditions)
+        protected override async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration, uint numberOfTrueBoundaryConditions)
         {
-            double[] equivalentVelocity = await base.CalculateEquivalentVelocity(displacement, velocity, acceleration, numberOfTrueBoundaryConditions);
-            double[] equivalentAcceleration = await base.CalculateEquivalentAcceleration(displacement, velocity, acceleration, numberOfTrueBoundaryConditions);
+            if (previousDisplacement.Length != numberOfTrueBoundaryConditions)
+            {
+                throw new Exception($"Lenth of displacement: {previousDisplacement.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+            }
+
+            if (previousVelocity.Length != numberOfTrueBoundaryConditions)
+            {
+                throw new Exception($"Lenth of velocity: {previousVelocity.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+            }
+
+            if (previousAcceleration.Length != numberOfTrueBoundaryConditions)
+            {
+                throw new Exception($"Lenth of acceleration: {previousAcceleration.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+            }
+
+            double[] equivalentVelocity = await base.CalculateEquivalentVelocity(previousDisplacement, previousVelocity, previousAcceleration, numberOfTrueBoundaryConditions);
+            double[] equivalentAcceleration = await base.CalculateEquivalentAcceleration(previousDisplacement, previousVelocity, previousAcceleration, numberOfTrueBoundaryConditions);
 
             double[,] mass = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
             double[,] damping = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
-            double[] force = new double[numberOfTrueBoundaryConditions];
 
             for (int i = 0; i < numberOfTrueBoundaryConditions; i++)
             {
-                force[i] = input.Force[i];
-
                 for (int j = 0; j < numberOfTrueBoundaryConditions; j++)
                 {
                     mass[i, j] = input.Mass[i, j];
@@ -51,16 +61,9 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva
             double[] mass_accel = await this._arrayOperation.Multiply(mass, equivalentAcceleration, $"{nameof(input.Mass)} and {nameof(equivalentAcceleration)}");
             double[] damping_vel = await this._arrayOperation.Multiply(damping, equivalentVelocity, $"{nameof(input.Damping)} and {nameof(equivalentVelocity)}");
 
-            double[] equivalentForce = await this._arrayOperation.Sum(force, mass_accel, damping_vel, $"{nameof(input.Force)}, {nameof(mass_accel)} and {nameof(damping_vel)}");
+            double[] equivalentForce = await this._arrayOperation.Sum(input.Force, mass_accel, damping_vel, $"{nameof(input.Force)}, {nameof(mass_accel)} and {nameof(damping_vel)}");
 
-            double[] dvaForce = new double[input.NumberOfTrueBoundaryConditions];
-
-            for (uint i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
-            {
-                dvaForce[i] = equivalentForce[i];
-            }
-
-            return dvaForce;
+            return equivalentForce;
         }
     }
 }

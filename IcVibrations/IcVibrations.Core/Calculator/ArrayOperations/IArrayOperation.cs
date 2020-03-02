@@ -16,8 +16,6 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
 
         Task<double[]> Multiply(double[,] matrix, double[] array, string arraysName);
 
-        Task<double[]> Multiply(double[,] matrix, double[] array, uint size, string arraysName);
-
         Task<double[]> Multiply(double[] array, double[,] matrix, string arraysName);
 
         Task<double[,]> Subtract(double[,] matrix1, double[,] matrix2, string matrixesName);

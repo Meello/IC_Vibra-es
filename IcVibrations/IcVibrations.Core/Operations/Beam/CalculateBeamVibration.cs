@@ -105,7 +105,7 @@ namespace IcVibrations.Core.Operations.Beam
 
             double[,] hardness = await this._mainMatrix.CalculateHardness(beam, degreesFreedomMaximum);
 
-            double[,] damping = await this._mainMatrix.CalculateDamping(mass, hardness, degreesFreedomMaximum);
+            double[,] damping = await this._mainMatrix.CalculateDamping(mass, hardness);
 
             double[] forces = beam.Forces;
 
