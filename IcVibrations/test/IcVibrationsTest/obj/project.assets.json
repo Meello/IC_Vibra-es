@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
+      "AsyncEnumerator/4.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/AsyncEnumerable.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/AsyncEnumerable.dll": {}
+        }
+      },
       "coverlet.collector/1.2.0": {
         "type": "package",
         "build": {
@@ -1690,10 +1699,70 @@
         "build": {
           "build/netcoreapp1.0/xunit.runner.visualstudio.props": {}
         }
+      },
+      "IcVibrations.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "compile": {
+          "bin/placeholder/IcVibrations.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/IcVibrations.Common.dll": {}
+        }
+      },
+      "IcVibrations.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "AsyncEnumerator": "4.0.2",
+          "IcVibrations.Common": "1.0.0",
+          "IcVibrations.DataContracts": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/IcVibrations.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/IcVibrations.Core.dll": {}
+        }
+      },
+      "IcVibrations.DataContracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "AsyncEnumerator": "4.0.2",
+          "IcVibrations.Common": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/IcVibrations.DataContracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/IcVibrations.DataContracts.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "AsyncEnumerator/4.0.2": {
+      "sha512": "mjBg9pGuQVbCeC/3t75B74mRjIIqOg6o212CJ7g37wRrPIJTGzuFKo9/TsVuJl2by2I1ESJLyFnNFHHEMRUysA==",
+      "type": "package",
+      "path": "asyncenumerator/4.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "asyncenumerator.4.0.2.nupkg.sha512",
+        "asyncenumerator.nuspec",
+        "lib/net45/AsyncEnumerable.dll",
+        "lib/net45/AsyncEnumerable.xml",
+        "lib/net461/AsyncEnumerable.dll",
+        "lib/net461/AsyncEnumerable.xml",
+        "lib/netstandard1.4/AsyncEnumerable.dll",
+        "lib/netstandard1.4/AsyncEnumerable.xml",
+        "lib/netstandard2.0/AsyncEnumerable.dll",
+        "lib/netstandard2.0/AsyncEnumerable.xml",
+        "lib/netstandard2.1/AsyncEnumerable.dll",
+        "lib/netstandard2.1/AsyncEnumerable.xml"
+      ]
+    },
     "coverlet.collector/1.2.0": {
       "sha512": "ZB+EGXsVBIn8cew7D3S2c+rgIlokKv1dSwsXEoiFQaNXF/BSxp9Rlfz/jV1ehSWH5XpLitfRxFNW3ok7uPDOXA==",
       "type": "package",
@@ -5749,14 +5818,29 @@
         "xunit.runner.visualstudio.2.4.1.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "IcVibrations.Common/1.0.0": {
+      "type": "project",
+      "path": "../../src/IcVibrations.Common/IcVibrations.Common.csproj",
+      "msbuildProject": "../../src/IcVibrations.Common/IcVibrations.Common.csproj"
+    },
+    "IcVibrations.Core/1.0.0": {
+      "type": "project",
+      "path": "../../src/IcVibrations.Core/IcVibrations.Core.csproj",
+      "msbuildProject": "../../src/IcVibrations.Core/IcVibrations.Core.csproj"
+    },
+    "IcVibrations.DataContracts/1.0.0": {
+      "type": "project",
+      "path": "../../src/IcVibrations.DataContract/IcVibrations.DataContracts.csproj",
+      "msbuildProject": "../../src/IcVibrations.DataContract/IcVibrations.DataContracts.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Common\\IcVibrations.Common.csproj",
-      "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Core\\IcVibrations.Core.csproj",
-      "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj",
       "FluentAssertions >= 5.10.2",
+      "IcVibrations.Common >= 1.0.0",
+      "IcVibrations.Core >= 1.0.0",
+      "IcVibrations.DataContracts >= 1.0.0",
       "Microsoft.NET.Test.Sdk >= 16.5.0",
       "coverlet.collector >= 1.2.0",
       "xunit >= 2.4.1",
@@ -5793,14 +5877,14 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
-            "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Common\\IcVibrations.Common.csproj": {
-              "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Common\\IcVibrations.Common.csproj"
+            "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\src\\IcVibrations.Common\\IcVibrations.Common.csproj": {
+              "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\src\\IcVibrations.Common\\IcVibrations.Common.csproj"
             },
-            "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Core\\IcVibrations.Core.csproj": {
-              "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Core\\IcVibrations.Core.csproj"
+            "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\src\\IcVibrations.Core\\IcVibrations.Core.csproj": {
+              "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\src\\IcVibrations.Core\\IcVibrations.Core.csproj"
             },
-            "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj": {
-              "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj"
+            "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\src\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj": {
+              "projectPath": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\src\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj"
             }
           }
         }
@@ -5857,34 +5941,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.DataContract\\IcVibrations.DataContracts.csproj",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    },
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Core\\IcVibrations.Core.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Core\\IcVibrations.Core.csproj",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    },
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Common\\IcVibrations.Common.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "C:\\Users\\bruno.silveira\\Documents\\GitHub\\IC_Vibrações\\IcVibrations\\test\\IcVibrations.Common\\IcVibrations.Common.csproj",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    }
-  ]
+  }
 }

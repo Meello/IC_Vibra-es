@@ -36,9 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IcVibrations.Common\IcVibrations.Common.csproj" />
-    <ProjectReference Include="..\IcVibrations.Core\IcVibrations.Core.csproj" />
-    <ProjectReference Include="..\IcVibrations.DataContract\IcVibrations.DataContracts.csproj" />
+    <ProjectReference Include="..\..\src\IcVibrations.Common\IcVibrations.Common.csproj" />
+    <ProjectReference Include="..\..\src\IcVibrations.Core\IcVibrations.Core.csproj" />
+    <ProjectReference Include="..\..\src\IcVibrations.DataContract\IcVibrations.DataContracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -55,19 +55,6 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
             result.Should().BeEquivalentTo(this._inversedMatrix1);
         }
 
-        [Fact(DisplayName = @"Feature: ArrayOperation | Given: Two matrixes. | When: Multiply matrixes. | Should: Return correctly matrix size and values.")]
-        public async void Multiply_TwoMatrixes_ShouldExecuteCorrectly()
-        {
-            // Act
-            double[,] result = await this._operation.Multiply(this._matrix1, this._matrix2, "Multiply Test");
-
-            // Assert
-            result.Should().NotBeEmpty();
-            result.GetLength(0).Should().Be(this._matrix1.GetLength(0));
-            result.GetLength(1).Should().Be(this._matrix2.GetLength(1));
-            result.Should().BeEquivalentTo(this._multipliedMatrix1Matrix2);
-        }
-
         [Fact(DisplayName = @"Feature: ArrayOperation | Given: One matrix and one array. | When: Multiply matrix and array. | Should: Return correctly array size and values.")]
         public async void Multiply_MatrixAndArray_ShouldExecuteCorrectly()
         {
@@ -156,7 +143,7 @@ namespace IcVibrationsTest.Core.Calculator.ArrayOperations
             double value = random.NextDouble();
 
             // Act
-            double[] result = await this._operation.Create(value, size);
+            double[] result = await this._operation.Create(value, size, "test");
 
             // Assert
             result.Should().NotBeNull();

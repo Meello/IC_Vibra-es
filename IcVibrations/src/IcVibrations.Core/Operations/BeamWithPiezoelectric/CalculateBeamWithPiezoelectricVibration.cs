@@ -67,8 +67,8 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
 
             if (request.BeamData.Profile.Area != default && request.BeamData.Profile.MomentOfInertia != default)
             {
-                geometricProperty.Area = await this._arrayOperation.Create(request.BeamData.Profile.Area.Value, request.BeamData.NumberOfElements);
-                geometricProperty.MomentOfInertia = await this._arrayOperation.Create(request.BeamData.Profile.MomentOfInertia.Value, request.BeamData.NumberOfElements);
+                geometricProperty.Area = await this._arrayOperation.Create(request.BeamData.Profile.Area.Value, request.BeamData.NumberOfElements, nameof(request.BeamData.Profile.Area));
+                geometricProperty.MomentOfInertia = await this._arrayOperation.Create(request.BeamData.Profile.MomentOfInertia.Value, request.BeamData.NumberOfElements, nameof(request.BeamData.Profile.MomentOfInertia));
             }
             else
             {
@@ -77,8 +77,8 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
 
             if (request.BeamData.PiezoelectricProfile.Area != default && request.BeamData.PiezoelectricProfile.MomentOfInertia != default)
             {
-                piezoelectricGeometricProperty.Area = await this._arrayOperation.Create(request.BeamData.PiezoelectricProfile.Area.Value, request.BeamData.NumberOfElements);
-                piezoelectricGeometricProperty.MomentOfInertia = await this._arrayOperation.Create(request.BeamData.PiezoelectricProfile.MomentOfInertia.Value, request.BeamData.NumberOfElements);
+                piezoelectricGeometricProperty.Area = await this._arrayOperation.Create(request.BeamData.PiezoelectricProfile.Area.Value, request.BeamData.NumberOfElements, nameof(request.BeamData.PiezoelectricProfile.Area));
+                piezoelectricGeometricProperty.MomentOfInertia = await this._arrayOperation.Create(request.BeamData.PiezoelectricProfile.MomentOfInertia.Value, request.BeamData.NumberOfElements, nameof(request.BeamData.PiezoelectricProfile.MomentOfInertia));
             }
             else
             {
@@ -135,7 +135,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 }
             }
 
-            bool[] bondaryConditions = await this._arrayOperation.MergeArray(beamBondaryConditions, piezoelectricBondaryConditions);
+            bool[] bondaryConditions = await this._arrayOperation.MergeVectors(beamBondaryConditions, piezoelectricBondaryConditions);
             uint numberOfTrueBoundaryConditions = numberOfTrueBeamBoundaryConditions + numberOfTruePiezoelectricBoundaryConditions;
 
             // Main matrixes to create input.
@@ -157,7 +157,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
 
             double[] electricalCharge = beam.ElectricalCharge;
 
-            double[] equivalentForce = await this._arrayOperation.MergeArray(force, electricalCharge);
+            double[] equivalentForce = await this._arrayOperation.MergeVectors(force, electricalCharge);
 
             // Creating input.
             NewmarkMethodInput input = new NewmarkMethodInput
