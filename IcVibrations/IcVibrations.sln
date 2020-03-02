@@ -3,40 +3,76 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.Application", "IcVibrations\IcVibrations.Application.csproj", "{6B41CC8F-4CA5-4031-B905-768254B70CD7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D5717D01-5421-460A-AEC6-16B201467754}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{55CEDD72-C6A5-4279-8676-D103E813438A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{C3BD5CF4-D8C1-4E61-A2F5-D9C78C849242}"
 	ProjectSection(SolutionItems) = preProject
-		CHANGELOG.md = CHANGELOG.md
+		etc\CHANGELOG.md = etc\CHANGELOG.md
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrationsTest", "IcVibrationsTest\IcVibrationsTest.csproj", "{C9FF326E-401E-4104-8102-E27E4F75BC41}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.Core", "IcVibrations.Core\IcVibrations.Core.csproj", "{998BEBC4-76F2-492C-9D16-5206867286B7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.DataContracts", "IcVibrations.DataContract\IcVibrations.DataContracts.csproj", "{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.Common", "IcVibrations.Common\IcVibrations.Common.csproj", "{662E2DBA-DE30-4711-82FC-73695762E920}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "programs in C", "programs in C", "{1078E301-A86F-42BF-BC6E-F6155B423122}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "initial code", "initial code", "{956B4127-97B8-4005-8351-AB94AB66C2EF}"
 	ProjectSection(SolutionItems) = preProject
-		..\Programas em C\Arquivo original\dados_piezo.inp = ..\Programas em C\Arquivo original\dados_piezo.inp
-		..\Programas em C\Arquivo original\DEFVAR19_09.H = ..\Programas em C\Arquivo original\DEFVAR19_09.H
+		programs in C\initial code\dados_piezo.inp = programs in C\initial code\dados_piezo.inp
+		programs in C\initial code\DEFVAR19_09.H = programs in C\initial code\DEFVAR19_09.H
 		..\Programas em C\Arquivo original\NEWMARK_PIEZOELETRICO.CPP = ..\Programas em C\Arquivo original\NEWMARK_PIEZOELETRICO.CPP
-		..\Programas em C\Arquivo original\TEST_ARQ.C = ..\Programas em C\Arquivo original\TEST_ARQ.C
+		programs in C\initial code\TEST_ARQ.C = programs in C\initial code\TEST_ARQ.C
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "piezoelectric", "piezoelectric", "{FA302BD0-2381-48D9-8067-339CF9914A8A}"
 	ProjectSection(SolutionItems) = preProject
-		..\Programas em C\programapiezo (1)\dados_piezo.inp = ..\Programas em C\programapiezo (1)\dados_piezo.inp
+		programs in C\piezoelectric\dados_piezo.inp = programs in C\piezoelectric\dados_piezo.inp
 		..\Programas em C\programapiezo\NEWMARK_com_PIEZOELETRICO_28-01.CPP = ..\Programas em C\programapiezo\NEWMARK_com_PIEZOELETRICO_28-01.CPP
-		..\Programas em C\programapiezo\TEST_ARQ.C = ..\Programas em C\programapiezo\TEST_ARQ.C
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "attempts", "attempts", "{50E49338-21BA-41F6-A769-7F6E5E55356F}"
+	ProjectSection(SolutionItems) = preProject
+		programs in C\attempts\dados9.inp = programs in C\attempts\dados9.inp
+		programs in C\attempts\dados_para_amplicacao.inp = programs in C\attempts\dados_para_amplicacao.inp
+		programs in C\attempts\DEFVAR19_09.H = programs in C\attempts\DEFVAR19_09.H
+		programs in C\attempts\NEWMARK11.CPP = programs in C\attempts\NEWMARK11.CPP
+		programs in C\attempts\NEWMARK11a.CPP = programs in C\attempts\NEWMARK11a.CPP
+		programs in C\attempts\NEWMARK_PIEZOELETRICO.CPP = programs in C\attempts\NEWMARK_PIEZOELETRICO.CPP
+		programs in C\attempts\TEST_ARQ.C = programs in C\attempts\TEST_ARQ.C
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.Core", "src\IcVibrations.Core\IcVibrations.Core.csproj", "{E82C7F83-762B-4488-A7D4-7612E0B53373}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.Application", "src\IcVibrations\IcVibrations.Application.csproj", "{DEA77280-F2F3-4A36-A619-BA3866911AA1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.Common", "src\IcVibrations.Common\IcVibrations.Common.csproj", "{293FA849-CFC1-4692-AC78-BA06E1A4719B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrations.DataContracts", "src\IcVibrations.DataContract\IcVibrations.DataContracts.csproj", "{1FE8516E-2DC4-4776-AB29-A59AA39A90B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcVibrationsTest", "test\IcVibrationsTest\IcVibrationsTest.csproj", "{E5927E4B-8877-44D0-BF13-A42962B1400C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "requests", "requests", "{59E9951D-DC2C-4BB5-80E4-6487C9982F43}"
+	ProjectSection(SolutionItems) = preProject
+		requests\Motor Baja = requests\Motor Baja
+		requests\Motor Baja 30Hz - 5 nós.json = requests\Motor Baja 30Hz - 5 nós.json
+		requests\Motor Baja 30Hz - 67 nós.json = requests\Motor Baja 30Hz - 67 nós.json
+		requests\Motor Baja com ADV 30Hz - 5 nós.json = requests\Motor Baja com ADV 30Hz - 5 nós.json
+		requests\Motor Baja com ADV 30Hz - 67 nós.json = requests\Motor Baja com ADV 30Hz - 67 nós.json
+		requests\RectangularBeamWithPiezoelectricRequest = requests\RectangularBeamWithPiezoelectricRequest
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solutions", "solutions", "{FADCEE5C-9793-4436-AFFF-53B92911FD1B}"
+	ProjectSection(SolutionItems) = preProject
+		solutions\Motor Baja 30Hz com ADV - 5 nós.xlsx = solutions\Motor Baja 30Hz com ADV - 5 nós.xlsx
+		solutions\Motor Baja 30Hz com ADV.xlsx = solutions\Motor Baja 30Hz com ADV.xlsx
+		solutions\Motor Baja 30Hz sem ADV - 5 nós.xlsx = solutions\Motor Baja 30Hz sem ADV - 5 nós.xlsx
+		solutions\Motor Baja 30Hz sem ADV.xlsx = solutions\Motor Baja 30Hz sem ADV.xlsx
+		solutions\Motor Baja 50hz.xlsx = solutions\Motor Baja 50hz.xlsx
+		solutions\MotorBaja.json = solutions\MotorBaja.json
+		solutions\Piezoelétrico - teste 1.xlsx = solutions\Piezoelétrico - teste 1.xlsx
+		solutions\Piezoelétrico - teste 2.xlsx = solutions\Piezoelétrico - teste 2.xlsx
+		solutions\RectangularBeamSolution.csv = solutions\RectangularBeamSolution.csv
+		solutions\RectangularBeamSolution.json = solutions\RectangularBeamSolution.json
+		solutions\TestSolution.csv = solutions\TestSolution.csv
+		solutions\TestSolution.txt = solutions\TestSolution.txt
 	EndProjectSection
 EndProject
 Global
@@ -45,38 +81,39 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6B41CC8F-4CA5-4031-B905-768254B70CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B41CC8F-4CA5-4031-B905-768254B70CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B41CC8F-4CA5-4031-B905-768254B70CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B41CC8F-4CA5-4031-B905-768254B70CD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9FF326E-401E-4104-8102-E27E4F75BC41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9FF326E-401E-4104-8102-E27E4F75BC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9FF326E-401E-4104-8102-E27E4F75BC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9FF326E-401E-4104-8102-E27E4F75BC41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{998BEBC4-76F2-492C-9D16-5206867286B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{998BEBC4-76F2-492C-9D16-5206867286B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{998BEBC4-76F2-492C-9D16-5206867286B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{998BEBC4-76F2-492C-9D16-5206867286B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{662E2DBA-DE30-4711-82FC-73695762E920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{662E2DBA-DE30-4711-82FC-73695762E920}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{662E2DBA-DE30-4711-82FC-73695762E920}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{662E2DBA-DE30-4711-82FC-73695762E920}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82C7F83-762B-4488-A7D4-7612E0B53373}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82C7F83-762B-4488-A7D4-7612E0B53373}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82C7F83-762B-4488-A7D4-7612E0B53373}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82C7F83-762B-4488-A7D4-7612E0B53373}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA77280-F2F3-4A36-A619-BA3866911AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA77280-F2F3-4A36-A619-BA3866911AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA77280-F2F3-4A36-A619-BA3866911AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA77280-F2F3-4A36-A619-BA3866911AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293FA849-CFC1-4692-AC78-BA06E1A4719B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293FA849-CFC1-4692-AC78-BA06E1A4719B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293FA849-CFC1-4692-AC78-BA06E1A4719B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293FA849-CFC1-4692-AC78-BA06E1A4719B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE8516E-2DC4-4776-AB29-A59AA39A90B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE8516E-2DC4-4776-AB29-A59AA39A90B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE8516E-2DC4-4776-AB29-A59AA39A90B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE8516E-2DC4-4776-AB29-A59AA39A90B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5927E4B-8877-44D0-BF13-A42962B1400C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5927E4B-8877-44D0-BF13-A42962B1400C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5927E4B-8877-44D0-BF13-A42962B1400C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5927E4B-8877-44D0-BF13-A42962B1400C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{6B41CC8F-4CA5-4031-B905-768254B70CD7} = {D5717D01-5421-460A-AEC6-16B201467754}
-		{C9FF326E-401E-4104-8102-E27E4F75BC41} = {55CEDD72-C6A5-4279-8676-D103E813438A}
-		{998BEBC4-76F2-492C-9D16-5206867286B7} = {D5717D01-5421-460A-AEC6-16B201467754}
-		{DCDD6600-3C55-42EB-9E6F-23DFB3084D32} = {D5717D01-5421-460A-AEC6-16B201467754}
-		{662E2DBA-DE30-4711-82FC-73695762E920} = {D5717D01-5421-460A-AEC6-16B201467754}
 		{956B4127-97B8-4005-8351-AB94AB66C2EF} = {1078E301-A86F-42BF-BC6E-F6155B423122}
 		{FA302BD0-2381-48D9-8067-339CF9914A8A} = {1078E301-A86F-42BF-BC6E-F6155B423122}
+		{50E49338-21BA-41F6-A769-7F6E5E55356F} = {1078E301-A86F-42BF-BC6E-F6155B423122}
+		{E82C7F83-762B-4488-A7D4-7612E0B53373} = {D5717D01-5421-460A-AEC6-16B201467754}
+		{DEA77280-F2F3-4A36-A619-BA3866911AA1} = {D5717D01-5421-460A-AEC6-16B201467754}
+		{293FA849-CFC1-4692-AC78-BA06E1A4719B} = {D5717D01-5421-460A-AEC6-16B201467754}
+		{1FE8516E-2DC4-4776-AB29-A59AA39A90B8} = {D5717D01-5421-460A-AEC6-16B201467754}
+		{E5927E4B-8877-44D0-BF13-A42962B1400C} = {55CEDD72-C6A5-4279-8676-D103E813438A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E443C2FD-9CF5-49EE-9F79-AEAD24219189}

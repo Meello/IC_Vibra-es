@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Programs in C to solution.
 - Research presentation.
 - Newmark method to beam with dynamic vibration absorber.
+### Changed
+- Folder path of projects.
 
 ## [1.0.0] - 2020-02-29
 ### Added
