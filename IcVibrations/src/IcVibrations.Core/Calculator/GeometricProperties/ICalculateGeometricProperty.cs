@@ -40,7 +40,5 @@ namespace IcVibrations.Calculator.GeometricProperties
         /// <param name="thickness"></param>
         /// <returns></returns>
         Task<double> MomentOfInertia(double height, double width, double? thickness);
-
-        //double StaticalMomentArea(double diameter, double thickness);
     }
 }

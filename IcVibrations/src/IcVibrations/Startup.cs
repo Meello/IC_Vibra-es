@@ -51,7 +51,6 @@ namespace IcVibrations
             services.AddScoped<IBeamWithDvaMainMatrix, BeamWithDvaMainMatrix>();
             services.AddScoped<IRectangularBeamWithPiezoelectricMainMatrix, RectangularBeamWithPiezoelectricMainMatrix>();
             services.AddScoped<ICircularBeamWithPiezoelectricMainMatrix, CircularBeamWithPiezoelectricMainMatrix>();
-            services.AddScoped<ICommonMainMatrix, CommonMainMatrix>();
 
             // Mapper
             services.AddScoped<IMappingResolver, MappingResolver>();

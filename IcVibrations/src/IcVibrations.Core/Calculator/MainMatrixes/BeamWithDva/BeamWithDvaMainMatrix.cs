@@ -1,5 +1,6 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
+﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
+using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
@@ -8,7 +9,8 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
     /// <summary>
     /// It's responsible to calculate the beam with DVA main matrixes.
     /// </summary>
-    public class BeamWithDvaMainMatrix : CommonMainMatrix, IBeamWithDvaMainMatrix
+    public class BeamWithDvaMainMatrix<TProfile> : BeamMainMatrix<TProfile>, IBeamWithDvaMainMatrix
+        where TProfile : Profile, new()
     {
         private readonly IArrayOperation _arrayOperation;
 
@@ -16,7 +18,6 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
         /// Class construtor.
         /// </summary>
         /// <param name="arrayOperation"></param>
-        /// <param name="commonMainMatrix"></param>
         public BeamWithDvaMainMatrix(
             IArrayOperation arrayOperation)
         {
