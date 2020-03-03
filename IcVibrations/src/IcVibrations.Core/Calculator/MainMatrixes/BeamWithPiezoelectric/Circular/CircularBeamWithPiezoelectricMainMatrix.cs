@@ -1,7 +1,5 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.Calculator.MainMatrixes.Beam.Circular;
 using IcVibrations.Core.Models.Piezoelectric;
 using System;
 using System.Threading.Tasks;
@@ -16,12 +14,10 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Circul
         /// <summary>
         /// Class constructor.
         /// </summary>
-        /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public CircularBeamWithPiezoelectricMainMatrix(
-            ICircularBeamMainMatrix beamMainMatrix, 
             IArrayOperation arrayOperation) 
-            : base(beamMainMatrix, arrayOperation)
+            : base(arrayOperation)
         {
         }
 

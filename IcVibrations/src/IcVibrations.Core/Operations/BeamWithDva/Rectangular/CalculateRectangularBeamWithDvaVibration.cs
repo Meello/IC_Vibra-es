@@ -1,7 +1,7 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
-using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva.Rectangular;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
 using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva;
@@ -32,7 +32,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva.Rectangular
             IRectangularProfileValidator profileValidator,
             IAuxiliarOperation auxiliarOperation,
             IRectangularProfileMapper profileMapper,
-            IBeamWithDvaMainMatrix mainMatrix,
+            IRectangularBeamWithDvaMainMatrix mainMatrix,
             IRectangularBeamMainMatrix beamMainMatrix,
             IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, beamMainMatrix, arrayOperation)

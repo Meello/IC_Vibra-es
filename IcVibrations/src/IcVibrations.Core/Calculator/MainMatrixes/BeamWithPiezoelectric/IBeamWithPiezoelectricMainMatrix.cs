@@ -1,7 +1,6 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Common.Profiles;
+using IcVibrations.Core.Calculator.MainMatrixes.Beam;
 using IcVibrations.Core.Models.Piezoelectric;
-using IcVibrations.Models.Beam.Characteristics;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
@@ -10,7 +9,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
     /// It's responsible to calculate the beam with piezoelectric main matrixes.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public interface IBeamWithPiezoelectricMainMatrix<TProfile> : ICommonMainMatrix
+    public interface IBeamWithPiezoelectricMainMatrix<TProfile> : IBeamMainMatrix<TProfile>
         where TProfile : Profile, new()
     {
         /// <summary>
@@ -57,7 +56,6 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// It's responsible to calculate piezoelectric capacitance matrix.
         /// </summary>
         /// <param name="beamWithPiezoelectric"></param>
-        /// <param name="numberOfElements"></param>
         /// <returns></returns>
         Task<double[,]> CalculatePiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric);
 
@@ -65,6 +63,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric
         /// It's responsible to calculate element piezoelectric capacitance matrix.
         /// </summary>
         /// <param name="beamWithPiezoelectric"></param>
+        /// <param name="elementIndex"></param>
         /// <returns></returns>
         Task<double[,]> CalculateElementPiezoelectricCapacitance(BeamWithPiezoelectric<TProfile> beamWithPiezoelectric, uint elementIndex);
 

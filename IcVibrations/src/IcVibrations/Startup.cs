@@ -1,9 +1,9 @@
 ﻿using IcVibrations.Calculator.GeometricProperties;
-using IcVibrations.Calculator.MainMatrixes;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam.Circular;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
-using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva.Circular;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva.Rectangular;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Circular;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectangular;
 using IcVibrations.Core.Mapper;
@@ -48,7 +48,8 @@ namespace IcVibrations
             // Calculator - MainMatrix
             services.AddScoped<IRectangularBeamMainMatrix, RectangularBeamMainMatrix>();
             services.AddScoped<ICircularBeamMainMatrix, CircularBeamMainMatrix>();
-            services.AddScoped<IBeamWithDvaMainMatrix, BeamWithDvaMainMatrix>();
+            services.AddScoped<ICircularBeamWithDvaMainMatrix, CircularBeamWithDvaMainMatrix>();
+            services.AddScoped<IRectangularBeamWithDvaMainMatrix, RectangularBeamWithDvaMainMatrix>();
             services.AddScoped<IRectangularBeamWithPiezoelectricMainMatrix, RectangularBeamWithPiezoelectricMainMatrix>();
             services.AddScoped<ICircularBeamWithPiezoelectricMainMatrix, CircularBeamWithPiezoelectricMainMatrix>();
 

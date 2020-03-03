@@ -1,7 +1,5 @@
-﻿using IcVibrations.Calculator.MainMatrixes;
-using IcVibrations.Common.Profiles;
+﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
-using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
 using IcVibrations.Core.Models;
 using IcVibrations.Core.Models.Piezoelectric;
 using System;
@@ -17,12 +15,10 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectan
         /// <summary>
         /// Class constructor.
         /// </summary>
-        /// <param name="beamMainMatrix"></param>
         /// <param name="arrayOperation"></param>
         public RectangularBeamWithPiezoelectricMainMatrix(
-            IRectangularBeamMainMatrix beamMainMatrix,
             IArrayOperation arrayOperation)
-            : base(beamMainMatrix, arrayOperation)
+            : base(arrayOperation)
         {
         }
 

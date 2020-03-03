@@ -26,7 +26,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
         private readonly IMappingResolver _mappingResolver;
         private readonly IAuxiliarOperation _auxiliarOperation;
         private readonly IProfileMapper<TProfile> _profileMapper;
-        private readonly IBeamWithDvaMainMatrix _mainMatrix;
+        private readonly IBeamWithDvaMainMatrix<TProfile> _mainMatrix;
         private readonly IBeamMainMatrix<TProfile> _beamMainMatrix;
         private readonly IArrayOperation _arrayOperation;
 
@@ -47,7 +47,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             IProfileValidator<TProfile> profileValidator,
             IAuxiliarOperation auxiliarOperation,
             IProfileMapper<TProfile> profileMapper,
-            IBeamWithDvaMainMatrix mainMatrix,
+            IBeamWithDvaMainMatrix<TProfile> mainMatrix,
             IBeamMainMatrix<TProfile> beamMainMatrix,
             IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)

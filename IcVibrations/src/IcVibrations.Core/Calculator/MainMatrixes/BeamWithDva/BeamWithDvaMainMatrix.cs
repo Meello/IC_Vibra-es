@@ -9,7 +9,7 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
     /// <summary>
     /// It's responsible to calculate the beam with DVA main matrixes.
     /// </summary>
-    public class BeamWithDvaMainMatrix<TProfile> : BeamMainMatrix<TProfile>, IBeamWithDvaMainMatrix
+    public abstract class BeamWithDvaMainMatrix<TProfile> : BeamMainMatrix<TProfile>, IBeamWithDvaMainMatrix<TProfile>
         where TProfile : Profile, new()
     {
         private readonly IArrayOperation _arrayOperation;
@@ -86,6 +86,14 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva
             return hardnessWithDva;
         }
 
+        /// <summary>
+        /// Responsible to calculate the bondary conditions matrix of the beam with dynamic vibration absorbers.
+        /// </summary>
+        /// <param name="firstFastening"></param>
+        /// <param name="lastFastening"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <param name="numberOfDvas"></param>
+        /// <returns></returns>
         public Task<bool[]> CalculateBondaryCondition(Fastening firstFastening, Fastening lastFastening, uint degreesFreedomMaximum, uint numberOfDvas)
         {
             uint size = degreesFreedomMaximum + numberOfDvas;

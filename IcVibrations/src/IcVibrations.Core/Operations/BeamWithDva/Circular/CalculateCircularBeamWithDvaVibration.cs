@@ -1,7 +1,7 @@
 ﻿using IcVibrations.Common.Profiles;
 using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.Beam.Circular;
-using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva;
+using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva.Circular;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Circular;
 using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva;
@@ -32,7 +32,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva.Circular
             ICircularProfileValidator profileValidator,
             IAuxiliarOperation auxiliarOperation,
             ICircularProfileMapper profileMapper,
-            IBeamWithDvaMainMatrix mainMatrix,
+            ICircularBeamWithDvaMainMatrix mainMatrix,
             ICircularBeamMainMatrix beamMainMatrix,
             IArrayOperation arrayOperation)
             : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation, profileMapper, mainMatrix, beamMainMatrix, arrayOperation)
