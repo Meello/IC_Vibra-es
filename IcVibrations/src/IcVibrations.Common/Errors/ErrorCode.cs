@@ -7,5 +7,7 @@
         public const string CircularProfile = "011";
 
         public const string RectangularProfile = "012";
+
+        public const string NewmarkMethod = "100";
     }
 }

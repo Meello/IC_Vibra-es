@@ -27,6 +27,10 @@ namespace IcVibrations.Core.Mapper.Profiles.Circular
             this._calculateGeometricProperty = calculateGeometricProperty;
         }
 
+        /// <summary>
+        /// Method to build the circular profile.
+        /// </summary>
+        /// <param name="degreesFreedomMaximum"></param>
         public async override Task<GeometricProperty> Execute(CircularProfile profile, uint degreesFreedomMaximum)
         {
             GeometricProperty geometricProperty = new GeometricProperty();

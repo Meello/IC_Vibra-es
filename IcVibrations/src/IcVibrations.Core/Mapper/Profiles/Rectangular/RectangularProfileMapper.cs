@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Mapper.Profiles.Rectangular
 {
+    /// <summary>
+    /// It's responsible to build a rectangular profile.
+    /// </summary>
     public class RectangularProfileMapper : ProfileMapper<RectangularProfile>, IRectangularProfileMapper
     {
         private readonly IArrayOperation _arrayOperation;
@@ -24,6 +27,12 @@ namespace IcVibrations.Core.Mapper.Profiles.Rectangular
             this._arrayOperation = arrayOperation;
         }
 
+        /// <summary>
+        /// Method to build the rectangular profile.
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public async override Task<GeometricProperty> Execute(RectangularProfile profile, uint degreesFreedomMaximum)
         {
             GeometricProperty geometricProperty = new GeometricProperty();

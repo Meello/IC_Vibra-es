@@ -26,40 +26,55 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva
             this._arrayOperation = arrayOperation;
         }
 
-        protected override async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration, uint numberOfTrueBoundaryConditions)
+        /// <summary>
+        /// It's responsible to calculate the equivalent force to a beam with dynamic vibration absorbers.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="previousDisplacement"></param>
+        /// <param name="previousVelocity"></param>
+        /// <param name="previousAcceleration"></param>
+        /// <returns></returns>
+        protected override async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration)
         {
-            if (previousDisplacement.Length != numberOfTrueBoundaryConditions)
+            if (previousDisplacement.Length != input.NumberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of displacement: {previousDisplacement.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+                throw new Exception($"Lenth of displacement: {previousDisplacement.Length} have to be equals to number of true bondary conditions: {input.NumberOfTrueBoundaryConditions}.");
             }
 
-            if (previousVelocity.Length != numberOfTrueBoundaryConditions)
+            if (previousVelocity.Length != input.NumberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of velocity: {previousVelocity.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+                throw new Exception($"Lenth of velocity: {previousVelocity.Length} have to be equals to number of true bondary conditions: {input.NumberOfTrueBoundaryConditions}.");
             }
 
-            if (previousAcceleration.Length != numberOfTrueBoundaryConditions)
+            if (previousAcceleration.Length != input.NumberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of acceleration: {previousAcceleration.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+                throw new Exception($"Lenth of acceleration: {previousAcceleration.Length} have to be equals to number of true bondary conditions: {input.NumberOfTrueBoundaryConditions}.");
             }
 
-            double[] equivalentVelocity = await base.CalculateEquivalentVelocity(previousDisplacement, previousVelocity, previousAcceleration, numberOfTrueBoundaryConditions);
-            double[] equivalentAcceleration = await base.CalculateEquivalentAcceleration(previousDisplacement, previousVelocity, previousAcceleration, numberOfTrueBoundaryConditions);
+            double[] equivalentVelocity = await base.CalculateEquivalentVelocity(previousDisplacement, previousVelocity, previousAcceleration, input.NumberOfTrueBoundaryConditions);
+            double[] equivalentAcceleration = await base.CalculateEquivalentAcceleration(previousDisplacement, previousVelocity, previousAcceleration, input.NumberOfTrueBoundaryConditions);
 
-            double[,] mass = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
-            double[,] damping = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
+            double[,] mass = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
+            double[,] damping = new double[input.NumberOfTrueBoundaryConditions, input.NumberOfTrueBoundaryConditions];
 
-            for (int i = 0; i < numberOfTrueBoundaryConditions; i++)
+            for (int i = 0; i < input.NumberOfTrueBoundaryConditions; i++)
             {
-                for (int j = 0; j < numberOfTrueBoundaryConditions; j++)
+                for (int j = 0; j < input.NumberOfTrueBoundaryConditions; j++)
                 {
-                    mass[i, j] = input.Mass[i, j];
-                    damping[i, j] = input.Damping[i, j];
+                    try
+                    {
+                        mass[i, j] = input.Mass[i, j];
+                        damping[i, j] = input.Damping[i, j];
+                    }
+                    catch
+                    {
+                        throw new ArgumentOutOfRangeException($"Error creating mass and damping matrixes. Stoped in position: {i}, {j}.");
+                    }
                 }
             }
 
-            double[] mass_accel = await this._arrayOperation.Multiply(mass, equivalentAcceleration, $"{nameof(input.Mass)} and {nameof(equivalentAcceleration)}");
-            double[] damping_vel = await this._arrayOperation.Multiply(damping, equivalentVelocity, $"{nameof(input.Damping)} and {nameof(equivalentVelocity)}");
+            double[] mass_accel = await this._arrayOperation.Multiply(mass, equivalentAcceleration, $"{nameof(mass)} and {nameof(equivalentAcceleration)}");
+            double[] damping_vel = await this._arrayOperation.Multiply(damping, equivalentVelocity, $"{nameof(damping)} and {nameof(equivalentVelocity)}");
 
             double[] equivalentForce = await this._arrayOperation.Sum(input.Force, mass_accel, damping_vel, $"{nameof(input.Force)}, {nameof(mass_accel)} and {nameof(damping_vel)}");
 

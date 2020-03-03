@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IcVibrations.Models.Beam.Characteristics
+﻿namespace IcVibrations.Models.Beam.Characteristics
 {
+    /// <summary>
+    /// It represents the geometric property used for calculations.
+    /// </summary>
     public class GeometricProperty
     {
-
         public double[] Area { get; set; }
 
         public double[] MomentOfInertia { get; set; }

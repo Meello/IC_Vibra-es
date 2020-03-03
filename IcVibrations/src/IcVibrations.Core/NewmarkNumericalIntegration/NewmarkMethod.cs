@@ -1,4 +1,5 @@
-﻿using IcVibrations.Core.Calculator.ArrayOperations;
+﻿using IcVibrations.Common.ErrorCodes;
+using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Models;
 using IcVibrations.DataContracts;
@@ -25,7 +26,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
         /// Class construtor.
         /// </summary>
         /// <param name="arrayOperation"></param>
-        /// <param name="auxiliarOperation"></param>
         public NewmarkMethod(
             IArrayOperation arrayOperation,
             IAuxiliarOperation auxiliarOperation)
@@ -34,12 +34,6 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             this._auxiliarOperation = auxiliarOperation;
         }
 
-        /// <summary>
-        /// It's responsivel to generate the response content to Newmark integration method.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="response"></param>
-        /// <returns></returns>
         public async Task CalculateResponse(NewmarkMethodInput input, OperationResponseBase response)
         {
             int angularFrequencyLoopCount;
@@ -52,16 +46,10 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
                 angularFrequencyLoopCount = 1;
             }
 
+            //Parallel.For
             for (int i = 0; i < angularFrequencyLoopCount; i++)
             {
-                if (angularFrequencyLoopCount == 1)
-                {
-                    input.AngularFrequency = input.Parameter.InitialAngularFrequency;
-                }
-                else
-                {
-                    input.AngularFrequency = (input.Parameter.InitialAngularFrequency + i * input.Parameter.DeltaAngularFrequency.Value);
-                }
+                input.AngularFrequency = (input.Parameter.InitialAngularFrequency + i * input.Parameter.DeltaAngularFrequency.Value);
 
                 if (input.AngularFrequency != 0)
                 {
@@ -83,18 +71,18 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
                 try
                 {
-                    //this._auxiliarOperation.WriteInFile(input.AngularFrequency);
+                    this._auxiliarOperation.WriteInFile(input.AngularFrequency);
                     await Solution(input);
                 }
                 catch (Exception ex)
                 {
-                    response.AddError("000", $"Error executing the solution. {ex.Message}");
+                    response.AddError(ErrorCode.NewmarkMethod, $"Error executing the solution. {ex.Message}");
                     return;
                 }
             }
         }
 
-        private async Task Solution(NewmarkMethodInput input)
+        protected async Task Solution(NewmarkMethodInput input)
         {
             double time = input.Parameter.InitialTime;
 
@@ -153,48 +141,79 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
 
         protected async Task<double[]> CalculateDisplacement(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration)
         {
-            double[,] equivalentHardness = await this.CalculateEquivalentHardness(input.Mass, input.Damping, input.Hardness, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
+            if (previousDisplacement.Length != input.NumberOfTrueBoundaryConditions)
+            {
+                throw new Exception($"Lenth of displacement: {previousDisplacement.Length} have to be equals to number of true bondary conditions: {input.NumberOfTrueBoundaryConditions}.");
+            }
+
+            if (previousVelocity.Length != input.NumberOfTrueBoundaryConditions)
+            {
+                throw new Exception($"Lenth of velocity: {previousVelocity.Length} have to be equals to number of true bondary conditions: {input.NumberOfTrueBoundaryConditions}.");
+            }
+
+            if (previousAcceleration.Length != input.NumberOfTrueBoundaryConditions)
+            {
+                throw new Exception($"Lenth of acceleration: {previousAcceleration.Length} have to be equals to number of true bondary conditions: {input.NumberOfTrueBoundaryConditions}.");
+            }
+
+            double[,] equivalentHardness = await this.CalculateEquivalentHardness(input.Mass, input.Hardness, input.Damping, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
             double[,] inversedEquivalentHardness = await this._arrayOperation.InverseMatrix(equivalentHardness, nameof(equivalentHardness)).ConfigureAwait(false);
 
-            double[] equivalentForce = await this.CalculateEquivalentForce(input, previousDisplacement, previousVelocity, previousAcceleration, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
+            double[] equivalentForce = await this.CalculateEquivalentForce(input, previousDisplacement, previousVelocity, previousAcceleration).ConfigureAwait(false);
 
             return await this._arrayOperation.Multiply(equivalentForce, inversedEquivalentHardness, $"{nameof(equivalentForce)}, {nameof(inversedEquivalentHardness)}");
         }
 
-        protected virtual async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration, uint numberOfTrueBoundaryConditions)
+        /// <summary>
+        /// Calculates the equivalent force to calculate the displacement in Newmark method.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="previousDisplacement"></param>
+        /// <param name="previousVelocity"></param>
+        /// <param name="previousAcceleration"></param>
+        /// <returns></returns>
+        protected virtual async Task<double[]> CalculateEquivalentForce(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration)
         {
-            if (previousDisplacement.Length != numberOfTrueBoundaryConditions)
+            int massRow = input.Mass.GetLength(0);
+            int massColumn = input.Mass.GetLength(1);
+            int massLength = input.Mass.Length;
+            int dampingRow = input.Damping.GetLength(0);
+            int dampingColumn = input.Damping.GetLength(1);
+            int dampingLength = input.Damping.Length;
+            int forceLength = input.Force.Length;
+
+            if (massRow != massColumn)
             {
-                throw new Exception($"Lenth of displacement: {previousDisplacement.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+                throw new IndexOutOfRangeException($"Mass matrix must be a square matrix. Sizes: {massRow}x{massColumn}.");
             }
 
-            if (previousVelocity.Length != numberOfTrueBoundaryConditions)
+            if (massRow < input.NumberOfTrueBoundaryConditions || massColumn < input.NumberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of velocity: {previousVelocity.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+                throw new IndexOutOfRangeException($"Sizes of mass matrix must be at least equals to {input.NumberOfTrueBoundaryConditions }. Mass sizes: {massRow}x{massColumn}.");
             }
 
-            if (previousAcceleration.Length != numberOfTrueBoundaryConditions)
+            if (dampingRow != dampingColumn)
             {
-                throw new Exception($"Lenth of acceleration: {previousAcceleration.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
+                throw new IndexOutOfRangeException($"Damping matrix must be a square matrix. Sizes: {dampingRow}x{dampingColumn}.");
             }
 
-            if (input.Mass.Length != Math.Pow(numberOfTrueBoundaryConditions, 2))
+            if (dampingRow < input.NumberOfTrueBoundaryConditions || dampingColumn < input.NumberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of input mass: {input.Mass.Length} have to be equals to number of true bondary conditions squared: {Math.Pow(numberOfTrueBoundaryConditions, 2)}.");
+                throw new IndexOutOfRangeException($"Sizes of damping matrix must be at least equals to {input.NumberOfTrueBoundaryConditions }. Damping sizes: {dampingRow}x{dampingColumn}.");
             }
 
-            if (input.Damping.Length != Math.Pow(numberOfTrueBoundaryConditions, 2))
+            if (forceLength < input.NumberOfTrueBoundaryConditions)
             {
-                throw new Exception($"Lenth of input damping: {input.Damping.Length} have to be equals to number of true bondary conditions squared: {Math.Pow(numberOfTrueBoundaryConditions, 2)}.");
+                throw new IndexOutOfRangeException($"Size of force vector must be at least equals to {input.NumberOfTrueBoundaryConditions}.");
+            }
+            
+            if (massLength != dampingLength)
+            {
+                throw new IndexOutOfRangeException($"Length of mass: {massLength} and damping: {dampingLength} must be equals.");
             }
 
-            if (input.Force.Length != numberOfTrueBoundaryConditions)
-            {
-                throw new Exception($"Lenth of input force: {input.Force.Length} have to be equals to number of true bondary conditions: {numberOfTrueBoundaryConditions}.");
-            }
-
-            double[] equivalentVelocity = await this.CalculateEquivalentVelocity(previousDisplacement, previousVelocity, previousAcceleration, numberOfTrueBoundaryConditions);
-            double[] equivalentAcceleration = await this.CalculateEquivalentAcceleration(previousDisplacement, previousVelocity, previousAcceleration, numberOfTrueBoundaryConditions);
+            double[] equivalentVelocity = await this.CalculateEquivalentVelocity(previousDisplacement, previousVelocity, previousAcceleration, input.NumberOfTrueBoundaryConditions);
+            double[] equivalentAcceleration = await this.CalculateEquivalentAcceleration(previousDisplacement, previousVelocity, previousAcceleration, input.NumberOfTrueBoundaryConditions);
 
             double[] mass_accel = await this._arrayOperation.Multiply(input.Mass, equivalentAcceleration, $"{nameof(input.Mass)} and {nameof(equivalentAcceleration)}");
             double[] damping_vel = await this._arrayOperation.Multiply(input.Damping, equivalentVelocity, $"{nameof(input.Damping)} and {nameof(equivalentVelocity)}");
@@ -204,8 +223,35 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return equivalentForce;
         }
 
+        /// <summary>
+        /// Calculates the equivalent aceleration to calculate the equivalent force.
+        /// </summary>
+        /// <param name="displacement"></param>
+        /// <param name="velocity"></param>
+        /// <param name="acceleration"></param>
+        /// <param name="numberOfTrueBondaryConditions"></param>
+        /// <returns></returns>
         protected Task<double[]> CalculateEquivalentAcceleration(double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryConditions)
         {
+            int displacementLength = displacement.Length;
+            int velocityLength = velocity.Length;
+            int accelerationLength = acceleration.Length;
+
+            if (displacementLength != numberOfTrueBondaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Size of displacement must be equals to {numberOfTrueBondaryConditions}.");
+            }
+
+            if (velocityLength != numberOfTrueBondaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Size of velocity must be equals to {numberOfTrueBondaryConditions}.");
+            }
+
+            if (accelerationLength != numberOfTrueBondaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Size of acceleration must be equals to {numberOfTrueBondaryConditions}.");
+            }
+
             double[] equivalentAcceleration = new double[numberOfTrueBondaryConditions];
 
             for (int i = 0; i < numberOfTrueBondaryConditions; i++)
@@ -216,8 +262,35 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return Task.FromResult(equivalentAcceleration);
         }
 
+        /// <summary>
+        /// Calculates the equivalent velocity to calculate the equivalent force.
+        /// </summary>
+        /// <param name="displacement"></param>
+        /// <param name="velocity"></param>
+        /// <param name="acceleration"></param>
+        /// <param name="numberOfTrueBondaryConditions"></param>
+        /// <returns></returns>
         protected Task<double[]> CalculateEquivalentVelocity(double[] displacement, double[] velocity, double[] acceleration, uint numberOfTrueBondaryConditions)
         {
+            int displacementLength = displacement.Length;
+            int velocityLength = velocity.Length;
+            int accelerationLength = acceleration.Length;
+
+            if (displacementLength != numberOfTrueBondaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Size of displacement must be equals to {numberOfTrueBondaryConditions}.");
+            }
+
+            if (velocityLength != numberOfTrueBondaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Size of velocity must be equals to {numberOfTrueBondaryConditions}.");
+            }
+
+            if (accelerationLength != numberOfTrueBondaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Size of acceleration must be equals to {numberOfTrueBondaryConditions}.");
+            }
+
             double[] equivalentVelocity = new double[numberOfTrueBondaryConditions];
 
             for (int i = 0; i < numberOfTrueBondaryConditions; i++)
@@ -228,8 +301,61 @@ namespace IcVibrations.Core.NewmarkNumericalIntegration
             return Task.FromResult(equivalentVelocity);
         }
 
-        protected Task<double[,]> CalculateEquivalentHardness(double[,] mass, double[,] damping, double[,] hardness, uint numberOfTrueBoundaryConditions)
+        /// <summary>
+        /// Calculates the equivalent hardness to calculate the displacement in Newmark method.
+        /// </summary>
+        /// <param name="mass"></param>
+        /// <param name="damping"></param>
+        /// <param name="hardness"></param>
+        /// <param name="numberOfTrueBoundaryConditions"></param>
+        /// <returns></returns>
+        protected Task<double[,]> CalculateEquivalentHardness(double[,] mass, double[,] hardness, double[,] damping, uint numberOfTrueBoundaryConditions)
         {
+            int massRow = mass.GetLength(0);
+            int massColumn = mass.GetLength(1);
+            int massLength = mass.Length;
+            int hardnessRow = hardness.GetLength(0);
+            int hardnessColumn = hardness.GetLength(1);
+            int hardnessLength = hardness.Length;
+            int dampingRow = damping.GetLength(0);
+            int dampingColumn = damping.GetLength(1);
+            int dampingLength = damping.Length;
+
+            if(massRow != massColumn)
+            {
+                throw new IndexOutOfRangeException($"Mass matrix must be a square matrix. Sizes: {massRow}x{massColumn}.");
+            }
+
+            if (massRow < numberOfTrueBoundaryConditions || massColumn < numberOfTrueBoundaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Sizes of mass matrix must be at least equals to {numberOfTrueBoundaryConditions}. Mass sizes: {massRow}x{massColumn}.");
+            }
+
+            if (hardnessRow != hardnessColumn)
+            {
+                throw new IndexOutOfRangeException($"Hardness matrix must be a square matrix. Sizes: {hardnessRow}x{hardnessColumn}.");
+            }
+
+            if (hardnessRow < numberOfTrueBoundaryConditions || hardnessColumn < numberOfTrueBoundaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Sizes of hardness matrix must be at least equals to {numberOfTrueBoundaryConditions}. Hardness sizes: {hardnessRow}x{hardnessColumn}.");
+            }
+
+            if (dampingRow != dampingColumn)
+            {
+                throw new IndexOutOfRangeException($"Damping matrix must be a square matrix. Sizes: {dampingRow}x{dampingColumn}.");
+            }
+
+            if (dampingRow < numberOfTrueBoundaryConditions || dampingColumn < numberOfTrueBoundaryConditions)
+            {
+                throw new IndexOutOfRangeException($"Sizes of damping matrix must be at least equals to {numberOfTrueBoundaryConditions}. Damping sizes: {dampingRow}x{dampingColumn}.");
+            }
+
+            if (massLength != hardnessLength || massLength != dampingLength || hardnessLength != dampingLength)
+            {
+                throw new IndexOutOfRangeException($"Length of mass: {massLength}, hardness: {hardnessLength} and damping: {dampingLength} must be equal.");
+            }
+
             double[,] equivalentHardness = new double[numberOfTrueBoundaryConditions, numberOfTrueBoundaryConditions];
 
             for (int i = 0; i < numberOfTrueBoundaryConditions; i++)

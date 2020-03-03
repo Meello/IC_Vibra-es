@@ -1,5 +1,8 @@
 ﻿namespace IcVibrations.Core.Models
 {
+    /// <summary>
+    /// It contains the constants used in the application.
+    /// </summary>
     public class Constants
     {
         public const int NodesPerElement = 2;

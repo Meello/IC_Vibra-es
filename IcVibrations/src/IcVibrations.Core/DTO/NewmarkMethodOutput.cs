@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 namespace IcVibrations.Core.DTO
 {
-    /// <summary>
-    /// It represents the 
-    /// </summary>
     public class NewmarkMethodResponse
     {
         /// <summary>
