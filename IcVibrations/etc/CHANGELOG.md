@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Research presentation.
 - Newmark method to beam with dynamic vibration absorber.
 - Sumary in classes.
-- Throw exceptions when invalid values are calculated.
+- Validators.
 ### Changed
 - Folder path of projects.
 - Simplified ArrayOperation.
