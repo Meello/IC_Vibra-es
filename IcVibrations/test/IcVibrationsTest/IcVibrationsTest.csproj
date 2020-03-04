@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Mapper\**" />
+    <Compile Remove="Methods\**" />
+    <Compile Remove="Operations\**" />
+    <Compile Remove="Validators\**" />
+    <EmbeddedResource Remove="Mapper\**" />
+    <EmbeddedResource Remove="Methods\**" />
+    <EmbeddedResource Remove="Operations\**" />
+    <EmbeddedResource Remove="Validators\**" />
+    <None Remove="Mapper\**" />
+    <None Remove="Methods\**" />
+    <None Remove="Operations\**" />
+    <None Remove="Validators\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="1.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\IcVibrations.Common\IcVibrations.Common.csproj" />
+    <ProjectReference Include="..\..\src\IcVibrations.Core\IcVibrations.Core.csproj" />
+    <ProjectReference Include="..\..\src\IcVibrations.DataContract\IcVibrations.DataContracts.csproj" />
+  </ItemGroup>
+
+</Project>
