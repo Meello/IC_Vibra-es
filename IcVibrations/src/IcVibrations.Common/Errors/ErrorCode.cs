@@ -9,5 +9,7 @@
         public const string RectangularProfile = "012";
 
         public const string NewmarkMethod = "100";
+
+        public const string NewmarkMethodInput = "101";
     }
 }

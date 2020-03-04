@@ -9,14 +9,15 @@ using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectangula
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Circular;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
-using IcVibrations.Core.NewmarkNumericalIntegration;
-using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva;
+using IcVibrations.Core.NumericalIntegrationMethods.Newmark;
+using IcVibrations.Core.NumericalIntegrationMethods.Newmark.BeamWithDva;
 using IcVibrations.Core.Operations.Beam.Circular;
 using IcVibrations.Core.Operations.Beam.Rectangular;
 using IcVibrations.Core.Operations.BeamWithDva.Circular;
 using IcVibrations.Core.Operations.BeamWithDva.Rectangular;
 using IcVibrations.Core.Operations.BeamWithPiezoelectric.Circular;
 using IcVibrations.Core.Operations.BeamWithPiezoelectric.Rectangular;
+using IcVibrations.Core.Validators.NumericalIntegrationMethods.Newmark;
 using IcVibrations.Core.Validators.Profiles.Circular;
 using IcVibrations.Core.Validators.Profiles.Rectangular;
 using IcVibrations.Methods.AuxiliarOperations;
@@ -80,6 +81,7 @@ namespace IcVibrations
             // Validators
             services.AddScoped<IRectangularProfileValidator, RectangularProfileValidator>();
             services.AddScoped<ICircularProfileValidator, CircularProfileValidator>();
+            services.AddScoped<INewmarkMethodValidator, NewmarkMethodValidator>();
 
             services.AddControllers();
 

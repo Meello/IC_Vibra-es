@@ -4,7 +4,7 @@ using IcVibrations.Core.DTO;
 using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Models.Beam;
-using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NumericalIntegrationMethods.Newmark;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.CalculateVibration;
 using IcVibrations.Methods.AuxiliarOperations;

@@ -4,7 +4,7 @@ using IcVibrations.Core.Calculator.MainMatrixes.Beam.Rectangular;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva.Rectangular;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
-using IcVibrations.Core.NewmarkNumericalIntegration.BeamWithDva;
+using IcVibrations.Core.NumericalIntegrationMethods.Newmark.BeamWithDva;
 using IcVibrations.Core.Validators.Profiles.Rectangular;
 using IcVibrations.Methods.AuxiliarOperations;
 

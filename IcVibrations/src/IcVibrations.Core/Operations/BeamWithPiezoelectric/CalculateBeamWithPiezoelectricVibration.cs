@@ -6,7 +6,7 @@ using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
 using IcVibrations.Core.Mapper.Profiles;
 using IcVibrations.Core.Models.Piezoelectric;
-using IcVibrations.Core.NewmarkNumericalIntegration;
+using IcVibrations.Core.NumericalIntegrationMethods.Newmark;
 using IcVibrations.Core.Validators.Profiles;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
 using IcVibrations.Methods.AuxiliarOperations;
