@@ -1,14 +1,3 @@
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\bin\Debug\netstandard2.1\IcVibrations.DataContracts.deps.json
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\bin\Debug\netstandard2.1\IcVibrations.DataContracts.dll
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\bin\Debug\netstandard2.1\IcVibrations.DataContracts.pdb
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\bin\Debug\netstandard2.1\IcVibrations.Common.dll
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\bin\Debug\netstandard2.1\IcVibrations.Common.pdb
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\obj\Debug\netstandard2.1\IcVibrations.DataContracts.csprojAssemblyReference.cache
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\obj\Debug\netstandard2.1\IcVibrations.DataContracts.AssemblyInfoInputs.cache
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\obj\Debug\netstandard2.1\IcVibrations.DataContracts.AssemblyInfo.cs
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\obj\Debug\netstandard2.1\IcVibrations.DataContracts.csproj.CopyComplete
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\obj\Debug\netstandard2.1\IcVibrations.DataContracts.dll
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\IcVibrations.DataContract\obj\Debug\netstandard2.1\IcVibrations.DataContracts.pdb
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.DataContract\bin\Debug\netstandard2.1\IcVibrations.DataContracts.deps.json
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.DataContract\bin\Debug\netstandard2.1\IcVibrations.DataContracts.dll
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.DataContract\bin\Debug\netstandard2.1\IcVibrations.DataContracts.pdb
