@@ -25,7 +25,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "piezoelectric", "piezoelectric", "{FA302BD0-2381-48D9-8067-339CF9914A8A}"
 	ProjectSection(SolutionItems) = preProject
 		programs in C\piezoelectric\dados_piezo.inp = programs in C\piezoelectric\dados_piezo.inp
-		..\Programas em C\programapiezo\NEWMARK_com_PIEZOELETRICO_28-01.CPP = ..\Programas em C\programapiezo\NEWMARK_com_PIEZOELETRICO_28-01.CPP
+		programs in C\piezoelectric\NEWMARK_com_PIEZOELETRICO_28-01.CPP = programs in C\piezoelectric\NEWMARK_com_PIEZOELETRICO_28-01.CPP
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "attempts", "attempts", "{50E49338-21BA-41F6-A769-7F6E5E55356F}"

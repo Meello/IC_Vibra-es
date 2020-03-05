@@ -25,7 +25,8 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark.BeamWithDva
             IAuxiliarOperation auxiliarOperation,
             INewmarkMethodValidator validator)
             : base(arrayOperation, auxiliarOperation, validator) 
-        { 
+        {
+            this._arrayOperation = arrayOperation;
         }
 
 

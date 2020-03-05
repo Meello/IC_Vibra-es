@@ -7,7 +7,7 @@ namespace IcVibrations.DataContracts.CalculateVibration.BeamWithDynamicVibration
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
     public class CalculateBeamWithDvaVibrationRequest<TProfile> : CalculateVibrationRequest<TProfile, BeamWithDvaRequestData<TProfile>>
-        where TProfile : Profile
+        where TProfile : Profile, new()
     {
     }
 }

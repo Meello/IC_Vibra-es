@@ -50,7 +50,7 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             IBeamWithDvaMainMatrix<TProfile> mainMatrix,
             IBeamMainMatrix<TProfile> beamMainMatrix,
             IArrayOperation arrayOperation)
-            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
+            : base(newmarkMethod, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
             this._auxiliarOperation = auxiliarOperation;

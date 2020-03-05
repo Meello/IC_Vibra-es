@@ -22,12 +22,11 @@ namespace IcVibrations.Core.Operations
     /// <typeparam name="TBeam"></typeparam>
     public abstract class CalculateVibration<TRequest, TRequestData, TProfile, TBeam> : OperationBase<TRequest, CalculateVibrationResponse>, ICalculateVibration<TRequest, TRequestData, TProfile, TBeam>
         where TProfile : Profile, new()
-        where TRequestData : CalculateVibrationRequestData<TProfile>, new()
+        where TRequestData : IBeamRequestData<TProfile>, new()
         where TRequest : CalculateVibrationRequest<TProfile, TRequestData>
         where TBeam : AbstractBeam<TProfile>, new()
     {
         private readonly INewmarkMethod _newmarkMethod;
-        private readonly IMappingResolver _mappingResolver;
         private readonly IProfileValidator<TProfile> _profileValidator;
         private readonly IAuxiliarOperation _auxiliarOperation;
 
@@ -35,17 +34,14 @@ namespace IcVibrations.Core.Operations
         /// Class construtor.
         /// </summary>
         /// <param name="newmarkMethod"></param>
-        /// <param name="mappingResolver"></param>
         /// <param name="profileValidator"></param>
         /// <param name="auxiliarOperation"></param>
         public CalculateVibration(
             INewmarkMethod newmarkMethod,
-            IMappingResolver mappingResolver,
             IProfileValidator<TProfile> profileValidator,
             IAuxiliarOperation auxiliarOperation)
         {
             this._newmarkMethod = newmarkMethod;
-            this._mappingResolver = mappingResolver;
             this._profileValidator = profileValidator;
             this._auxiliarOperation = auxiliarOperation;
         }
@@ -98,7 +94,11 @@ namespace IcVibrations.Core.Operations
         {
             CalculateVibrationResponse response = new CalculateVibrationResponse();
 
-            if(!await this._profileValidator.Execute(request.BeamData.Profile, response))
+            bool isProfileValid = await this._profileValidator.Execute(request.BeamData.Profile, response);
+
+            bool isRequestValid;
+
+            if (!isProfileValid)
             {
                 return response;
             }

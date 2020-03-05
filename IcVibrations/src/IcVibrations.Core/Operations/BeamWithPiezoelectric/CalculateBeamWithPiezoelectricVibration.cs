@@ -46,7 +46,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             IProfileMapper<TProfile> profileMapper,
             IBeamWithPiezoelectricMainMatrix<TProfile> mainMatrix,
             IArrayOperation arrayOperation)
-            : base(newmarkMethod, mappingResolver, profileValidator, auxiliarOperation)
+            : base(newmarkMethod, profileValidator, auxiliarOperation)
         {
             this._mappingResolver = mappingResolver;
             this._auxiliarOperation = auxiliarOperation;

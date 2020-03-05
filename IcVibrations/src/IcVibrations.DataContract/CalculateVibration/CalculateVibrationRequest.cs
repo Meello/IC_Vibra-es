@@ -8,8 +8,8 @@ namespace IcVibrations.DataContracts.CalculateVibration
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
     public abstract class CalculateVibrationRequest<TProfile, TRequestData> : OperationRequestBase
-        where TProfile : Profile
-        where TRequestData : CalculateVibrationRequestData<TProfile>
+        where TProfile : Profile, new()
+        where TRequestData : IBeamRequestData<TProfile>
     {
         public TRequestData BeamData { get; set; }
 
