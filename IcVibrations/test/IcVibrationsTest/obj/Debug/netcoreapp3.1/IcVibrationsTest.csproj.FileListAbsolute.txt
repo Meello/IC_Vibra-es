@@ -202,6 +202,14 @@ C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibr
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\bin\Debug\netcoreapp3.1\IcVibrations.Common.pdb
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\bin\Debug\netcoreapp3.1\IcVibrations.Core.pdb
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\bin\Debug\netcoreapp3.1\IcVibrations.DataContracts.pdb
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\netcoreapp3.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\netcoreapp3.1\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\netcoreapp3.1\xunit.runner.utility.netcoreapp10.dll
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\netcoreapp3.1\IcVibrationsTest.deps.json
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\netcoreapp3.1\IcVibrationsTest.runtimeconfig.json
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\netcoreapp3.1\IcVibrationsTest.runtimeconfig.dev.json
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\netcoreapp3.1\IcVibrationsTest.dll
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\netcoreapp3.1\IcVibrationsTest.pdb
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\obj\Debug\netcoreapp3.1\IcVibrationsTest.csprojAssemblyReference.cache
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\obj\Debug\netcoreapp3.1\IcVibrationsTest.AssemblyInfoInputs.cache
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\obj\Debug\netcoreapp3.1\IcVibrationsTest.AssemblyInfo.cs

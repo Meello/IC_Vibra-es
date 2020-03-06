@@ -13,6 +13,8 @@
 # Build results
 obj/
 bin/
+Debug/
+v16/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
