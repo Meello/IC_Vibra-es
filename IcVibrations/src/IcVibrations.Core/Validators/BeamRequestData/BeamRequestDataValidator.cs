@@ -14,8 +14,20 @@ namespace IcVibrations.Core.Validators.BeamRequestData
         {
             if (beamData.NumberOfElements < 1)
             {
-                response.AddError(ErrorCode.BeamRequestData, "");
+                response.AddError(ErrorCode.BeamRequestData, $"Number of elements: {beamData.NumberOfElements} must be greather than or equals to 1.");
             }
+
+            if (true)
+            {
+
+            }
+
+            if (!response.Success)
+            {
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
         }
     }
 }

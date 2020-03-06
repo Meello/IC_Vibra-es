@@ -61,10 +61,13 @@ namespace IcVibrations.Models.Beam.Characteristics
     }
 
     /// <summary>
-    /// It's responsible to create a material object based in a string.
+    /// It's responsible to manipulate a material object based in a string.
     /// </summary>
     public class MaterialFactory
     {
+        /// <summary>
+        /// It's responsible to create a material object based in a string.
+        /// </summary>
         public static Material Create(string material)
         {
             switch ((Materials)Enum.Parse(typeof(Materials), material, ignoreCase: true))
@@ -76,6 +79,16 @@ namespace IcVibrations.Models.Beam.Characteristics
             }
 
             throw new Exception($"Invalid material: {material}.");
+        }
+
+        /// <summary>
+        /// It's responsible to validate a material object based in a string.
+        /// </summary>
+        public bool Validate(string material)
+        {
+            bool isMaterialValid = Enum.TryParse<Materials>(material, out _);
+
+            return isMaterialValid;
         }
     }
 }
