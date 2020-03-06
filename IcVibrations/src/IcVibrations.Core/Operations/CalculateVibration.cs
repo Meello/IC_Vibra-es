@@ -96,7 +96,7 @@ namespace IcVibrations.Core.Operations
 
             bool isProfileValid = await this._profileValidator.Execute(request.BeamData.Profile, response);
 
-            bool isRequestValid;
+            bool isBeamDataValid;
 
             if (!isProfileValid)
             {
