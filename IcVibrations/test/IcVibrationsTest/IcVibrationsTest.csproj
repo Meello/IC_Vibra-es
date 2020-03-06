@@ -6,6 +6,10 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\.vs\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Mapper\**" />
     <Compile Remove="Methods\**" />
