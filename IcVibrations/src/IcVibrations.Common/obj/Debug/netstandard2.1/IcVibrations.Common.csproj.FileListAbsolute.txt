@@ -1,8 +1,0 @@
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.Common\bin\Debug\netstandard2.1\IcVibrations.Common.deps.json
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.Common\bin\Debug\netstandard2.1\IcVibrations.Common.dll
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.Common\bin\Debug\netstandard2.1\IcVibrations.Common.pdb
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.Common\obj\Debug\netstandard2.1\IcVibrations.Common.AssemblyInfoInputs.cache
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.Common\obj\Debug\netstandard2.1\IcVibrations.Common.AssemblyInfo.cs
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.Common\obj\Debug\netstandard2.1\IcVibrations.Common.dll
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.Common\obj\Debug\netstandard2.1\IcVibrations.Common.pdb
-C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\src\IcVibrations.Common\obj\Debug\netstandard2.1\IcVibrations.Common.csprojAssemblyReference.cache
