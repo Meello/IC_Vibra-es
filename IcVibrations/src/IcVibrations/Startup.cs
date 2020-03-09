@@ -7,6 +7,8 @@ using IcVibrations.Core.Calculator.MainMatrixes.BeamWithDva.Rectangular;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Circular;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric.Rectangular;
 using IcVibrations.Core.Mapper;
+using IcVibrations.Core.Mapper.PiezoelectricProfiles.Circular;
+using IcVibrations.Core.Mapper.PiezoelectricProfiles.Rectangular;
 using IcVibrations.Core.Mapper.Profiles.Circular;
 using IcVibrations.Core.Mapper.Profiles.Rectangular;
 using IcVibrations.Core.NumericalIntegrationMethods.Newmark;
@@ -58,6 +60,8 @@ namespace IcVibrations
             services.AddScoped<IMappingResolver, MappingResolver>();
             services.AddScoped<ICircularProfileMapper, CircularProfileMapper>();
             services.AddScoped<IRectangularProfileMapper, RectangularProfileMapper>();
+            services.AddScoped<IPiezoelectricCircularProfileMapper, PiezoelectricCircularProfileMapper>();
+            services.AddScoped<IPiezoelectricRectangularProfileMapper, PiezoelectricRectangularProfileMapper>();
 
             // NewmarkNumericalIntegration
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
