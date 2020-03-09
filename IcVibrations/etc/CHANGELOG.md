@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Folder path of projects.
 - Simplified ArrayOperation.
-- Piezoelectric operations can receive position of piezoelectric (up, down or both).
+- Piezoelectric operations receives position of piezoelectric.
 
 ## [1.0.0] - 2020-02-29
 ### Added
