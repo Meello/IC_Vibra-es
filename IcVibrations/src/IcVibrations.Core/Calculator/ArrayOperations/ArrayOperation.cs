@@ -69,6 +69,33 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
         }
 
         /// <summary>
+        /// It's responsible to create a vector with an unique value in the informed positions with a size that is informed too.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="size"></param>
+        /// <param name="positions"></param>
+        /// <param name="vectorName"></param>
+        /// <returns></returns>
+        public Task<double[]> Create(double value, uint size, uint[] positions, string vectorName)
+        {
+            double[] newVector = new double[size];
+
+            try
+            {
+                for(int i = 0; i< positions.Length; i++)
+                {
+                    newVector[positions[i]] = value;
+                }
+            }
+            catch
+            {
+                throw new Exception($"Error creating the vector: {vectorName}.");
+            }
+
+            return Task.FromResult(newVector);
+        }
+
+        /// <summary>
         /// It's responsible to inverse a matrix.
         /// </summary>
         /// <param name="matrix"></param>

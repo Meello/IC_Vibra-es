@@ -4,7 +4,9 @@ using IcVibrations.Core.Calculator.ArrayOperations;
 using IcVibrations.Core.Calculator.MainMatrixes.BeamWithPiezoelectric;
 using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Mapper;
+using IcVibrations.Core.Mapper.PiezoelectricProfiles;
 using IcVibrations.Core.Mapper.Profiles;
+using IcVibrations.Core.Models.BeamWithPiezoelectric;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.Core.NumericalIntegrationMethods.Newmark;
 using IcVibrations.Core.Validators.Profiles;
@@ -25,6 +27,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
         private readonly IMappingResolver _mappingResolver;
         private readonly IAuxiliarOperation _auxiliarOperation;
         private readonly IProfileMapper<TProfile> _profileMapper;
+        private readonly IPiezoelectricProfileMapper<TProfile> _piezoelectricProfileMapper;
         private readonly IBeamWithPiezoelectricMainMatrix<TProfile> _mainMatrix;
         private readonly IArrayOperation _arrayOperation;
 
@@ -44,6 +47,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             IProfileValidator<TProfile> profileValidator,
             IAuxiliarOperation auxiliarOperation,
             IProfileMapper<TProfile> profileMapper,
+            IPiezoelectricProfileMapper<TProfile> piezoelectricProfileMapper,
             IBeamWithPiezoelectricMainMatrix<TProfile> mainMatrix,
             IArrayOperation arrayOperation)
             : base(newmarkMethod, profileValidator, auxiliarOperation)
@@ -51,6 +55,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             this._mappingResolver = mappingResolver;
             this._auxiliarOperation = auxiliarOperation;
             this._profileMapper = profileMapper;
+            this._piezoelectricProfileMapper = piezoelectricProfileMapper;
             this._mainMatrix = mainMatrix;
             this._arrayOperation = arrayOperation;
         }
@@ -65,6 +70,8 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             GeometricProperty geometricProperty = new GeometricProperty();
             GeometricProperty piezoelectricGeometricProperty = new GeometricProperty();
 
+            uint numberOfPiezoelectricPerElements = PiezoelectricPositionFactory.Create(request.BeamData.PiezoelectricPosition);
+
             if (request.BeamData.Profile.Area != default && request.BeamData.Profile.MomentOfInertia != default)
             {
                 geometricProperty.Area = await this._arrayOperation.Create(request.BeamData.Profile.Area.Value, request.BeamData.NumberOfElements, nameof(request.BeamData.Profile.Area));
@@ -72,7 +79,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             }
             else
             {
-                geometricProperty = await this._profileMapper.Execute(request.BeamData.Profile, degreesFreedomMaximum);
+                geometricProperty = await this._piezoelectricProfileMapper.Execute(request.BeamData.Profile, numberOfPiezoelectricPerElements, request.BeamData.ElementsWithPiezoelectric, degreesFreedomMaximum);
             }
 
             if (request.BeamData.PiezoelectricProfile.Area != default && request.BeamData.PiezoelectricProfile.MomentOfInertia != default)
@@ -99,6 +106,7 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
                 Length = request.BeamData.Length,
                 Material = MaterialFactory.Create(request.BeamData.Material),
                 NumberOfElements = request.BeamData.NumberOfElements,
+                NumberOfPiezoelectricPerElements = numberOfPiezoelectricPerElements,
                 PiezoelectricConstant = request.BeamData.PiezoelectricConstant,
                 PiezoelectricProfile = request.BeamData.PiezoelectricProfile,
                 PiezoelectricGeometricProperty = piezoelectricGeometricProperty,
