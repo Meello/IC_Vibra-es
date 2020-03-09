@@ -15,13 +15,23 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
         Task<double[,]> AddValue(double[,] matrixToAdd, double[] values, uint[] nodePositions, string matrixName);
 
         /// <summary>
-        /// It's responsible to create a matrix with a unique value in all positions with a size that is informed.
+        /// It's responsible to create a vector with an unique value in all positions with a size that is informed.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="size"></param>
         /// <param name="vectorName"></param>
         /// <returns></returns>
         Task<double[]> Create(double value, uint size, string vectorName);
+
+        /// <summary>
+        /// It's responsible to create a vector with an unique value in the informed positions with a size that is informed too.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="size"></param>
+        /// <param name="positions"></param>
+        /// <param name="vectorName"></param>
+        /// <returns></returns>
+        Task<double[]> Create(double value, uint size, uint[] positions, string vectorName);
 
         /// <summary>
         /// It's responsible to inverse a matrix.
