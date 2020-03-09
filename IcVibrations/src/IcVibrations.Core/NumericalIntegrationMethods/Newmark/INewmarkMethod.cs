@@ -9,6 +9,12 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
     /// </summary>
     public interface INewmarkMethod
     {
+        /// <summary>
+        /// Calculates and write in a file the response matrixes.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         Task CalculateResponse(NewmarkMethodInput input, OperationResponseBase response);
     }
 }

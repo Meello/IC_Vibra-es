@@ -200,19 +200,19 @@ namespace IcVibrations.Core.Calculator.MainMatrixes.Beam
             {
                 if (i == 0)
                 {
-                    bondaryCondition[i] = firstFastening.Displacement;
+                    bondaryCondition[i] = firstFastening.LinearDisplacement;
                 }
                 else if (i == degreesFreedomMaximum - 2)
                 {
-                    bondaryCondition[i] = lastFastening.Displacement;
+                    bondaryCondition[i] = lastFastening.LinearDisplacement;
                 }
                 else if (i == 1)
                 {
-                    bondaryCondition[i] = firstFastening.Angle;
+                    bondaryCondition[i] = firstFastening.AngularDisplacement;
                 }
                 else if (i == degreesFreedomMaximum - 1)
                 {
-                    bondaryCondition[i] = lastFastening.Angle;
+                    bondaryCondition[i] = lastFastening.AngularDisplacement;
                 }
                 else
                 {

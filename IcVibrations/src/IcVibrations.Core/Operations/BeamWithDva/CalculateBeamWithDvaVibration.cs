@@ -60,6 +60,12 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             this._arrayOperation = arrayOperation;
         }
 
+        /// <summary>
+        /// Builds the beam with dynamic vibration absorbers object.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public async override Task<BeamWithDva<TProfile>> BuildBeam(CalculateBeamWithDvaVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
         {
             if (request == null)
@@ -109,6 +115,13 @@ namespace IcVibrations.Core.Operations.BeamWithDva
             };
         }
 
+        /// <summary>
+        /// Creates the Newmark method input.
+        /// </summary>
+        /// <param name="beam"></param>
+        /// <param name="newmarkMethodParameter"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public async override Task<NewmarkMethodInput> CreateInput(BeamWithDva<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
             bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum, (uint)beam.DvaNodePositions.Length);

@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace IcVibrations.Core.Mapper
 {
+    /// <summary>
+    /// It's responsible to map the data into a specific class.
+    /// </summary>
     public interface IMappingResolver
     {
         /// <summary>

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IcVibrations.DataContracts
+﻿namespace IcVibrations.DataContracts
 {
     public class OperationRequestBase
     {

@@ -1,5 +1,4 @@
 ﻿using IcVibrations.Common.Profiles;
-using IcVibrations.Core.DTO.Input;
 using IcVibrations.Core.Models.Piezoelectric;
 using IcVibrations.DataContracts.CalculateVibration.BeamWithPiezoelectric;
 

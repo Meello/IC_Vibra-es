@@ -55,6 +55,12 @@ namespace IcVibrations.Core.Operations.Beam
             this._arrayOperation = arrayOperation;
         }
 
+        /// <summary>
+        /// Builds the beam object with the profile that is passed.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public async override Task<Beam<TProfile>> BuildBeam(CalculateBeamVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
         {
             if (request == null)
@@ -87,6 +93,13 @@ namespace IcVibrations.Core.Operations.Beam
             };
         }
 
+        /// <summary>
+        /// Creates the Newmark method input.
+        /// </summary>
+        /// <param name="beam"></param>
+        /// <param name="newmarkMethodParameter"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public async override Task<NewmarkMethodInput> CreateInput(Beam<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
             bool[] bondaryCondition = await this._mainMatrix.CalculateBondaryCondition(beam.FirstFastening, beam.LastFastening, degreesFreedomMaximum);

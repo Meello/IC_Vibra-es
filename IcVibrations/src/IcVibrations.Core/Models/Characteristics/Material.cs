@@ -70,7 +70,7 @@ namespace IcVibrations.Models.Beam.Characteristics
         /// </summary>
         public static Material Create(string material)
         {
-            switch ((Materials)Enum.Parse(typeof(Materials), material, ignoreCase: true))
+            switch ((Materials)Enum.Parse(typeof(Materials), material.Trim(), ignoreCase: true))
             {
                 case Materials.Steel1020: return new Steel1020();
                 case Materials.Steel4130: return new Steel4130();

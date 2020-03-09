@@ -60,6 +60,12 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             this._arrayOperation = arrayOperation;
         }
 
+        /// <summary>
+        /// Builds the beam with piezoelectric object.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public async override Task<BeamWithPiezoelectric<TProfile>> BuildBeam(CalculateBeamWithPiezoelectricVibrationRequest<TProfile> request, uint degreesFreedomMaximum)
         {
             if (request == null)
@@ -117,6 +123,13 @@ namespace IcVibrations.Core.Operations.BeamWithPiezoelectric
             };
         }
 
+        /// <summary>
+        /// Creates the Newmark method input.
+        /// </summary>
+        /// <param name="beam"></param>
+        /// <param name="newmarkMethodParameter"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public async override Task<NewmarkMethodInput> CreateInput(BeamWithPiezoelectric<TProfile> beam, NewmarkMethodParameter newmarkMethodParameter, uint degreesFreedomMaximum)
         {
             uint piezoelectricDegreesFreedomMaximum = beam.NumberOfElements + 1;

@@ -27,6 +27,14 @@ namespace IcVibrations.Core.Mapper.PiezoelectricProfiles.Circular
             this._calculateGeometricProperty = calculateGeometricProperty;
         }
 
+        /// <summary>
+        /// Method to build the piezoelectric circular profile.
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <param name="numberOfPiezoelectricsPerElements"></param>
+        /// <param name="elementsWithPiezoelectric"></param>
+        /// <param name="degreesFreedomMaximum"></param>
+        /// <returns></returns>
         public async override Task<GeometricProperty> Execute(CircularProfile profile, uint numberOfPiezoelectricsPerElements, uint[] elementsWithPiezoelectric, uint degreesFreedomMaximum)
         {
             GeometricProperty geometricProperty = new GeometricProperty();

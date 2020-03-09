@@ -2,6 +2,9 @@
 
 namespace IcVibrations.Core.DTO.Input
 {
+    /// <summary>
+    /// It contains the input content of newmark method operations.
+    /// </summary>
     public class NewmarkMethodInput
     {
         /// <summary>

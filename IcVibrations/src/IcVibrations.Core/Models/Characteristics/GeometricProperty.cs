@@ -5,8 +5,14 @@
     /// </summary>
     public class GeometricProperty
     {
+        /// <summary>
+        /// Area.
+        /// </summary>
         public double[] Area { get; set; }
 
+        /// <summary>
+        /// Moment of inertia.
+        /// </summary>
         public double[] MomentOfInertia { get; set; }
     }
 }

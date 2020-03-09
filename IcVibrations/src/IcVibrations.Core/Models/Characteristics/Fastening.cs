@@ -8,9 +8,9 @@ namespace IcVibrations.Models.Beam.Characteristics
     /// </summary>
     public abstract class Fastening
     {
-        public abstract bool Displacement { get; }
+        public abstract bool LinearDisplacement { get; }
 
-        public abstract bool Angle { get; }
+        public abstract bool AngularDisplacement { get; }
 
     }
 
@@ -19,9 +19,9 @@ namespace IcVibrations.Models.Beam.Characteristics
     /// </summary>
     public class Fixed : Fastening
     {
-        public override bool Displacement => false;
+        public override bool LinearDisplacement => false;
 
-        public override bool Angle => false;
+        public override bool AngularDisplacement => false;
 
     }
 
@@ -30,9 +30,9 @@ namespace IcVibrations.Models.Beam.Characteristics
     /// </summary>
     public class Pinned : Fastening
     {
-        public override bool Displacement => false;
+        public override bool LinearDisplacement => false;
 
-        public override bool Angle => true;
+        public override bool AngularDisplacement => true;
 
     }
 
@@ -41,9 +41,9 @@ namespace IcVibrations.Models.Beam.Characteristics
     /// </summary>
     public class None : Fastening
     {
-        public override bool Displacement => true;
+        public override bool LinearDisplacement => true;
 
-        public override bool Angle => true;
+        public override bool AngularDisplacement => true;
 
     }
 

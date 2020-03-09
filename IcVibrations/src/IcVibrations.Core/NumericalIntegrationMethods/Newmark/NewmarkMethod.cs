@@ -6,6 +6,8 @@ using IcVibrations.Core.Validators.NumericalIntegrationMethods.Newmark;
 using IcVibrations.DataContracts;
 using IcVibrations.Methods.AuxiliarOperations;
 using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
@@ -20,6 +22,11 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
         /// </summary>
         public double a0, a1, a2, a3, a4, a5, a6, a7;
 
+        /// <summary>
+        /// The path of file to write the solutions.
+        /// </summary>
+        public string path = @"C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\Solutions\TestSolution.csv";
+
         private readonly IArrayOperation _arrayOperation;
         private readonly IAuxiliarOperation _auxiliarOperation;
         private readonly INewmarkMethodValidator _validator;
@@ -33,11 +40,17 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
             IAuxiliarOperation auxiliarOperation,
             INewmarkMethodValidator validator)
         {
-            _arrayOperation = arrayOperation;
-            _auxiliarOperation = auxiliarOperation;
+            this._arrayOperation = arrayOperation;
+            this._auxiliarOperation = auxiliarOperation;
             this._validator = validator;
         }
 
+        /// <summary>
+        /// Calculates the response of Newmark numerical integration.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
         public async Task CalculateResponse(NewmarkMethodInput input, OperationResponseBase response)
         {
             if(await this._validator.ValidateParameters(input, response))
@@ -80,7 +93,7 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
 
                 try
                 {
-                    this._auxiliarOperation.WriteInFile(input.AngularFrequency);
+                    this._auxiliarOperation.WriteInFile(input.AngularFrequency, path);
                     await Solution(input);
                 }
                 catch (Exception ex)
@@ -91,6 +104,11 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
             }
         }
 
+        /// <summary>
+        /// Constains the Newmark numerical integration logic to calculate the response matrixes.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         protected async Task Solution(NewmarkMethodInput input)
         {
             double time = input.Parameter.InitialTime;
@@ -133,7 +151,7 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
                         }
                     }
 
-                    //this._auxiliarOperation.WriteInFile(time, y);
+                    this._auxiliarOperation.WriteInFile(time, y, path);
 
                     time += input.DeltaTime;
 
@@ -148,6 +166,14 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
             }
         }
 
+        /// <summary>
+        /// Calculates the displacement to Newmark method.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="previousDisplacement"></param>
+        /// <param name="previousVelocity"></param>
+        /// <param name="previousAcceleration"></param>
+        /// <returns></returns>
         protected async Task<double[]> CalculateDisplacement(NewmarkMethodInput input, double[] previousDisplacement, double[] previousVelocity, double[] previousAcceleration)
         {
             double[,] equivalentHardness = await CalculateEquivalentHardness(input.Mass, input.Hardness, input.Damping, input.NumberOfTrueBoundaryConditions).ConfigureAwait(false);
@@ -159,7 +185,7 @@ namespace IcVibrations.Core.NumericalIntegrationMethods.Newmark
         }
 
         /// <summary>
-        /// Calculates the equivalent force to calculate the displacement in Newmark method.
+        /// Calculates the equivalent force to calculate the displacement to Newmark method.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="previousDisplacement"></param>
