@@ -84,7 +84,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
             {
                 for(int i = 0; i< positions.Length; i++)
                 {
-                    newVector[positions[i]] = value;
+                    newVector[positions[i] - 1] = value;
                 }
             }
             catch
