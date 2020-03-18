@@ -216,3 +216,5 @@ C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibr
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\obj\Debug\netcoreapp3.1\IcVibrationsTest.csproj.CopyComplete
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\obj\Debug\netcoreapp3.1\IcVibrationsTest.dll
 C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\obj\Debug\netcoreapp3.1\IcVibrationsTest.pdb
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\obj\Debug\netcoreapp3.1\IcVibrationsTest.csproj.CoreCompileInputs.cache
+C:\Users\bruno.silveira\Documents\GitHub\IC_Vibrações\IcVibrations\test\IcVibrationsTest\obj\Debug\netcoreapp3.1\IcVibrationsTest.genruntimeconfig.cache

@@ -20,7 +20,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
         {
             if (!int.Equals(values.Length, nodePositions.Length))
             {
-                throw new Exception($"Error adding values in {matrixName}. The matrixes lenght {nameof(values)}: {values.Length} and {nameof(nodePositions)}: {nodePositions.Length} must be the same.");
+                throw new ArgumentException($"Error adding values in {matrixName}. The matrixes lenght {nameof(values)}: {values.Length} and {nameof(nodePositions)}: {nodePositions.Length} must be the same.");
             }
 
             int size = values.Length;
@@ -34,7 +34,7 @@ namespace IcVibrations.Core.Calculator.ArrayOperations
                 }
                 catch
                 {
-                    throw new Exception($"It was not possible to add value: {values[i]} in matrix: {matrixName} at the position: {i}.");
+                    throw new ArgumentOutOfRangeException($"It was not possible to add the value: {values[i]} in matrix: {matrixName} at the position: {i}.");
                 }
             }
 

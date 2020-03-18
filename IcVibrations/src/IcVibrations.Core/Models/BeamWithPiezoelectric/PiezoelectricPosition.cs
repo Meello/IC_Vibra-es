@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace IcVibrations.Core.Models.BeamWithPiezoelectric
 {
@@ -20,7 +21,9 @@ namespace IcVibrations.Core.Models.BeamWithPiezoelectric
         /// </summary>
         public static uint Create(string piezoelectricPosition)
         {
-            switch ((PiezoelectricPosition)Enum.Parse(typeof(PiezoelectricPosition), piezoelectricPosition, ignoreCase: true))
+            var value = Regex.Replace(piezoelectricPosition, @"\s", "");
+
+            switch ((PiezoelectricPosition)Enum.Parse(typeof(PiezoelectricPosition), value, ignoreCase: true))
             {
                 case PiezoelectricPosition.Up: return 1;
                 case PiezoelectricPosition.Down: return 1;
